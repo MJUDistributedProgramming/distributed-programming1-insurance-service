@@ -3,6 +3,7 @@ package daoList;
 import java.util.ArrayList;
 
 import IF.PaymentList;
+import domain.Contract;
 import domain.Payment;
 
 /**
@@ -25,7 +26,14 @@ public class PaymentListImpl implements PaymentList {
 	}
 
 	public void add(Payment Payment){
-
+		for (Payment payment : paymentList) {
+			if (payment.getContractID() == Payment.getContractID()) {
+				System.out.println("[error] Payment ID duplicate. Please try again");
+				return;
+			}
+		}
+		this.paymentList.add(Payment);
+		System.out.println("\"[success] Successfully Create Payment!\"");
 	}
 
 	public void delete(int paymentID){
