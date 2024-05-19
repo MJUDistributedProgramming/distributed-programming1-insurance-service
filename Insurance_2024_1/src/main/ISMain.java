@@ -136,8 +136,17 @@ public class ISMain {
 		
 	}
 	private static void showPaymentList() {
-		// TODO Auto-generated method stub
-		
+		if (!TokenManager.isValidToken(token)) {
+			System.out.println("[error] please login first.");
+			return;
+		}
+		ArrayList<Payment> paymentList = paymentListImpl.retrieveByCustomerID(Integer.parseInt(TokenManager.getID(token)));
+		int index = 1;
+		System.out.println("-- Your Payment List --");
+		for(Payment payment : paymentList) {
+			System.out.println(index + ". CounselID: " + payment.getPaymentID() + " ContractID: " + payment.getContractID()+ " CustomerID: " + payment.getCustomerID()+" Status: "+payment.isPaymentProcessed());
+			index++;
+		}
 	}
 	private static void createAccident(BufferedReader clientInputReader) {
 		// TODO Auto-generated method stub
