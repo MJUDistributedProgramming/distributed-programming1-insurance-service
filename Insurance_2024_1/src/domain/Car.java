@@ -21,4 +21,36 @@ public class Car extends Insurance {
 		super.finalize();
 	}
 
+	public boolean isHasBlackbox() {
+		return hasBlackbox;
+	}
+
+	public void setHasBlackbox(boolean hasBlackbox) {
+		this.hasBlackbox = hasBlackbox;
+	}
+
+	public String getModel() {
+		return model;
+	}
+
+	public void setModel(String model) {
+		this.model = model;
+	}
+
+	public int getPriceOfCar() {
+		return priceOfCar;
+	}
+
+	public void setPriceOfCar(int priceOfCar) {
+		this.priceOfCar = priceOfCar;
+	}
+
+	public String getVIN() {
+		return VIN;
+	}
+
+	public void setVIN(String vIN) {
+		VIN = vIN;
+	}
+
 }
