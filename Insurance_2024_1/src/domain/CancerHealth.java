@@ -14,6 +14,14 @@ public class CancerHealth extends Insurance {
 
 	}
 
+	public String getCategoryOfCancer() {
+		return categoryOfCancer;
+	}
+
+	public void setCategoryOfCancer(String categoryOfCancer) {
+		this.categoryOfCancer = categoryOfCancer;
+	}
+
 	public void finalize() throws Throwable {
 		super.finalize();
 	}
