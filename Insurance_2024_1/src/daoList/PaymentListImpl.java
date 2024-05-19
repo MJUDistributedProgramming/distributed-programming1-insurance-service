@@ -16,6 +16,7 @@ public class PaymentListImpl implements PaymentList {
 	public Payment m_Payment;
 
 	public PaymentListImpl(){
+		this.paymentList = new ArrayList<>();
 
 	}
 
@@ -23,35 +24,44 @@ public class PaymentListImpl implements PaymentList {
 
 	}
 
-	/**
-	 * 
-	 * @param Payment
-	 */
 	public void add(Payment Payment){
 
 	}
 
-	/**
-	 * 
-	 * @param paymentID
-	 */
 	public void delete(int paymentID){
-
+		for (Payment payment : paymentList) {
+			if (payment.getPaymentID() == paymentID) {
+				paymentList.remove(payment);
+				System.out.println("\"[success] Successfully deleted this Payment!\"");
+				return;
+			}
+		}
+		System.out.println("\"[error] The payment id does not exist.\"");
 	}
 
-	/**
-	 * 
-	 * @param paymentID
-	 */
 	public Payment retrieve(int paymentID){
+		for (Payment payment: paymentList) {
+			if (payment.getPaymentID() == paymentID) {
+				return payment;
+			}
+		}
 		return null;
 	}
+	
+	public ArrayList<Payment> retrieveAll(){
+		return this.paymentList;
+	}
+	
+	public ArrayList<Payment> retrieveByCustomerID(int customerID){
+		ArrayList<Payment> customerPayment = new ArrayList<>();
+		for (Payment payment: paymentList) {
+			if (payment.getCustomerID() == customerID) {
+				customerPayment.add(payment);
+			}
+		}
+		return customerPayment;
+	}
 
-	/**
-	 * 
-	 * @param payment
-	 * @param paymentID
-	 */
 	public void update(Payment payment, int paymentID){
 
 	}
