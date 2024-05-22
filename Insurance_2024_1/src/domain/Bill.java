@@ -21,4 +21,28 @@ public class Bill {
 
 	}
 
+	public int getBillID() {
+		return billID;
+	}
+
+	public void setBillID(int billID) {
+		this.billID = billID;
+	}
+
+	public String getBillReason() {
+		return billReason;
+	}
+
+	public void setBillReason(String billReason) {
+		this.billReason = billReason;
+	}
+
+	public int getCustomerID() {
+		return customerID;
+	}
+
+	public void setCustomerID(int customerID) {
+		this.customerID = customerID;
+	}
+
 }
