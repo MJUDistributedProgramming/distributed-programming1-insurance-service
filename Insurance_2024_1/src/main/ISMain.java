@@ -15,8 +15,10 @@ import daoList.InsuranceListImpl;
 import daoList.PaymentListImpl;
 import daoList.RuleListImpl;
 import domain.Accident;
+import domain.Bill;
 import domain.CancerHealth;
 import domain.Car;
+import domain.Compensation;
 import domain.Contract;
 import domain.Counsel;
 import domain.Customer;
@@ -25,6 +27,7 @@ import domain.Guarantee;
 import domain.HouseFire;
 import domain.Insurance;
 import domain.InternationalTravel;
+import domain.Loss;
 import domain.MedicalHistory;
 import domain.Payment;
 import domain.SpecialProvision;
@@ -140,6 +143,12 @@ public class ISMain {
 		}
 		ArrayList<Accident> accidentList = accidentListImpl.retrieveByCustomerID(Integer.parseInt(TokenManager.getID(token)));
 		int index = 1;
+		
+		if(accidentList.size() == 0) {
+			System.out.println("No Accident");
+			return;
+		}
+		
 		System.out.println("-- Your Accident List --");
 		for(Accident accident : accidentList) {
 			System.out.println(index + ". AccidentID: " + accident.getAccidentID() + " CustomerID: " + accident.getCustomerID()+ " Accident Date: " + accident.getAccidentDate() + " Accident Location: " + accident.getAccidentLocation() + " Accident Type: " + accident.getAccidentType() + " Car Info: " + accident.getCarInformation() + " Car Num: " + accident.getCarNumber());
@@ -167,10 +176,10 @@ public class ISMain {
 		System.out.println("-- Accident Information--");
 		// basic attribute settings
 		System.out.print("AccidentID: "); String accidentID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		System.out.print("Accident Date: "); String accidentDate = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		System.out.print("Accident Location: "); String accidentLocation = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		System.out.print("Accident Type: "); String accidentType = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		System.out.print("Car Information: "); String carInfomation = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("Accident Date: "); String accidentDate = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+		System.out.print("Accident Location: "); String accidentLocation = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+		System.out.print("Accident Type: "); String accidentType = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+		System.out.print("Car Information: "); String carInfomation = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
 		System.out.print("Car Number: "); String carNumber = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
 		
 		// AccidentImpl Add
@@ -281,7 +290,7 @@ public class ISMain {
 			else if (clientChoice.equals("5")) showContractList();
 			else if (clientChoice.equals("6")) showPaymentList();
 			else if (clientChoice.equals("7")) showInsuranceList();
-			else if (clientChoice.equals("8")) showCompensationList();
+			else if (clientChoice.equals("8")) showAllCompensationList();
 			else if (clientChoice.equals("9")) showAllCounselList();
 			else if (clientChoice.equals("10")) showRuleList();
 			else if (clientChoice.equals("11")) createContract(clientInputReader);
@@ -400,7 +409,48 @@ public class ISMain {
 		}
 	}
 	private static void showCompensationList() {
-		// TODO Auto-generated method stub
+		if (!TokenManager.isValidToken(token)) {
+			System.out.println("[error] please login first.");
+			return;
+		}
+		ArrayList<Compensation> compensationList = compensationListImpl.retrieveByCustomerID(Integer.parseInt(TokenManager.getID(token)));
+		int index = 1;
+		
+		if(compensationList.size() == 0) {
+			System.out.println("No Compensation");
+			return;
+		}
+		
+		System.out.println("-- Your Compensation List --");
+		for(Compensation compensation : compensationList) {
+			System.out.println(index + ". CompensationID: " + compensation.getCompensationID() + " CustomerID: " + compensation.getCustomerID()+ " ContractID: " + compensation.getContractID() + " Insurance Amount: " + compensation.getInsuranceAmount() + " LossID: " + compensation.getLoss().getLossID() + " AccidentID: " + compensation.getLoss().getAccidentID() + " EmployeeID : " + compensation.getLoss().getEmployeeID() + " Employee Opinion: " + compensation.getLoss().getEmployeeOpinion() + " Loss Amount: " + compensation.getLoss().getLossAmount() + " BillID: " + compensation.getBill().getBillID() + " Bill Reason: " + compensation.getBill().getBillReason());
+			index++;
+		}
+	}
+	private static void showAllCompensationList() {
+		if (!TokenManager.isValidToken(token)) {
+			System.out.println("[error] please login first.");
+			return;
+		}
+		
+		String role = TokenManager.getRole(token);
+		if (role.equals(Customer)) {
+			System.out.println("[error] You do not have access.");
+			return;
+		}
+		
+		int index = 1;
+		System.out.println();
+		ArrayList<Compensation> compensationList = compensationListImpl.retrieveAll();
+		if(compensationList.size() == 0) {
+			System.out.println("No Compensation");
+			return;
+		}
+		System.out.println("-- Compensation List --");
+		for(Compensation compensation : compensationList) {
+			System.out.println(index + ". CompensationID: " + compensation.getCompensationID() + " CustomerID: " + compensation.getCustomerID() + " ContractID: " + compensation.getContractID() + " Insurance Amount: " + compensation.getInsuranceAmount() + " LossID: " + compensation.getLoss().getLossID() + " AccidentID: " + compensation.getLoss().getAccidentID() + " EmployeeID : " + compensation.getLoss().getEmployeeID() + " Employee Opinion: " + compensation.getLoss().getEmployeeOpinion() + " Loss Amount: " + compensation.getLoss().getLossAmount() + " BillID: " + compensation.getBill().getBillID() + " Bill Reason: " + compensation.getBill().getBillReason());
+			index++;
+		}
 		
 	}
 	private static void showInsuranceList() {
@@ -534,13 +584,62 @@ public class ISMain {
 		counselListImpl.delete(Integer.parseInt(counselID));
 		
 	}
-	private static void createCompensation(String usertype, BufferedReader clientInputReader) {
-		// TODO Auto-generated method stub
+	private static void createCompensation(String usertype, BufferedReader clientInputReader) throws IOException {
+		if (!TokenManager.isValidToken(token)) {
+			System.out.println("[error] please login first.");
+			return;
+		}
 		
+		System.out.println("--Create Compensation Infomation--");
+		// basic attribute settings
+		System.out.print("CompensationID: "); String compensationID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("ContractID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("CustomerID: "); String customerID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("Insurance Amount: "); String insuranceAmount = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+
+		// composition to whole settings
+		System.out.println("--Bill Information--");
+		System.out.print("BillID: "); String billID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("Bill Reason: "); String billReason = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+		
+		Bill bill = new Bill();
+		bill.setBillID(Integer.parseInt(billID));
+		bill.setBillReason(billReason);
+		
+		// Loss setting - 손해조사하기 전
+		Loss loss = new Loss();
+		loss.setLossID(0);
+		loss.setAccidentID(0);
+		loss.setEmployeeID(0);
+		loss.setEmployeeOpinion(null);
+		loss.setLossAmount(0);
+
+		// ListImpl Add
+		Compensation compensation = new Compensation();
+		compensation.setCompensationID(Integer.parseInt(compensationID));
+		compensation.setContractID(Integer.parseInt(contractID));
+		compensation.setCustomerID(Integer.parseInt(TokenManager.getID(token)));
+		compensation.setInsuranceAmount(Integer.parseInt(insuranceAmount));
+		
+		// composition to whole settings
+		compensation.setBill(bill);
+		compensation.setLoss(loss);
+		
+		compensationListImpl.add(compensation);		
 	}
-	private static void deleteCompensation(BufferedReader clientInputReader) {
-		// TODO Auto-generated method stub
-		
+	private static void deleteCompensation(BufferedReader clientInputReader) throws IOException {
+		if (!TokenManager.isValidToken(token)) {
+			System.out.println("[error] please login first.");
+			return;
+		}
+		if (TokenManager.getRole(token).equals(Customer)) {
+			System.out.println("[error] You do not have access.");
+			return;
+		}
+		System.out.println("--Delete Compensation Infomation--");
+		System.out.print("CompensationID: "); String compensationID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		compensationListImpl.delete(Integer.parseInt(compensationID));
+				
 	}
 	private static void createInsurance(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {

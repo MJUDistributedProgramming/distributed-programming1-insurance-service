@@ -59,7 +59,7 @@ public class AccidentListImpl implements AccidentList {
 	}
 
 	public ArrayList<Accident> retrieveByCustomerID(int customerID){
-		ArrayList<Accident> customerAccident = new ArrayList<>();
+		ArrayList<Accident> customerAccident = new ArrayList<Accident>();
 		for (Accident accident: accidentList) {
 			if (accident.getCustomerID() == customerID) {
 				customerAccident.add(accident);
