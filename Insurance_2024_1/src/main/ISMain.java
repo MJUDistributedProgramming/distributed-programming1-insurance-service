@@ -14,8 +14,11 @@ import daoList.EmployeeListImpl;
 import daoList.InsuranceListImpl;
 import daoList.PaymentListImpl;
 import daoList.RuleListImpl;
+import domain.AutomaticPayment;
+import domain.BankPayment;
 import domain.CancerHealth;
 import domain.Car;
+import domain.CardPayment;
 import domain.Contract;
 import domain.Counsel;
 import domain.Customer;
@@ -26,6 +29,8 @@ import domain.Insurance;
 import domain.InternationalTravel;
 import domain.MedicalHistory;
 import domain.Payment;
+import domain.PaymentInfo;
+import domain.Rule;
 import domain.SpecialProvision;
 import token.TokenManager;
 public class ISMain {
@@ -38,6 +43,10 @@ public class ISMain {
 	private static final String contractStatus1 = "ReviewRequest"; //심사요청상태
 	private static final String contractStatus2 = "ReviewReject"; //심사거절상태
 	private static final String contractStatus3 = "ContractPermission";//계약진행허가상태
+	private static final String paymentInfoCard = "card";
+	private static final String paymentInfoBank = "bank";
+	private static final String paymentInfoAutomatic = "automatic";
+
 	// main attributes
 	private static String token;
 	private static AccidentListImpl accidentList;
@@ -120,8 +129,8 @@ public class ISMain {
 			else if (clientChoice.equals("10")) deleteCompensation(clientInputReader);
 			else if (clientChoice.equals("11")) createCounsel(Customer, clientInputReader);
 			else if (clientChoice.equals("12")) deleteCounsel(clientInputReader);
-//			else if (clientChoice.equals("13")) createPayment(clientInputReader);
-//			else if (clientChoice.equals("14")) deletePayment(clientInputReader);
+			else if (clientChoice.equals("13")) createPayment(clientInputReader);
+			else if (clientChoice.equals("14")) deletePayment(clientInputReader);
 			else if (clientChoice.equals("13")) logout();
 			else if (clientChoice.equals("14")) deleteMembership(Customer , clientInputReader);
 			else if (clientChoice.equals("R")) {
@@ -320,7 +329,22 @@ public class ISMain {
 		}
 	}
 	private static void showRuleList() {
-		// TODO Auto-generated method stub
+		if (!TokenManager.isValidToken(token)) {
+			System.out.println("[error] please login first.");
+			return;
+		}
+		String role = TokenManager.getRole(token);
+		int index = 1;
+		if (role.equals(Customer)) {
+			System.out.println("[error] You do not have access.");
+			return;
+		}
+		System.out.println();
+		System.out.println("-- Contract List --");
+		for(Rule rule : ruleListImpl.retrieveAll()) {
+			System.out.println(index + ". RuleID: " + rule.getRuleID() + " RuleName: " + rule.getRuleName()+ " RuleDetail: " + rule.getRuleDetail());
+			index++;
+		}
 		
 	}
 	private static void showCounselList() {
@@ -427,8 +451,50 @@ public class ISMain {
 
 		
 		// composition to whole settings
-		// PaymentInfo
-		// -> 서현누나 구현 예정
+		PaymentInfo paymentInfo = new PaymentInfo();
+		System.out.println("--Payment Information--");
+		System.out.print("PaymentInfo ID: "); String paymentInfoID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("fixedMonthlyPayment : "); String fixedMonthlyPayment = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("fixedMonthlyPaymentDate: "); String fixedMonthlyPaymentDate = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+		System.out.print("PaymentType: "); String paymentType = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+
+		paymentInfo.setPaymentInfoID(Integer.parseInt(paymentInfoID));
+		paymentInfo.setFixedMonthlyPayment(Integer.parseInt(fixedMonthlyPayment));
+		paymentInfo.setFixedMonthlyPaymentDate(fixedMonthlyPaymentDate);
+		paymentInfo.setPaymentType(paymentType);
+		
+		if(paymentType.equals(paymentInfoCard)) {
+			System.out.println("--Payment Card Information--");
+			System.out.print("cardNum: ");String cardNum= dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+			System.out.print("cvcNum: ");String cvcNum= dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+			System.out.print("password: ");String password= dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+			
+			CardPayment cardPayment = new CardPayment();
+			cardPayment.setCardNum(cardNum);
+			cardPayment.setCvcNum(cvcNum);
+			cardPayment.setPassword(password);
+		}else if(paymentType.equals(paymentInfoBank)) {
+			System.out.println("--Payment Bank Information--");
+			System.out.print("payerName: ");String payerName= dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);;
+			System.out.print("payerPhoneNum: ");String payerPhoneNum= dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+			BankPayment bankPayment = new BankPayment();
+			bankPayment.setPayerName(payerName);
+			bankPayment.setPayerPhoneNum(payerPhoneNum);
+			
+		}else if(paymentType.equals(paymentInfoAutomatic)) {
+			System.out.println("--Payment Automatic Information--");
+			System.out.print("accountNum: ");String accountNum = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+			System.out.print("applicantName: ");String applicantName = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+			System.out.print("applicantRRN: ");String applicantRRN = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+			System.out.print("paymentCompanyName: ");String paymentCompanyName = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+			System.out.print("relationshipToApplicant: ");String relationshipToApplicant = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+			AutomaticPayment automaticPayment = new AutomaticPayment();
+			automaticPayment.setAccountNum(accountNum);
+			automaticPayment.setApplicantName(applicantName);
+			automaticPayment.setApplicantRRN(applicantRRN);
+			automaticPayment.setPaymentCompanyName(paymentCompanyName);
+			automaticPayment.setRelationshipToApplicant(relationshipToApplicant);
+		}
 		
 		// ListImpl Add
 		Contract contract = new Contract();
@@ -455,13 +521,43 @@ public class ISMain {
 		System.out.print("contractID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
 		contractListImpl.delete(Integer.parseInt(contractID));
 	}
-	private static void createRule(BufferedReader clientInputReader) {
-		// TODO Auto-generated method stub
+	private static void createRule(BufferedReader clientInputReader) throws IOException {
+		if (!TokenManager.isValidToken(token)) {
+			System.out.println("[error] please login first.");
+			return;
+		}
+		if (TokenManager.getRole(token).equals(Customer)) {
+			System.out.println("[error] You do not have access.");
+			return;
+		}
+		System.out.println("--Create Rule Infomation--");
+		System.out.print("ruleID: "); 
+		String ruleID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);	
+		System.out.print("ruleName: "); 
+		String ruleName =dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("ruleDetail: "); 
+		String ruleDetail = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
 		
+		Rule rule = new Rule();
+		rule.setRuleID(Integer.parseInt(ruleID));
+		rule.setRuleName(ruleName);
+		rule.setRuleDetail(ruleDetail);
+		ruleListImpl.add(rule);
 	}
-	private static void deleteRule(BufferedReader clientInputReader) {
-		// TODO Auto-generated method stub
+	private static void deleteRule(BufferedReader clientInputReader) throws IOException {
+		System.out.print("ruleID: "); 
+		String ruleID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);	
+
+		if (!TokenManager.isValidToken(token)) {
+			System.out.println("[error] please login first.");
+			return;
+		}
+		if (TokenManager.getRole(token).equals(Customer)) {
+			System.out.println("[error] You do not have access.");
+			return;
+		}
 		
+		ruleListImpl.delete(Integer.parseInt(ruleID));
 	}
 	private static void createCounsel(String usertype, BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
@@ -529,7 +625,7 @@ public class ISMain {
 		System.out.print("Notice: "); String notice = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
 		
 		// composition to whole settings
-		// LatePaymentPolicy, CompulsoryCancelPolicy 아직 X
+
 		Guarantee guarantee = new Guarantee();
 		System.out.println("--Guarantee Information--");
 		System.out.print("Guarantee Name: "); String guaranteeName = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
