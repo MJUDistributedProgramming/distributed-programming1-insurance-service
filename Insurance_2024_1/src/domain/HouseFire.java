@@ -19,4 +19,20 @@ public class HouseFire extends Insurance {
 		super.finalize();
 	}
 
+	public String getCategoryOfHouse() {
+		return categoryOfHouse;
+	}
+
+	public void setCategoryOfHouse(String categoryOfHouse) {
+		this.categoryOfHouse = categoryOfHouse;
+	}
+
+	public int getPriceOfHouse() {
+		return priceOfHouse;
+	}
+
+	public void setPriceOfHouse(int priceOfHouse) {
+		this.priceOfHouse = priceOfHouse;
+	}
+
 }
