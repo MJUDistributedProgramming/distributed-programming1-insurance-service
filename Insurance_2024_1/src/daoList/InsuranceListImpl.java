@@ -16,42 +16,48 @@ public class InsuranceListImpl implements InsuranceList {
 	public Insurance m_Insurance;
 
 	public InsuranceListImpl(){
-
+		this.insuranceList = new ArrayList<>();
 	}
 
 	public void finalize() throws Throwable {
 
 	}
 
-	/**
-	 * 
-	 * @param insurance
-	 */
 	public void add(Insurance insurance){
-
+		for (Insurance i: insuranceList) {
+			if (i.getInsuranceID() == insurance.getInsuranceID()) {
+				System.out.println("[error] Insurance ID duplicate. Please try again");
+				return;
+			}
+		}
+		this.insuranceList.add(insurance);
+		System.out.println("\"[success] Successfully created Insurance!\"");
 	}
 
-	/**
-	 * 
-	 * @param insuranceID
-	 */
-	public void delete(int insuranceID){
-
+	public void delete(int insuranceID) {
+		for (Insurance insurance : insuranceList) {
+			if (insurance.getInsuranceID() == insuranceID) {
+				insuranceList.remove(insurance);
+				System.out.println("\"[success] Successfully deleted Insurance!\"");
+				return;
+			}
+		}
+		System.out.println("\"[error] The Insurance ID does not exist.\"");
 	}
 
-	/**
-	 * 
-	 * @param insuranceID
-	 */
-	public Insurance retrieve(int insuranceID){
+	public Insurance retrieve(int insuranceID) {
+		for (Insurance insurance: insuranceList) {
+			if (insurance.getInsuranceID() == insuranceID) {
+				return insurance;
+			}
+		}
 		return null;
 	}
+	
+	public ArrayList<Insurance> retrieveAll(){
+		return this.insuranceList;
+	}
 
-	/**
-	 * 
-	 * @param insuranceID
-	 * @param insurance
-	 */
 	public void update(int insuranceID, Insurance insurance){
 
 	}

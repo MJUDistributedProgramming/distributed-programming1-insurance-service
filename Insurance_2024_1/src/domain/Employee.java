@@ -124,5 +124,4 @@ public class Employee {
 	public void setM_Counsel(Counsel m_Counsel) {
 		this.m_Counsel = m_Counsel;
 	}
-
 }
