@@ -50,7 +50,6 @@ public class ISMain {
 	private static final String paymentInfoCard = "card";
 	private static final String paymentInfoBank = "bank";
 	private static final String paymentInfoAutomatic = "automatic";
-
 	// main attributes
 	private static String token;
 	private static AccidentListImpl accidentListImpl;
@@ -83,7 +82,6 @@ public class ISMain {
 		System.out.println("2. EmployeeService");
 		System.out.println("X. Exit");
 	}
-	
 	private static void startInsuranceService(BufferedReader clientInputReader) throws IOException{
 		while(true) {
 			printMainMenu();
@@ -151,12 +149,10 @@ public class ISMain {
 		}
 		ArrayList<Accident> accidentList = accidentListImpl.retrieveByCustomerID(Integer.parseInt(TokenManager.getID(token)));
 		int index = 1;
-		
 		if(accidentList.size() == 0) {
 			System.out.println("No Accident");
 			return;
 		}
-		
 		System.out.println("-- Your Accident List --");
 		for(Accident accident : accidentList) {
 			System.out.println(index + ". AccidentID: " + accident.getAccidentID() + " CustomerID: " + accident.getCustomerID()+ " Accident Date: " + accident.getAccidentDate() + " Accident Location: " + accident.getAccidentLocation() + " Accident Type: " + accident.getAccidentType() + " Car Info: " + accident.getCarInformation() + " Car Num: " + accident.getCarNumber());
@@ -189,7 +185,6 @@ public class ISMain {
 		System.out.print("Accident Type: "); String accidentType = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
 		System.out.print("Car Information: "); String carInfomation = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
 		System.out.print("Car Number: "); String carNumber = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		
 		// AccidentImpl Add
 		Accident accident = new Accident();
 		accident.setAccidentID(Integer.parseInt(accidentID));
@@ -386,7 +381,7 @@ public class ISMain {
 			return;
 		}
 		System.out.println();
-		System.out.println("-- Contract List --");
+		System.out.println("-- Rule List --");
 		for(Rule rule : ruleListImpl.retrieveAll()) {
 			System.out.println(index + ". RuleID: " + rule.getRuleID() + " RuleName: " + rule.getRuleName()+ " RuleDetail: " + rule.getRuleDetail());
 			index++;
@@ -535,8 +530,6 @@ public class ISMain {
 		boolean isPassUW = false;
 		System.out.print("monthlyPremium: "); String monthlyPremium = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
 
-
-		
 		// composition to whole settings
 		PaymentInfo paymentInfo = new PaymentInfo();
 		System.out.println("--Payment Information--");
