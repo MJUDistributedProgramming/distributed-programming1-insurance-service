@@ -3,7 +3,9 @@ package daoList;
 import java.util.ArrayList;
 
 import IF.CompensationList;
+import domain.Accident;
 import domain.Compensation;
+import domain.Contract;
 
 /**
  * @author junkyulee
@@ -12,10 +14,11 @@ import domain.Compensation;
  */
 public class CompensationListImpl implements CompensationList {
 
-	private ArrayList<Compensation> compesnationList;
+	private ArrayList<Compensation> compensationList;
 	public Compensation m_Compensation;
 
-	public CompensationListImpl(){
+	public CompensationListImpl() {
+		this.compensationList = new ArrayList<Compensation>();
 
 	}
 
@@ -23,35 +26,51 @@ public class CompensationListImpl implements CompensationList {
 
 	}
 
-	/**
-	 * 
-	 * @param compensation
-	 */
 	public void add(Compensation compensation){
-
+		for (Compensation cp : compensationList) {
+			if (cp.getCompensationID() == compensation.getCompensationID()) {
+				System.out.println("[error] Compensation ID duplicate. Please try again");
+				return;
+			}
+		}
+		this.compensationList.add(compensation);
+		System.out.println("\"[success] Successfully Create Compensation!\"");
 	}
 
-	/**
-	 * 
-	 * @param compensationID
-	 */
 	public void delete(int compensationID){
-
+		for (Compensation compensation : compensationList) {
+			if (compensation.getCompensationID() == compensationID) {
+				compensationList.remove(compensation);
+				System.out.println("\"[success] Successfully deleted Compensation!\"");
+				return;
+			}
+		}
+		System.out.println("\"[error] The Compensation ID does not exist.\"");
 	}
 
-	/**
-	 * 
-	 * @param compensationID
-	 */
 	public Compensation retrieve(int compensationID){
+		for (Compensation compensation : compensationList) {
+			if (compensation.getCompensationID() == compensationID) {
+				return compensation;
+			}
+		}
 		return null;
 	}
+	
+	public ArrayList<Compensation> retrieveByCustomerID(int customerID){
+		ArrayList<Compensation> customerCompensation = new ArrayList<Compensation>();
+		for (Compensation compensation : compensationList) {
+			if (compensation.getCustomerID() == customerID) {
+				customerCompensation.add(compensation);
+			}
+		}
+		return customerCompensation;
+	}
+	
+	public ArrayList<Compensation> retrieveAll(){
+		return this.compensationList;
+	}
 
-	/**
-	 * 
-	 * @param compensation
-	 * @param compensationID
-	 */
 	public void update(Compensation compensation, int compensationID){
 
 	}

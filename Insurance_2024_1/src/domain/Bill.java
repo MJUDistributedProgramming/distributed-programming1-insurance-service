@@ -7,8 +7,7 @@ package domain;
  * @created 16-5-2024 오후 6:54:55
  */
 public class Bill {
-
-	//private blob billDocument;
+	
 	private int billID;
 	private String billReason;
 	private int customerID;
@@ -44,5 +43,4 @@ public class Bill {
 	public void setCustomerID(int customerID) {
 		this.customerID = customerID;
 	}
-
 }
