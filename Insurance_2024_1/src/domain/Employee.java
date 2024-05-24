@@ -1,13 +1,6 @@
 package domain;
-
-
-/**
- * @author Owner
- * @version 1.0
- * @created 16-5-2024 오후 6:54:56
- */
+import IF.ContractList;
 public class Employee {
-
 	private String email;
 	private int employeeID;
 	private String employeePW;
@@ -15,14 +8,15 @@ public class Employee {
 	private String name;
 	private String phone;
 	private String type;
+	//
 	public Insurance m_Insurance;
 	public Rule m_Rule;
-	public Contract m_Contract;
+	public ContractList contractListImpl;
 	public Compensation m_Compensation;
 	public Counsel m_Counsel;
-
-	public Employee(){
-
+	//
+	public Employee(ContractList contractListImpl){
+		this.contractListImpl = contractListImpl;
 	}
 
 	public void finalize() throws Throwable {
@@ -101,14 +95,6 @@ public class Employee {
 		this.m_Rule = m_Rule;
 	}
 
-	public Contract getM_Contract() {
-		return m_Contract;
-	}
-
-	public void setM_Contract(Contract m_Contract) {
-		this.m_Contract = m_Contract;
-	}
-
 	public Compensation getM_Compensation() {
 		return m_Compensation;
 	}
@@ -123,5 +109,13 @@ public class Employee {
 
 	public void setM_Counsel(Counsel m_Counsel) {
 		this.m_Counsel = m_Counsel;
+	}
+
+	public String createContract(Contract contract) {
+		return contractListImpl.add(contract);
+	}
+
+	public String deleteContract(int contractID) {
+		return contractListImpl.deleteById(contractID);
 	}
 }

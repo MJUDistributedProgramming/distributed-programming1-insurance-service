@@ -1,11 +1,4 @@
 package domain;
-
-
-/**
- * @author Owner
- * @version 1.0
- * @created 16-5-2024 오후 6:54:55
- */
 public class Contract {
 	private int concludeEID;
 	private int contractDate;
@@ -171,5 +164,4 @@ public class Contract {
 	public void setM_PaymentInfo(PaymentInfo m_PaymentInfo) {
 		this.m_PaymentInfo = m_PaymentInfo;
 	}
-	
 }

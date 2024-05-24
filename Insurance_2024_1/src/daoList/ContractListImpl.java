@@ -1,16 +1,7 @@
 package daoList;
-
 import java.util.ArrayList;
-
 import IF.ContractList;
 import domain.Contract;
-import domain.Customer;
-
-/**
- * @author Owner
- * @version 1.0
- * @created 16-5-2024 오후 6:54:55
- */
 public class ContractListImpl implements ContractList {
 	private ArrayList<Contract> ContractList;
 	public Contract m_Contract;
@@ -23,27 +14,25 @@ public class ContractListImpl implements ContractList {
 	public ArrayList<Contract> retrieveAll(){
 		return ContractList;
 	}
-	public void add(Contract Contract){
+	public String add(Contract Contract){
 		for (Contract contract : ContractList) {
 			if (contract.getContractID() == Contract.getContractID()) {
-				System.out.println("[error] Contract ID duplicate. Please try again");
-				return;
+				return "[error] Contract ID duplicate. Please try again";
 			}
 		}
 		this.ContractList.add(Contract);
-		System.out.println("\"[success] Successfully Create Contract!\"");
+		return "[success] Successfully Create Contract!";
 	}
-	public void delete(int id){
+	public String deleteById(int id){
 		for (Contract Contract : ContractList) {
 			if (Contract.getContractID() == id) {
 				ContractList.remove(Contract);
-				System.out.println("\"[success] Successfully deleted this Contract!\"");
-				return;
+				return "[success] Successfully deleted this Contract!";
 			}
 		}
-		System.out.println("\"[error] The contract id does not exist.\"");
+		return "[error] The contract id does not exist.";
 	}
-	public Contract retrieve(int id){
+	public Contract retrieveById(int id){
 		for (Contract Contract : ContractList) {
 			if (Contract.getContractID() == id) {
 				return Contract;
