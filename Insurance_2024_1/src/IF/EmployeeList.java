@@ -25,7 +25,7 @@ public interface EmployeeList {
 	 * 
 	 * @param id
 	 */
-	public Employee retrieve(int id);
+	public Employee retrieveById(int id);
 
 	/**
 	 * 

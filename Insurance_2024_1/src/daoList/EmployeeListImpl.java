@@ -41,7 +41,7 @@ public class EmployeeListImpl implements EmployeeList {
 			}
 		}
 	}
-	public Employee retrieve(int id){
+	public Employee retrieveById(int id){
 		for (Employee employee : EmployeeList) {
 			if (employee.getEmployeeID() == id) {
 				return employee;
