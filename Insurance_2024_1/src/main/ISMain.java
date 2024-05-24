@@ -131,8 +131,8 @@ public class ISMain {
 			else if (clientChoice.equals("10")) deleteCompensation(clientInputReader);
 			else if (clientChoice.equals("11")) createCounsel(Customer, clientInputReader);
 			else if (clientChoice.equals("12")) deleteCounsel(clientInputReader);
-			else if (clientChoice.equals("13")) createPayment(clientInputReader);
-			else if (clientChoice.equals("14")) deletePayment(clientInputReader);
+//			else if (clientChoice.equals("13")) createPayment(clientInputReader);
+//			else if (clientChoice.equals("14")) deletePayment(clientInputReader);
 			else if (clientChoice.equals("13")) logout();
 			else if (clientChoice.equals("14")) deleteMembership(Customer , clientInputReader);
 			else if (clientChoice.equals("R")) {
@@ -165,10 +165,35 @@ public class ISMain {
 			return;
 		}
 		ArrayList<Payment> paymentList = paymentListImpl.retrieveByCustomerID(Integer.parseInt(TokenManager.getID(token)));
+		if(paymentList.size() == 0) {
+			System.out.println("No Payment");
+			return;
+		}
 		int index = 1;
 		System.out.println("-- Your Payment List --");
 		for(Payment payment : paymentList) {
-			System.out.println(index + ". CounselID: " + payment.getPaymentID() + " ContractID: " + payment.getContractID()+ " CustomerID: " + payment.getCustomerID()+" Status: "+payment.isPaymentProcessed());
+			System.out.println(index + ". PaymentID: " + payment.getPaymentID() + " ContractID: " + payment.getContractID()+ " CustomerID: " + payment.getCustomerID()+" Status: "+payment.isPaymentProcessed());
+			index++;
+		}
+	}
+	private static void showAllPaymentList() {
+		if (!TokenManager.isValidToken(token)) {
+			System.out.println("[error] please login first.");
+			return;
+		}
+		if (TokenManager.getRole(token).equals(Customer)) {
+			System.out.println("[error] You do not have access.");
+			return;
+		}
+		ArrayList<Payment> paymentList = paymentListImpl.retrieveAll();
+		if(paymentList.size() == 0) {
+			System.out.println("No Payment");
+			return;
+		}
+		System.out.println("-- Payment List --");
+		int index = 1;
+		for(Payment payment :  paymentList) {
+			System.out.println(index + ". PaymentID: " + payment.getPaymentID() + " ContractID: " + payment.getContractID()+ " CustomerID: " + payment.getCustomerID()+" Status: "+payment.isPaymentProcessed());
 			index++;
 		}
 	}
@@ -291,7 +316,7 @@ public class ISMain {
 			else if (clientChoice.equals("3")) showCustomerList();
 			else if (clientChoice.equals("4")) showEmployeeList();
 			else if (clientChoice.equals("5")) showContractList();
-			else if (clientChoice.equals("6")) showPaymentList();
+			else if (clientChoice.equals("6")) showAllPaymentList();
 			else if (clientChoice.equals("7")) showInsuranceList();
 			else if (clientChoice.equals("8")) showAllCompensationList();
 			else if (clientChoice.equals("9")) showAllCounselList();
@@ -393,9 +418,11 @@ public class ISMain {
 			System.out.println("[error] please login first.");
 			return;
 		}
-		// int customerID = Integer.parseInt(TokenManager.getID(token));
-		// Counsel counsel = counselListImpl.retrieve(customerID);
 		ArrayList<Counsel> counselList = counselListImpl.retrieveByCustomerID(Integer.parseInt(TokenManager.getID(token)));
+		if(counselList.size() == 0) {
+			System.out.println("No counsel");
+			return;
+		}
 		int index = 1;
 		System.out.println("-- Your Counsel List --");
 		for(Counsel counsel : counselList) {
