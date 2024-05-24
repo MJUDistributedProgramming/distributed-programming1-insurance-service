@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import IF.AccidentList;
 import domain.Accident;
+import domain.Counsel;
+import domain.Payment;
 
 /**
  * @author junkyulee
@@ -12,10 +14,11 @@ import domain.Accident;
  */
 public class AccidentListImpl implements AccidentList {
 
-	private ArrayList<Accident> AccidentList;
+	private ArrayList<Accident> accidentList;
 	public Accident m_Accident;
 
-	public AccidentListImpl(){
+	public AccidentListImpl() {
+		this.accidentList = new ArrayList<Accident>();
 
 	}
 
@@ -23,35 +26,52 @@ public class AccidentListImpl implements AccidentList {
 
 	}
 
-	/**
-	 * 
-	 * @param accident
-	 */
-	public void add(Accident accident){
+	public void add(Accident accident) {
+		for (Accident ac : accidentList) {
+			if (ac.getAccidentID() == accident.getAccidentID()) {
+				System.out.println("[error] Accident ID duplicate. Please try again");
+				return;
+			}
+		}
+		this.accidentList.add(accident);
+		System.out.println("\"[success] Successfully Create Accident!\"");
 
 	}
 
-	/**
-	 * 
-	 * @param accidentID
-	 */
 	public void delete(int accidentID){
-
+		for (Accident accident : accidentList) {
+			if (accident.getAccidentID() == accidentID) {
+				accidentList.remove(accident);
+				System.out.println("\"[success] Successfully deleted Accident!\"");
+				return;
+			}
+		}
+		System.out.println("\"[error] The Accident ID does not exist.\"");
 	}
 
-	/**
-	 * 
-	 * @param accidentID
-	 */
 	public Accident retrieve(int accidentID){
+		for (Accident accident : accidentList) {
+			if (accident.getAccidentID() == accidentID) {
+				return accident;
+			}
+		}
 		return null;
 	}
 
-	/**
-	 * 
-	 * @param accident
-	 * @param accidentID
-	 */
+	public ArrayList<Accident> retrieveByCustomerID(int customerID){
+		ArrayList<Accident> customerAccident = new ArrayList<Accident>();
+		for (Accident accident: accidentList) {
+			if (accident.getCustomerID() == customerID) {
+				customerAccident.add(accident);
+			}
+		}
+		return customerAccident;
+	}
+	
+	public ArrayList<Accident> retrieveAll(){
+		return this.accidentList;
+	}
+	
 	public void update(Accident accident, int accidentID){
 
 	}

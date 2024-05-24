@@ -18,15 +18,11 @@ public class Insurance {
 	private int insuranceRate;
 	private String notice;
 	
-	private CompulsoryCancelPolicy compulsoryCancelPolicy;
 	private Guarantee guarantee;
-	private LatePaymentPolicy latePaymentPolicy;
 	private SpecialProvision specialProvision;
 	
 	public SpecialProvision m_SpecialProvision;
 	public Guarantee m_Guarantee;
-	public LatePaymentPolicy m_LatePaymentPolicy;
-	public CompulsoryCancelPolicy m_CompulsoryCancelPolicy;
 	public Contract m_Contract;	
 
 	public Insurance(){
@@ -39,14 +35,6 @@ public class Insurance {
 
 	public void setCategory(String category) {
 		this.category = category;
-	}
-
-	public CompulsoryCancelPolicy getCompulsoryCancelPolicy() {
-		return compulsoryCancelPolicy;
-	}
-
-	public void setCompulsoryCancelPolicy(CompulsoryCancelPolicy compulsoryCancelPolicy) {
-		this.compulsoryCancelPolicy = compulsoryCancelPolicy;
 	}
 
 	public Guarantee getGuarantee() {
@@ -79,14 +67,6 @@ public class Insurance {
 
 	public void setInsuranceRate(int insuranceRate) {
 		this.insuranceRate = insuranceRate;
-	}
-
-	public LatePaymentPolicy getLatePaymentPolicy() {
-		return latePaymentPolicy;
-	}
-
-	public void setLatePaymentPolicy(LatePaymentPolicy latePaymentPolicy) {
-		this.latePaymentPolicy = latePaymentPolicy;
 	}
 
 	public int getMinimumPeriod() {
