@@ -14,23 +14,23 @@ public class ContractListImpl implements ContractList {
 	public ArrayList<Contract> retrieveAll(){
 		return ContractList;
 	}
-	public String add(Contract Contract){
+	public boolean add(Contract Contract){
 		for (Contract contract : ContractList) {
 			if (contract.getContractID() == Contract.getContractID()) {
-				return "[error] Contract ID duplicate. Please try again";
+				return false;
 			}
 		}
 		this.ContractList.add(Contract);
-		return "[success] Successfully Create Contract!";
+		return true;
 	}
-	public String deleteById(int id){
+	public boolean deleteById(int id){
 		for (Contract Contract : ContractList) {
 			if (Contract.getContractID() == id) {
 				ContractList.remove(Contract);
-				return "[success] Successfully deleted this Contract!";
+				return true;
 			}
 		}
-		return "[error] The contract id does not exist.";
+		return false;
 	}
 	public Contract retrieveById(int id){
 		for (Contract Contract : ContractList) {

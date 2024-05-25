@@ -14,22 +14,24 @@ public class EmployeeListImpl implements EmployeeList {
 	public ArrayList<Employee> retrieveAll(){
 		return EmployeeList;
 	}
-	public String add(Employee Employee){
+	public boolean add(Employee Employee){
 		for (Employee employee : EmployeeList) {
 			if (employee.getEmployeeID() == Employee.getEmployeeID()) {
-				return "[error] ID duplicate. Please sign up again";
+				return false;
 			}
 		}
 		this.EmployeeList.add(Employee);
-		return "[success] Successfully Sign Up!";
+		return true;
 	}
-	public String delete(int id){
+	public boolean deleteById(int id){
+		Employee deleteEmployee = null;
 		for (Employee employee : EmployeeList) {
 			if (employee.getEmployeeID() == id) {
-				EmployeeList.remove(employee);
+				deleteEmployee = employee;
 			}
 		}
-		return "[success] Successfully deleted your membership!";
+		EmployeeList.remove(deleteEmployee);
+		return true;
 	}
 	public Employee retrieveById(int id){
 		for (Employee employee : EmployeeList) {

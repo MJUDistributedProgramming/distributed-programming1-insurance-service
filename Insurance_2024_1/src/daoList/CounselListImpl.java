@@ -5,11 +5,6 @@ import java.util.ArrayList;
 import IF.CounselList;
 import domain.Counsel;
 
-/**
- * @author yeil9
- * @version 1.0
- * @created 16-5-2024 오후 6:54:55
- */
 public class CounselListImpl implements CounselList {
 
 	private ArrayList<Counsel> counselList;
