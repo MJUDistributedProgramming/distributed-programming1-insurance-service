@@ -531,8 +531,9 @@ public class ISMain {
 		contract.setPassUW(isPassUW);
 		contract.setMonthlyPremium(Integer.parseInt(monthlyPremium));
 		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
-		String response = employee.createContract(contract);
-		System.out.println(response);
+		boolean response = employee.createContract(contract);
+		if (response == true) System.out.println("[success] Successfully Create Contract!");
+		else System.out.println("[error] Contract ID duplicate. Please try again");
 	}
 	private static void deleteContract(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
@@ -542,8 +543,9 @@ public class ISMain {
 		System.out.println("--Delete Contract Infomation--");
 		System.out.print("contractID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
 		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
-		String response = employee.deleteContract(Integer.parseInt(contractID));
-		System.out.println(response);
+		boolean response = employee.deleteContract(Integer.parseInt(contractID));
+		if (response == true) System.out.println("[success] Successfully deleted this Contract!");
+		else System.out.println("[error] The contract id does not exist.");
 	}
 	private static void createRule(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
@@ -870,8 +872,9 @@ public class ISMain {
 			customer.setName(name);
 			customer.setPhone(phone);
 			customer.setWeight(Integer.parseInt(weight));
-			String response = customerListImpl.add(customer);		
-			System.out.println(response);
+			boolean response = customerListImpl.add(customer);		
+			if (response == true) System.out.println("[success] Successfully Sign Up!");
+			else System.out.println("[error] ID duplicate. Please sign up again");
 		} else if (userType.equals(Employee)) {
 			System.out.println("--SignUp Infomation--");
 			
@@ -895,8 +898,9 @@ public class ISMain {
 			employee.setEmail(email);
 			employee.setGender(gender);
 			employee.setType(type);
-			String response = employeeListImpl.add(employee);
-			System.out.println(response);
+			boolean response = employeeListImpl.add(employee);
+			if (response == true) System.out.println("[success] Successfully Sign Up!");
+			else System.out.println("[error] ID duplicate. Please sign up again");
 		}
 	}
 	private static void logout() {
@@ -916,8 +920,8 @@ public class ISMain {
 		System.out.println("--deleteMembership Infomation--");
 		System.out.print("Do you want to delete your membership? [Y/N] : "); String result = dataValidation(clientInputReader.readLine().trim(), "boolean", clientInputReader);
 		if (result.equals("Y")) {
-			if (userType.equals(Customer)) customerListImpl.delete(Integer.parseInt(TokenManager.getID(token)));
-			else if (userType.equals(Employee)) employeeListImpl.delete(Integer.parseInt(TokenManager.getID(token)));
+			if (userType.equals(Customer)) customerListImpl.deleteById(Integer.parseInt(TokenManager.getID(token)));
+			else if (userType.equals(Employee)) employeeListImpl.deleteById(Integer.parseInt(TokenManager.getID(token)));
 			TokenManager.invalidateToken(token);
 		} else System.out.println("[error] you enter 'N', return to homePage");
 	}

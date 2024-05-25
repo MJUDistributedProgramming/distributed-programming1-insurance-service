@@ -111,11 +111,11 @@ public class Employee {
 		this.m_Counsel = m_Counsel;
 	}
 
-	public String createContract(Contract contract) {
+	public boolean createContract(Contract contract) {
 		return contractListImpl.add(contract);
 	}
 
-	public String deleteContract(int contractID) {
+	public boolean deleteContract(int contractID) {
 		return contractListImpl.deleteById(contractID);
 	}
 }

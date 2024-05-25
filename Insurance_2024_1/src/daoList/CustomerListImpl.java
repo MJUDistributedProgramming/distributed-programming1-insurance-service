@@ -15,22 +15,24 @@ public class CustomerListImpl implements CustomerList {
 	public void finalize() throws Throwable {
 
 	}
-	public String add(Customer Customer){
+	public boolean add(Customer Customer){
 		for (Customer customer : customerList) {
 			if (customer.getCustomerID() == Customer.getCustomerID()) {
-				return "[error] ID duplicate. Please sign up again";
+				return false;
 			}
 		}
 		this.customerList.add(Customer);
-		return "[success] Successfully Sign Up!";
+		return true;
 	}
-	public String delete(int id){
+	public boolean deleteById(int id){
+		Customer deleteCustomer = null;
 		for (Customer customer : customerList) {
 			if (customer.getCustomerID() == id) {
-				customerList.remove(customer);
+				deleteCustomer = customer;
 			}
 		}
-		return "[success] Successfully deleted your membership!";
+		customerList.remove(deleteCustomer);
+		return true;
 	}
 	public Customer retrieveById(int id){
 		for (Customer customer : customerList) {
