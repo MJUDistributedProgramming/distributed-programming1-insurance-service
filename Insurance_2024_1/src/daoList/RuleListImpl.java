@@ -6,11 +6,6 @@ import IF.RuleList;
 import domain.Contract;
 import domain.Rule;
 
-/**
- * @author Owner
- * @version 1.0
- * @created 16-5-2024 오후 6:54:57
- */
 public class RuleListImpl implements RuleList {
 
 	private ArrayList<Rule> ruleList;
@@ -24,31 +19,18 @@ public class RuleListImpl implements RuleList {
 	}
 
 	
-	public void add(Rule rule){
+	public boolean add(Rule rule){
 		for(Rule rule1 : ruleList) {
 			if(rule1.getRuleID() == rule.getRuleID()) {
-				System.out.println("[error] Rule ID duplicate. Please try again");
-				return;
+				return false;
 			}
 		}
-		this.ruleList.add(rule);
-		System.out.println("\"[success] Successfully Create Rule!\"");
+		
+		return this.ruleList.add(rule);
 
 	}
 
-	public void delete(int ruleID){
-		for(Rule rule1 : ruleList) {
-			if(rule1.getRuleID() == ruleID) {
-				this.ruleList.remove(rule1);
-				System.out.println("\"[success] Successfully deleted this Rule!\"");
-				return;
-			}
-		}
-		System.out.println("\"[error] The rule id does not exist.\"");
-	}
-
-
-	public Rule retrieve(int ruleID){
+	public Rule retrieveById(int ruleID){
 		for(Rule rule1 : ruleList) {
 			if(rule1.getRuleID() == ruleID) {
 				return rule1;
@@ -63,8 +45,18 @@ public class RuleListImpl implements RuleList {
 	}
 
 	public ArrayList<Rule> retrieveAll() {
-		// TODO Auto-generated method stub
 		return ruleList;
+	}
+
+	@Override
+	public boolean deleteById(int ruleID) {
+		Rule deleteRule = new Rule();
+		for(Rule rule : ruleList) {
+			if(rule.getRuleID() == ruleID) {
+				deleteRule=rule;
+			}
+		}
+		return ruleList.remove(deleteRule);
 	}
 
 }

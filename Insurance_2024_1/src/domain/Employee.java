@@ -1,5 +1,6 @@
 package domain;
 import IF.ContractList;
+import IF.RuleList;
 public class Employee {
 	private String email;
 	private int employeeID;
@@ -10,7 +11,7 @@ public class Employee {
 	private String type;
 	//
 	public Insurance m_Insurance;
-	public Rule m_Rule;
+	public RuleList ruleListImpl;
 	public ContractList contractListImpl;
 	public Compensation m_Compensation;
 	public Counsel m_Counsel;
@@ -87,14 +88,6 @@ public class Employee {
 		this.m_Insurance = m_Insurance;
 	}
 
-	public Rule getM_Rule() {
-		return m_Rule;
-	}
-
-	public void setM_Rule(Rule m_Rule) {
-		this.m_Rule = m_Rule;
-	}
-
 	public Compensation getM_Compensation() {
 		return m_Compensation;
 	}
@@ -117,5 +110,21 @@ public class Employee {
 
 	public boolean deleteContract(int contractID) {
 		return contractListImpl.deleteById(contractID);
+	}
+
+	public void setRuleList(RuleList ruleListImpl) {
+		this.ruleListImpl = ruleListImpl;
+	}
+	
+	public RuleList getRuleList() {
+		return ruleListImpl;
+	}
+	
+	public boolean createRule(Rule rule) {
+		return this.ruleListImpl.add(rule);
+	}
+
+	public boolean deleteRule(int ruleID) {
+		return this.ruleListImpl.deleteById(ruleID);
 	}
 }
