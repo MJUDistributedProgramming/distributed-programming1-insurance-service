@@ -7,11 +7,6 @@ import domain.Accident;
 import domain.Compensation;
 import domain.Contract;
 
-/**
- * @author junkyulee
- * @version 1.0
- * @created 16-5-2024 오후 6:54:55
- */
 public class CompensationListImpl implements CompensationList {
 
 	private ArrayList<Compensation> compensationList;
@@ -19,33 +14,30 @@ public class CompensationListImpl implements CompensationList {
 
 	public CompensationListImpl() {
 		this.compensationList = new ArrayList<Compensation>();
-
 	}
 
 	public void finalize() throws Throwable {
 
 	}
 
-	public void add(Compensation compensation){
+	public boolean add(Compensation compensation){
 		for (Compensation cp : compensationList) {
 			if (cp.getCompensationID() == compensation.getCompensationID()) {
-				System.out.println("[error] Compensation ID duplicate. Please try again");
-				return;
+				return false;
 			}
 		}
 		this.compensationList.add(compensation);
-		System.out.println("\"[success] Successfully Create Compensation!\"");
+		return true;
 	}
 
-	public void delete(int compensationID){
+	public boolean deleteById(int compensationID){
+		Compensation deletedCompensation = new Compensation();
 		for (Compensation compensation : compensationList) {
 			if (compensation.getCompensationID() == compensationID) {
-				compensationList.remove(compensation);
-				System.out.println("\"[success] Successfully deleted Compensation!\"");
-				return;
+				deletedCompensation = compensation;
 			}
 		}
-		System.out.println("\"[error] The Compensation ID does not exist.\"");
+		return compensationList.remove(deletedCompensation);
 	}
 
 	public Compensation retrieve(int compensationID){

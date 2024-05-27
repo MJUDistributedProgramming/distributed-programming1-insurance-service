@@ -1,10 +1,12 @@
 package domain;
 import java.util.ArrayList;
-/**
- * @author Owner
- * @version 1.0
- * @created 16-5-2024 오후 6:54:56
- */
+
+import IF.AccidentList;
+import IF.CompensationList;
+import IF.CounselList;
+import IF.InsuranceList;
+import IF.PaymentList;
+
 public class Customer {
 	private String account;
 	private String address;
@@ -23,12 +25,13 @@ public class Customer {
 	private int weight;
 	
 	// associations
-	public Payment m_Payment;
-	public Compensation m_Compensation;
-	public Counsel m_Counsel;
+	public CounselList counselListImpl;
 	public Contract m_Contract;
 	public MedicalHistory m_MedicalHistory;
-	public Accident m_Accident;
+	public PaymentList paymentListImpl;
+	public InsuranceList insuranceListImpl;
+	public AccidentList accidentListImpl;
+	public CompensationList compensationListImpl;
 	
 	public Customer(){
 		contractedList = new ArrayList<>();
@@ -126,24 +129,6 @@ public class Customer {
 	public void setWeight(int weight) {
 		this.weight = weight;
 	}
-	public Payment getM_Payment() {
-		return m_Payment;
-	}
-	public void setM_Payment(Payment m_Payment) {
-		this.m_Payment = m_Payment;
-	}
-	public Compensation getM_Compensation() {
-		return m_Compensation;
-	}
-	public void setM_Compensation(Compensation m_Compensation) {
-		this.m_Compensation = m_Compensation;
-	}
-	public Counsel getM_Counsel() {
-		return m_Counsel;
-	}
-	public void setM_Counsel(Counsel m_Counsel) {
-		this.m_Counsel = m_Counsel;
-	}
 	public Contract getM_Contract() {
 		return m_Contract;
 	}
@@ -156,11 +141,41 @@ public class Customer {
 	public void setM_MedicalHistory(MedicalHistory m_MedicalHistory) {
 		this.m_MedicalHistory = m_MedicalHistory;
 	}
-	public Accident getM_Accident() {
-		return m_Accident;
+	public void setCounselList(CounselList counselListImpl) {
+		this.counselListImpl = counselListImpl;
 	}
-	public void setM_Accident(Accident m_Accident) {
-		this.m_Accident = m_Accident;
+	public boolean requestCounsel(Counsel counsel) {
+		return counselListImpl.add(counsel);
 	}
-	
+	public boolean deleteCounsel(int counselID) {
+		return counselListImpl.delete(counselID);
+	}
+	public void setPaymentList(PaymentList paymentListImpl) {
+		this.paymentListImpl = paymentListImpl;
+		
+	}
+	public void setInsuranceList(InsuranceList insuranceListImpl) {
+		this.insuranceListImpl = insuranceListImpl;
+	}
+	public void setAccidentList(AccidentList accidentListImpl) {
+		this.accidentListImpl = accidentListImpl;
+	}
+	public AccidentList getAccidentList() {
+		return accidentListImpl;
+	}
+	public boolean createAccident(Accident accident) {
+		return this.accidentListImpl.add(accident);
+	}
+	public boolean deleteAccident(int accidentId) {
+		return this.accidentListImpl.deleteById(accidentId);
+	}
+	public CompensationList getCompensationList() {
+		return compensationListImpl;
+	}
+	public void setCompensationList(CompensationList compensationListImpl) {
+		this.compensationListImpl = compensationListImpl;
+	}
+	public boolean createCompensation(Compensation compensation) {
+		return this.compensationListImpl.add(compensation);
+	}
 }

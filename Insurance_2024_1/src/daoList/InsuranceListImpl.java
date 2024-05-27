@@ -5,11 +5,6 @@ import java.util.ArrayList;
 import IF.InsuranceList;
 import domain.Insurance;
 
-/**
- * @author yeil9
- * @version 1.0
- * @created 16-5-2024 오후 6:54:56
- */
 public class InsuranceListImpl implements InsuranceList {
 
 	private ArrayList<Insurance> insuranceList;
@@ -23,26 +18,23 @@ public class InsuranceListImpl implements InsuranceList {
 
 	}
 
-	public void add(Insurance insurance){
+	public boolean add(Insurance insurance){
 		for (Insurance i: insuranceList) {
-			if (i.getInsuranceID() == insurance.getInsuranceID()) {
-				System.out.println("[error] Insurance ID duplicate. Please try again");
-				return;
-			}
+			if (i.getInsuranceID() == insurance.getInsuranceID())
+				return false;
 		}
 		this.insuranceList.add(insurance);
-		System.out.println("\"[success] Successfully created Insurance!\"");
+		return true;
 	}
 
-	public void delete(int insuranceID) {
+	public boolean delete(int insuranceID) {
 		for (Insurance insurance : insuranceList) {
 			if (insurance.getInsuranceID() == insuranceID) {
 				insuranceList.remove(insurance);
-				System.out.println("\"[success] Successfully deleted Insurance!\"");
-				return;
+				return true;
 			}
 		}
-		System.out.println("\"[error] The Insurance ID does not exist.\"");
+		return false;
 	}
 
 	public Insurance retrieve(int insuranceID) {
@@ -58,8 +50,8 @@ public class InsuranceListImpl implements InsuranceList {
 		return this.insuranceList;
 	}
 
-	public void update(int insuranceID, Insurance insurance){
-
+	public boolean update(int insuranceID, Insurance insurance){
+		return false;
 	}
 
 }

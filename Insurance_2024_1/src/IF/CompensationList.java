@@ -1,37 +1,20 @@
 package IF;
 
+import java.util.ArrayList;
+
 import domain.Compensation;
 
-/**
- * @author junkyulee
- * @version 1.0
- * @created 16-5-2024 오후 6:54:55
- */
 public interface CompensationList {
 
-	/**
-	 * 
-	 * @param compensation
-	 */
-	public void add(Compensation compensation);
-
-	/**
-	 * 
-	 * @param compensationID
-	 */
-	public void delete(int compensationID);
-
-	/**
-	 * 
-	 * @param compensationID
-	 */
+	public boolean add(Compensation compensation);
+	
+	public boolean deleteById(int compensationID);
+	
 	public Compensation retrieve(int compensationID);
-
-	/**
-	 * 
-	 * @param compensation
-	 * @param compensationID
-	 */
+	
+	public ArrayList<Compensation> retrieveByCustomerID(int customerID);
+	
+	public ArrayList<Compensation> retrieveAll();
+	
 	public void update(Compensation compensation, int compensationID);
-
 }
