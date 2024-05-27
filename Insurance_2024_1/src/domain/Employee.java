@@ -1,6 +1,10 @@
 package domain;
 import IF.ContractList;
 import IF.RuleList;
+import IF.CounselList;
+import IF.InsuranceList;
+import IF.PaymentList;
+
 public class Employee {
 	private String email;
 	private int employeeID;
@@ -9,15 +13,17 @@ public class Employee {
 	private String name;
 	private String phone;
 	private String type;
-	//
-	public Insurance m_Insurance;
+
+
 	public RuleList ruleListImpl;
+	public InsuranceList insuranceListImpl;
 	public ContractList contractListImpl;
 	public Compensation m_Compensation;
-	public Counsel m_Counsel;
+	public CounselList counselListImpl;
+	public PaymentList paymentListImpl;
 	//
-	public Employee(ContractList contractListImpl){
-		this.contractListImpl = contractListImpl;
+	public Employee(){
+
 	}
 
 	public void finalize() throws Throwable {
@@ -80,12 +86,12 @@ public class Employee {
 		this.type = type;
 	}
 
-	public Insurance getM_Insurance() {
-		return m_Insurance;
+	public InsuranceList getInsuranceList() {
+		return insuranceListImpl;
 	}
 
-	public void setM_Insurance(Insurance m_Insurance) {
-		this.m_Insurance = m_Insurance;
+	public void setInsuranceList(InsuranceList insuranceListImpl) {
+		this.insuranceListImpl = insuranceListImpl;
 	}
 
 	public Compensation getM_Compensation() {
@@ -96,12 +102,20 @@ public class Employee {
 		this.m_Compensation = m_Compensation;
 	}
 
-	public Counsel getM_Counsel() {
-		return m_Counsel;
+	public CounselList getCounselList() {
+		return counselListImpl;
 	}
 
-	public void setM_Counsel(Counsel m_Counsel) {
-		this.m_Counsel = m_Counsel;
+	public void setCounselList(CounselList counselListImpl) {
+		this.counselListImpl = counselListImpl;
+	}
+	
+	public ContractList getContractList() {
+		return contractListImpl;
+	}
+
+	public void setContractList(ContractList contractListImpl) {
+		this.contractListImpl = contractListImpl;
 	}
 
 	public boolean createContract(Contract contract) {
@@ -126,5 +140,25 @@ public class Employee {
 
 	public boolean deleteRule(int ruleID) {
 		return this.ruleListImpl.deleteById(ruleID);
+
+	public boolean createInsurance(Insurance insurance) {
+		return this.insuranceListImpl.add(insurance);
+	}
+
+	public boolean deleteInsurance(int insuranceID) {
+		return this.insuranceListImpl.delete(insuranceID);
+	}
+
+	public boolean createPayment(Payment payment) {
+		return this.paymentListImpl.add(payment);
+	}
+
+	public boolean deletePayment(int paymentID) {
+		return this.paymentListImpl.delete(paymentID);
+	}
+
+	public void setPaymentList(PaymentList paymentListImpl) {
+		this.paymentListImpl = paymentListImpl;
+
 	}
 }
