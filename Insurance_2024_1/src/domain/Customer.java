@@ -1,10 +1,10 @@
 package domain;
 import java.util.ArrayList;
-/**
- * @author Owner
- * @version 1.0
- * @created 16-5-2024 오후 6:54:56
- */
+
+import IF.CounselList;
+import IF.InsuranceList;
+import IF.PaymentList;
+
 public class Customer {
 	private String account;
 	private String address;
@@ -23,12 +23,13 @@ public class Customer {
 	private int weight;
 	
 	// associations
-	public Payment m_Payment;
+	public CounselList counselListImpl;
 	public Compensation m_Compensation;
-	public Counsel m_Counsel;
 	public Contract m_Contract;
 	public MedicalHistory m_MedicalHistory;
 	public Accident m_Accident;
+	private PaymentList paymentListImpl;
+	private InsuranceList insuranceListImpl;
 	
 	public Customer(){
 		contractedList = new ArrayList<>();
@@ -126,23 +127,11 @@ public class Customer {
 	public void setWeight(int weight) {
 		this.weight = weight;
 	}
-	public Payment getM_Payment() {
-		return m_Payment;
-	}
-	public void setM_Payment(Payment m_Payment) {
-		this.m_Payment = m_Payment;
-	}
 	public Compensation getM_Compensation() {
 		return m_Compensation;
 	}
 	public void setM_Compensation(Compensation m_Compensation) {
 		this.m_Compensation = m_Compensation;
-	}
-	public Counsel getM_Counsel() {
-		return m_Counsel;
-	}
-	public void setM_Counsel(Counsel m_Counsel) {
-		this.m_Counsel = m_Counsel;
 	}
 	public Contract getM_Contract() {
 		return m_Contract;
@@ -161,6 +150,23 @@ public class Customer {
 	}
 	public void setM_Accident(Accident m_Accident) {
 		this.m_Accident = m_Accident;
+	}
+	public void setCounselList(CounselList counselListImpl) {
+		this.counselListImpl = counselListImpl;
+	}
+	
+	public boolean requestCounsel(Counsel counsel) {
+		return counselListImpl.add(counsel);
+	}
+	public boolean deleteCounsel(int counselID) {
+		return counselListImpl.delete(counselID);
+	}
+	public void setPaymentList(PaymentList paymentListImpl) {
+		this.paymentListImpl = paymentListImpl;
+		
+	}
+	public void setInsuranceList(InsuranceList insuranceListImpl) {
+		this.insuranceListImpl = insuranceListImpl;
 	}
 	
 }

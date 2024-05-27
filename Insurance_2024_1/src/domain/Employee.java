@@ -1,13 +1,9 @@
 package domain;
-
-
-/**
- * @author Owner
- * @version 1.0
- * @created 16-5-2024 오후 6:54:56
- */
+import IF.ContractList;
+import IF.CounselList;
+import IF.InsuranceList;
+import IF.PaymentList;
 public class Employee {
-
 	private String email;
 	private int employeeID;
 	private String employeePW;
@@ -15,14 +11,16 @@ public class Employee {
 	private String name;
 	private String phone;
 	private String type;
-	public Insurance m_Insurance;
+	//
+	public InsuranceList insuranceListImpl;
 	public Rule m_Rule;
-	public Contract m_Contract;
+	public ContractList contractListImpl;
 	public Compensation m_Compensation;
-	public Counsel m_Counsel;
-
-	public Employee(){
-
+	public CounselList counselListImpl;
+	public PaymentList paymentListImpl;
+	//
+	public Employee(ContractList contractListImpl){
+		this.contractListImpl = contractListImpl;
 	}
 
 	public void finalize() throws Throwable {
@@ -85,12 +83,12 @@ public class Employee {
 		this.type = type;
 	}
 
-	public Insurance getM_Insurance() {
-		return m_Insurance;
+	public InsuranceList getInsuranceList() {
+		return insuranceListImpl;
 	}
 
-	public void setM_Insurance(Insurance m_Insurance) {
-		this.m_Insurance = m_Insurance;
+	public void setInsuranceList(InsuranceList insuranceListImpl) {
+		this.insuranceListImpl = insuranceListImpl;
 	}
 
 	public Rule getM_Rule() {
@@ -101,14 +99,6 @@ public class Employee {
 		this.m_Rule = m_Rule;
 	}
 
-	public Contract getM_Contract() {
-		return m_Contract;
-	}
-
-	public void setM_Contract(Contract m_Contract) {
-		this.m_Contract = m_Contract;
-	}
-
 	public Compensation getM_Compensation() {
 		return m_Compensation;
 	}
@@ -117,11 +107,39 @@ public class Employee {
 		this.m_Compensation = m_Compensation;
 	}
 
-	public Counsel getM_Counsel() {
-		return m_Counsel;
+	public CounselList getCounselList() {
+		return counselListImpl;
 	}
 
-	public void setM_Counsel(Counsel m_Counsel) {
-		this.m_Counsel = m_Counsel;
+	public void setCounselList(CounselList counselListImpl) {
+		this.counselListImpl = counselListImpl;
+	}
+
+	public boolean createContract(Contract contract) {
+		return contractListImpl.add(contract);
+	}
+
+	public boolean deleteContract(int contractID) {
+		return contractListImpl.deleteById(contractID);
+	}
+
+	public boolean createInsurance(Insurance insurance) {
+		return this.insuranceListImpl.add(insurance);
+	}
+
+	public boolean deleteInsurance(int insuranceID) {
+		return this.insuranceListImpl.delete(insuranceID);
+	}
+
+	public boolean createPayment(Payment payment) {
+		return this.paymentListImpl.add(payment);
+	}
+
+	public boolean deletePayment(int paymentID) {
+		return this.paymentListImpl.delete(paymentID);
+	}
+
+	public void setPaymentList(PaymentList paymentListImpl) {
+		this.paymentListImpl = paymentListImpl;
 	}
 }

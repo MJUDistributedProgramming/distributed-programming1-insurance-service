@@ -3,24 +3,30 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
+
+import IF.ContractList;
+import IF.CounselList;
+import IF.CustomerList;
+import IF.EmployeeList;
+import IF.InsuranceList;
+import IF.PaymentList;
 import daoList.AccidentListImpl;
 import daoList.CompensationListImpl;
 import daoList.ContractListImpl;
 import daoList.CounselListImpl;
-import daoList.CustomerDBImpl;
+import daoList.CustomerListImpl;
 import daoList.EmployeeListImpl;
 import daoList.InsuranceListImpl;
 import daoList.PaymentListImpl;
 import daoList.RuleListImpl;
 import domain.Accident;
-import domain.Bill;
-import domain.Compensation;
 import domain.AutomaticPayment;
 import domain.BankPayment;
+import domain.Bill;
 import domain.CancerHealth;
 import domain.Car;
 import domain.CardPayment;
+import domain.Compensation;
 import domain.Contract;
 import domain.Counsel;
 import domain.Customer;
@@ -36,6 +42,7 @@ import domain.PaymentInfo;
 import domain.Rule;
 import domain.SpecialProvision;
 import token.TokenManager;
+
 public class ISMain {
 	// constants - role
 	private static final String Customer = "C";
@@ -46,7 +53,7 @@ public class ISMain {
 	private static final String CompensationProcessing = "CP";
 	private static final String contractStatus1 = "ReviewRequest"; //심사요청상태
 	private static final String contractStatus2 = "ReviewReject"; //심사거절상태
-	private static final String contractStatus3 = "ContractPermission";//계약진행허가상태
+	private static final String contractStatus3 = "ContractPermission"; //계약진행허가상태
 	private static final String paymentInfoCard = "card";
 	private static final String paymentInfoBank = "bank";
 	private static final String paymentInfoAutomatic = "automatic";
@@ -54,20 +61,21 @@ public class ISMain {
 	private static String token;
 	private static AccidentListImpl accidentListImpl;
 	private static CompensationListImpl compensationListImpl;
-	private static ContractListImpl contractListImpl;
-	private static CounselListImpl counselListImpl;
-	private static CustomerDBImpl customerDBImpl;
-	private static EmployeeListImpl employeeListImpl;
-	private static InsuranceListImpl insuranceListImpl;
-	private static PaymentListImpl paymentListImpl;
+	private static ContractList contractListImpl;
+	private static CounselList counselListImpl;
+	private static CustomerList customerListImpl;
+	private static EmployeeList employeeListImpl;
+	private static InsuranceList insuranceListImpl;
+	private static PaymentList paymentListImpl;
 	private static RuleListImpl ruleListImpl;
+	
 	public static void main(String[] args) throws IOException {
 		// ListImpl Settings
 		accidentListImpl = new AccidentListImpl();
 		compensationListImpl = new CompensationListImpl();
 		contractListImpl = new ContractListImpl();
 		counselListImpl = new CounselListImpl();
-		customerDBImpl = new CustomerDBImpl();
+		customerListImpl = new CustomerListImpl();
 		employeeListImpl = new EmployeeListImpl();
 		insuranceListImpl = new InsuranceListImpl();
 		paymentListImpl = new PaymentListImpl();
@@ -99,20 +107,19 @@ public class ISMain {
 		System.out.println("***************** Main Menu *****************");
 		System.out.println("1. Login");
 		System.out.println("2. SignUp");
-		System.out.println("3. List Accident");
-		System.out.println("4. List Compensation");
-		System.out.println("5. List Counsel");
-		System.out.println("6. List Payment");
-		System.out.println("7. Create Accident");
-		System.out.println("8. Delete Accident");
-		System.out.println("9. Create Compensation");
-		System.out.println("10. Delete Compensation");
-		System.out.println("11. Create Counsel");
-		System.out.println("12. Delete Counsel");
-//		System.out.println("13. Create Payment");
-//		System.out.println("14. Delete Payment");
-		System.out.println("13. Logout");
-		System.out.println("14. Delete Membership");
+		System.out.println("3. List Insurance");
+		System.out.println("4. List Accident");
+		System.out.println("5. List Compensation");
+		System.out.println("6. List Counsel");
+		System.out.println("7. List Payment");
+		System.out.println("8. Create Accident");
+		System.out.println("9. Delete Accident");
+		System.out.println("10. Create Compensation");
+		System.out.println("11. Delete Compensation");
+		System.out.println("12. Create Counsel");
+		System.out.println("13. Delete Counsel");
+		System.out.println("14. Logout");
+		System.out.println("15. Delete Membership");
 		System.out.println("R. Return HomePage");
 	}
 	private static void startCustomerService(BufferedReader clientInputReader) throws IOException{
@@ -121,6 +128,7 @@ public class ISMain {
 			String clientChoice = clientInputReader.readLine().trim();
 			if (clientChoice.equals("1")) login(Customer , clientInputReader);
 			else if (clientChoice.equals("2")) signUp(Customer , clientInputReader);
+			else if (clientChoice.equals("3")) showInsuranceList();
 			else if (clientChoice.equals("3")) showAccidentList();
 			else if (clientChoice.equals("4")) showCompensationList();
 			else if (clientChoice.equals("5")) showCounselList();
@@ -131,8 +139,6 @@ public class ISMain {
 			else if (clientChoice.equals("10")) deleteCompensation(clientInputReader);
 			else if (clientChoice.equals("11")) createCounsel(Customer, clientInputReader);
 			else if (clientChoice.equals("12")) deleteCounsel(clientInputReader);
-//			else if (clientChoice.equals("13")) createPayment(clientInputReader);
-//			else if (clientChoice.equals("14")) deletePayment(clientInputReader);
 			else if (clientChoice.equals("13")) logout();
 			else if (clientChoice.equals("14")) deleteMembership(Customer , clientInputReader);
 			else if (clientChoice.equals("R")) {
@@ -166,34 +172,13 @@ public class ISMain {
 		}
 		ArrayList<Payment> paymentList = paymentListImpl.retrieveByCustomerID(Integer.parseInt(TokenManager.getID(token)));
 		if(paymentList.size() == 0) {
-			System.out.println("No Payment");
+			System.out.println("No payment");
 			return;
 		}
 		int index = 1;
 		System.out.println("-- Your Payment List --");
 		for(Payment payment : paymentList) {
-			System.out.println(index + ". PaymentID: " + payment.getPaymentID() + " ContractID: " + payment.getContractID()+ " CustomerID: " + payment.getCustomerID()+" Status: "+payment.isPaymentProcessed());
-			index++;
-		}
-	}
-	private static void showAllPaymentList() {
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] please login first.");
-			return;
-		}
-		if (TokenManager.getRole(token).equals(Customer)) {
-			System.out.println("[error] You do not have access.");
-			return;
-		}
-		ArrayList<Payment> paymentList = paymentListImpl.retrieveAll();
-		if(paymentList.size() == 0) {
-			System.out.println("No Payment");
-			return;
-		}
-		System.out.println("-- Payment List --");
-		int index = 1;
-		for(Payment payment :  paymentList) {
-			System.out.println(index + ". PaymentID: " + payment.getPaymentID() + " ContractID: " + payment.getContractID()+ " CustomerID: " + payment.getCustomerID()+" Status: "+payment.isPaymentProcessed());
+			System.out.println(index + ". CounselID: " + payment.getPaymentID() + " ContractID: " + payment.getContractID()+ " CustomerID: " + payment.getCustomerID()+" Status: "+payment.isPaymentProcessed());
 			index++;
 		}
 	}
@@ -236,16 +221,10 @@ public class ISMain {
 			System.out.println("[error] please login first.");
 			return;
 		}
-		if (TokenManager.getRole(token).equals(Customer)) {
-			System.out.println("[error] You do not have access.");
-			return;
-		}
 		System.out.println("--Create Payment Infomation--");
-		
-		// basic attribute settings
 		System.out.print("Payment ID: "); String paymentID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		System.out.print("ContractID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		Contract contract = contractListImpl.retrieve(Integer.parseInt(contractID));
+		System.out.print("Contract ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
 		if (contract == null) {
 			System.out.println("[error] A contract for that ID does not exist.");
 			return;
@@ -263,22 +242,27 @@ public class ISMain {
 		payment.setAmount(amount);
 		payment.setDueDateOfPayment(dueDateOfPayment);
 		payment.setStatusOfPayment(statusOfPayment);
-		paymentListImpl.add(payment);
+		
+		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+		boolean response = employee.createPayment(payment);
+		if(response) System.out.println("[success] Successfully Create Payment!");
+		else System.out.println("[error] Payment ID duplicate. Please try again");
 	}
+	
 	private static void deletePayment(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
 			return;
 		}
-		if (TokenManager.getRole(token).equals(Customer)) {
-			System.out.println("[error] You do not have access.");
-			return;
-		}
 		System.out.println("--Delete Payment Infomation--");
 		System.out.print("payment ID: "); String paymentID = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-		paymentListImpl.delete(Integer.parseInt(paymentID));
 		
+		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+		boolean response = employee.deletePayment(Integer.parseInt(paymentID));
+		if(response) System.out.println("[success] Successfully deleted this Payment!");
+		else System.out.println("[error] The payment id does not exist.");
 	}
+	
 	private static void printEmployeeMainMenu() {
 		System.out.println("***************** Main Menu *****************");
 		System.out.println("1. Login");
@@ -297,15 +281,14 @@ public class ISMain {
 		System.out.println("14. Delete Insurance");
 		System.out.println("15. Create Compensation");
 		System.out.println("16. Delete Compensation");
-		System.out.println("17. Create Counsel");
-		System.out.println("18. Delete Counsel");
-		System.out.println("19. Create Rule");
-		System.out.println("20. Delete Rule");
-		System.out.println("21, Create Payment");
-		System.out.println("22. Delete Payment");
-		System.out.println("23. Logout");
-		System.out.println("24. Delete Membership");
-		System.out.println("X. R. Return HomePage");
+		System.out.println("17. Update Counsel");
+		System.out.println("18. Create Rule");
+		System.out.println("19. Delete Rule");
+		System.out.println("20, Create Payment");
+		System.out.println("21. Delete Payment");
+		System.out.println("22. Logout");
+		System.out.println("23. Delete Membership");
+		System.out.println("R. Return HomePage");
 	}
 	private static void startEmployeeService(BufferedReader clientInputReader) throws IOException{
 		while(true) {
@@ -327,14 +310,13 @@ public class ISMain {
 			else if (clientChoice.equals("14")) deleteInsurance(clientInputReader);
 			else if (clientChoice.equals("15")) createCompensation(Employee, clientInputReader);
 			else if (clientChoice.equals("16")) deleteCompensation(clientInputReader);
-			else if (clientChoice.equals("17")) createCounsel(Employee, clientInputReader);
-			else if (clientChoice.equals("18")) deleteCounsel(clientInputReader);
-			else if (clientChoice.equals("19")) createRule(clientInputReader);
-			else if (clientChoice.equals("20")) deleteRule(clientInputReader);
-			else if (clientChoice.equals("21")) createPayment(clientInputReader);
-			else if (clientChoice.equals("22")) deletePayment(clientInputReader);
-			else if (clientChoice.equals("23")) logout();
-			else if (clientChoice.equals("24")) deleteMembership(Employee , clientInputReader);
+			else if (clientChoice.equals("17")) updateCounsel(Employee, clientInputReader);
+			else if (clientChoice.equals("18")) createRule(clientInputReader);
+			else if (clientChoice.equals("19")) deleteRule(clientInputReader);
+			else if (clientChoice.equals("20")) createPayment(clientInputReader);
+			else if (clientChoice.equals("21")) deletePayment(clientInputReader);
+			else if (clientChoice.equals("22")) logout();
+			else if (clientChoice.equals("23")) deleteMembership(Employee , clientInputReader);
 			else if (clientChoice.equals("R")) {
 				System.out.println("|*** Return to HomePage ***|");
 				return;
@@ -342,34 +324,38 @@ public class ISMain {
 			else System.out.println("invalid choice");
 		}
 	}
-	private static void showCustomerList() {
+	private static void showAllPaymentList() {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
 			return;
 		}
-		String role = TokenManager.getRole(token);
 		int index = 1;
-		if (role.equals(Customer)) {
-			System.out.println("[error] You do not have access.");
+		ArrayList<Payment> paymentList = paymentListImpl.retrieveAll();
+		if(paymentList.size() == 0) {
+			System.out.println("No payment");
 			return;
 		}
+		System.out.println("-- Payment List --");
+		for(Payment payment : paymentList) {
+			System.out.println(index + ". CounselID: " + payment.getPaymentID() + " ContractID: " + payment.getContractID()+ " CustomerID: " + payment.getCustomerID()+" Status: "+payment.isPaymentProcessed());
+			index++;
+		}
+	}
+	private static void updateCounsel(String userType, BufferedReader clientInputReader) {
+		
+	}
+	
+	private static void showCustomerList() {
+		int index = 1;
 		System.out.println("-- Customer List --");
-		for(Customer customer : customerDBImpl.retrieveAll()) {
+		for(Customer customer : customerListImpl.retrieveAll()) {
 			System.out.println(index + ". ID: " + customer.getCustomerID() + " Name: " + customer.getName());
 			index++;
 		}
 	}
 	private static void showEmployeeList() {
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] please login first.");
-			return;
-		}
-		String role = TokenManager.getRole(token);
 		int index = 1;
-		if (role.equals(Customer)) {
-			System.out.println("[error] You do not have access.");
-			return;
-		}
+		System.out.println();
 		System.out.println("-- Employee List --");
 		for(Employee employee : employeeListImpl.retrieveAll()) {
 			System.out.println(index + ". ID: " + employee.getEmployeeID() + " Name: " + employee.getName());
@@ -377,16 +363,7 @@ public class ISMain {
 		}
 	}
 	private static void showContractList() {
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] please login first.");
-			return;
-		}
-		String role = TokenManager.getRole(token);
 		int index = 1;
-		if (role.equals(Customer)) {
-			System.out.println("[error] You do not have access.");
-			return;
-		}
 		System.out.println();
 		System.out.println("-- Contract List --");
 		for(Contract contract : contractListImpl.retrieveAll()) {
@@ -435,20 +412,14 @@ public class ISMain {
 			System.out.println("[error] please login first.");
 			return;
 		}
-		String role = TokenManager.getRole(token);
 		int index = 1;
-		if (role.equals(Customer)) {
-			System.out.println("[error] You do not have access.");
-			return;
-		}
-		System.out.println();
 		ArrayList<Counsel> counselList = counselListImpl.retrieveAll();
 		if(counselList.size() == 0) {
 			System.out.println("No counsel");
 			return;
 		}
 		System.out.println("-- Counsel List --");
-		for(Counsel counsel : counselListImpl.retrieveAll()) {
+		for(Counsel counsel : counselList) {
 			System.out.println(index + ". CounselID: " + counsel.getCounselID() + " CustomerID: " + counsel.getCustomerID()+ " Status: " + counsel.isConfirmedCounsel());
 			index++;
 		}
@@ -517,36 +488,11 @@ public class ISMain {
 		}
 	}
 	private static void createContract(BufferedReader clientInputReader) throws IOException {
-//		private int concludeEID; 계약한 직원 ID -> 초기널값임
-//		private int contractDate; 계역 날짜 -> 초기 널값임 
-//		private int contractID; 계약 ID
-//		private String contractStatus; 계약상태 [심사요청, 심사거절, 계약허가]
-//		private int customerID; 
-//		private String evaluation; 평가결과 -> 초기 널값임
-//		private String expirationDate; 만료일자
-//		private int insuranceID;
-//		private boolean isConclude; 계약되었는지.. -> 초기 false
-//		private boolean isPassUW; 인수심사 완료 되었는지... -> 초기 false
-//		private int monthlyPremium; 월보험료
-//		private int nonPaymentPeriod; 미납기간 -> 조기 널값임
-		//
-//		private PaymentInfo paymentInfo; => 서현누나가 구현 필요
-//		private boolean renewalStatus; 재계약여부 -> 초기 널값임
-//		private String resurrectionDate; 부활날짜 -> 초기 널값임
-//		private String resurrectionReason; 부활사유 -> 초기 널값임
-//		private int underwritingEID; 인수심사한 직원 ID -> 초기 널값임
-		
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
 			return;
 		}
-		if (TokenManager.getRole(token).equals(Customer)) {
-			System.out.println("[error] You do not have access.");
-			return;
-		}
-		
 		System.out.println("--Create Contract Infomation--");
-		
 		// basic attribute settings
 		System.out.print("contractID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
 		String contractStatus = contractStatus1;
@@ -564,18 +510,15 @@ public class ISMain {
 		System.out.print("fixedMonthlyPayment : "); String fixedMonthlyPayment = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
 		System.out.print("fixedMonthlyPaymentDate: "); String fixedMonthlyPaymentDate = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
 		System.out.print("PaymentType: "); String paymentType = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-
 		paymentInfo.setPaymentInfoID(Integer.parseInt(paymentInfoID));
 		paymentInfo.setFixedMonthlyPayment(Integer.parseInt(fixedMonthlyPayment));
 		paymentInfo.setFixedMonthlyPaymentDate(fixedMonthlyPaymentDate);
 		paymentInfo.setPaymentType(paymentType);
-		
 		if(paymentType.equals(paymentInfoCard)) {
 			System.out.println("--Payment Card Information--");
 			System.out.print("cardNum: ");String cardNum= dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
 			System.out.print("cvcNum: ");String cvcNum= dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
 			System.out.print("password: ");String password= dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-			
 			CardPayment cardPayment = new CardPayment();
 			cardPayment.setCardNum(cardNum);
 			cardPayment.setCvcNum(cvcNum);
@@ -587,7 +530,6 @@ public class ISMain {
 			BankPayment bankPayment = new BankPayment();
 			bankPayment.setPayerName(payerName);
 			bankPayment.setPayerPhoneNum(payerPhoneNum);
-			
 		}else if(paymentType.equals(paymentInfoAutomatic)) {
 			System.out.println("--Payment Automatic Information--");
 			System.out.print("accountNum: ");String accountNum = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
@@ -602,7 +544,6 @@ public class ISMain {
 			automaticPayment.setPaymentCompanyName(paymentCompanyName);
 			automaticPayment.setRelationshipToApplicant(relationshipToApplicant);
 		}
-		
 		// ListImpl Add
 		Contract contract = new Contract();
 		contract.setContractID(Integer.parseInt(contractID));
@@ -613,20 +554,22 @@ public class ISMain {
 		contract.setConclude(isConclude);
 		contract.setPassUW(isPassUW);
 		contract.setMonthlyPremium(Integer.parseInt(monthlyPremium));
-		contractListImpl.add(contract);
+		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+		boolean response = employee.createContract(contract);
+		if (response == true) System.out.println("[success] Successfully Create Contract!");
+		else System.out.println("[error] Contract ID duplicate. Please try again");
 	}
 	private static void deleteContract(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
 			return;
 		}
-		if (TokenManager.getRole(token).equals(Customer)) {
-			System.out.println("[error] You do not have access.");
-			return;
-		}
 		System.out.println("--Delete Contract Infomation--");
 		System.out.print("contractID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		contractListImpl.delete(Integer.parseInt(contractID));
+		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+		boolean response = employee.deleteContract(Integer.parseInt(contractID));
+		if (response == true) System.out.println("[success] Successfully deleted this Contract!");
+		else System.out.println("[error] The contract id does not exist.");
 	}
 	private static void createRule(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
@@ -675,8 +618,8 @@ public class ISMain {
 		// basic attribute settings
 		System.out.print("CounselID: "); String counselID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
 		System.out.print("InsuranceCategory: 1. 자동차  2. 생활  3. 건강  4. 여행"); String insuranceCategory = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		System.out.print("Date of Counsel: "); String dateOfCounsel = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		System.out.print("Time of Counsel: "); String timeOfCOunsel = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("Date of Counsel: "); String dateOfCounsel = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+		System.out.print("Time of Counsel: "); String timeOfCOunsel = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
 		boolean statusOfCounsel = false;
 		
 		// ListImpl Add
@@ -687,7 +630,11 @@ public class ISMain {
 		counsel.setDateOfCounsel(dateOfCounsel);
 		counsel.setTimeOfCounsel(timeOfCOunsel);
 		counsel.setStatusOfCounsel(statusOfCounsel);
-		counselListImpl.add(counsel);
+		
+		Customer customer = customerListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+		boolean response = customer.requestCounsel(counsel);
+		if (response == true) System.out.println("[success] Successfully requested Counsel!");
+		else System.out.println("[error] Counsel ID duplicate. Please try again");
 	}
 	private static void deleteCounsel(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
@@ -696,7 +643,11 @@ public class ISMain {
 		}
 		System.out.println("--Delete Counsel Infomation--");
 		System.out.print("Counsel ID: "); String counselID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		counselListImpl.delete(Integer.parseInt(counselID));
+		
+		Customer customer = customerListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+		boolean response = customer.deleteCounsel(Integer.parseInt(counselID));
+		if(response) System.out.println("[success] Successfully deleted Counsel!");
+		else System.out.println("[error] The counsel ID does not exist.");
 		
 	}
 	private static void createCompensation(String usertype, BufferedReader clientInputReader) throws IOException {
@@ -759,10 +710,6 @@ public class ISMain {
 	private static void createInsurance(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
-			return;
-		}
-		if (TokenManager.getRole(token).equals(Customer)) {
-			System.out.println("[error] You do not have access.");
 			return;
 		}
 		System.out.println("InsuranceCategory: 1. 자동차  2. 주택화재  3. 암건강  4. 해외여행"); 
@@ -852,28 +799,31 @@ public class ISMain {
 		insurance.setGuarantee(guarantee);
 		insurance.setSpecialProvision(specialProvision);
 		
-		insuranceListImpl.add(insurance);
+		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+		boolean response = employee.createInsurance(insurance);
+		if(response) System.out.println("[error] Insurance ID duplicate. Please try again");
+		else System.out.println("[success] Successfully created Insurance!");
 	}
 	private static void deleteInsurance(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
 			return;
 		}
-		if (TokenManager.getRole(token).equals(Customer)) {
-			System.out.println("[error] You do not have access.");
-			return;
-		}
 		System.out.println("--Delete Insurance Infomation--");
 		System.out.print("Insurance ID: "); String insuranceID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		insuranceListImpl.delete(Integer.parseInt(insuranceID));
 		
+		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+		boolean response = employee.deleteInsurance(Integer.parseInt(insuranceID));
+		if(response) System.out.println("[success] Successfully deleted Insurance!");
+		else System.out.println("[error] The Insurance ID does not exist.");
 	}
+	
 	private static void login(String userType, BufferedReader clientInputReader) throws IOException {
 		System.out.println("--Login Infomation--");
 		if (userType.equals(Customer)) {
 			System.out.print("ID: "); String ID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
 			System.out.print("PW: "); String PW = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-			for(Customer customer : customerDBImpl.retrieveAll()) {
+			for(Customer customer : customerListImpl.retrieveAll()) {
 				String customerID = Integer.toString(customer.getCustomerID());
 				String customerPW = customer.getCustomerPW();
 				if (customerID.equals(ID) && customerPW.equals(PW)) {
@@ -953,10 +903,18 @@ public class ISMain {
 			customer.setName(name);
 			customer.setPhone(phone);
 			customer.setWeight(Integer.parseInt(weight));
-			customerDBImpl.add(customer);			
+			
+			// association setting
+			customer.setCounselList(counselListImpl);
+			customer.setPaymentList(paymentListImpl);
+			customer.setInsuranceList(insuranceListImpl);
+			
+			boolean response = customerListImpl.add(customer);		
+			if (response == true) System.out.println("[success] Successfully Sign Up!");
+			else System.out.println("[error] ID duplicate. Please sign up again");
 		} else if (userType.equals(Employee)) {
 			System.out.println("--SignUp Infomation--");
-
+			
 			// basic attribute settings
 			System.out.print("Name: "); String name = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
 			System.out.print("ID: "); String employeeID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
@@ -969,7 +927,7 @@ public class ISMain {
 			String type = dataValidation(clientInputReader.readLine().trim(), "type", clientInputReader);
 			
 			// ListImpl Add
-			Employee employee = new Employee();
+			Employee employee = new Employee(contractListImpl);
 			employee.setName(name);
 			employee.setEmployeeID(Integer.parseInt(employeeID));
 			employee.setEmployeePW(employeePW);
@@ -977,7 +935,15 @@ public class ISMain {
 			employee.setEmail(email);
 			employee.setGender(gender);
 			employee.setType(type);
-			employeeListImpl.add(employee);
+			
+			// association setting
+			employee.setInsuranceList(insuranceListImpl);
+			employee.setPaymentList(paymentListImpl);
+			employee.setCounselList(counselListImpl);
+			
+			boolean response = employeeListImpl.add(employee);
+			if (response == true) System.out.println("[success] Successfully Sign Up!");
+			else System.out.println("[error] ID duplicate. Please sign up again");
 		}
 	}
 	private static void logout() {
@@ -997,8 +963,8 @@ public class ISMain {
 		System.out.println("--deleteMembership Infomation--");
 		System.out.print("Do you want to delete your membership? [Y/N] : "); String result = dataValidation(clientInputReader.readLine().trim(), "boolean", clientInputReader);
 		if (result.equals("Y")) {
-			if (userType.equals(Customer)) customerDBImpl.delete(Integer.parseInt(TokenManager.getID(token)));
-			else if (userType.equals(Employee)) employeeListImpl.delete(Integer.parseInt(TokenManager.getID(token)));
+			if (userType.equals(Customer)) customerListImpl.deleteById(Integer.parseInt(TokenManager.getID(token)));
+			else if (userType.equals(Employee)) employeeListImpl.deleteById(Integer.parseInt(TokenManager.getID(token)));
 			TokenManager.invalidateToken(token);
 		} else System.out.println("[error] you enter 'N', return to homePage");
 	}
@@ -1019,7 +985,6 @@ public class ISMain {
 			if ("multiValue".equals(type)) {
 				if (inputData.replaceAll("\\s+", "").isEmpty()) return true;
 				else if(inputData.matches(".*\\s{2,}.*")) return false;
-				ArrayList<String> prerequisiteList = new ArrayList<>(Arrays.asList(inputData.split("\\s+")));
 			    return true;
 			} else if ("Integer".equals(type)) {
 				if (inputData.matches("\\d+")) return true;
