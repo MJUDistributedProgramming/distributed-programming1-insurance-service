@@ -927,7 +927,7 @@ public class ISMain {
 			String type = dataValidation(clientInputReader.readLine().trim(), "type", clientInputReader);
 			
 			// ListImpl Add
-			Employee employee = new Employee(contractListImpl);
+			Employee employee = new Employee();
 			employee.setName(name);
 			employee.setEmployeeID(Integer.parseInt(employeeID));
 			employee.setEmployeePW(employeePW);
@@ -937,6 +937,7 @@ public class ISMain {
 			employee.setType(type);
 			
 			// association setting
+			employee.setContractList(contractListImpl);
 			employee.setInsuranceList(insuranceListImpl);
 			employee.setPaymentList(paymentListImpl);
 			employee.setCounselList(counselListImpl);

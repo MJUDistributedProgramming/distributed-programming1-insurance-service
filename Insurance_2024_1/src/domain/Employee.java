@@ -19,8 +19,8 @@ public class Employee {
 	public CounselList counselListImpl;
 	public PaymentList paymentListImpl;
 	//
-	public Employee(ContractList contractListImpl){
-		this.contractListImpl = contractListImpl;
+	public Employee(){
+
 	}
 
 	public void finalize() throws Throwable {
@@ -113,6 +113,14 @@ public class Employee {
 
 	public void setCounselList(CounselList counselListImpl) {
 		this.counselListImpl = counselListImpl;
+	}
+	
+	public ContractList getContractList() {
+		return contractListImpl;
+	}
+
+	public void setContractList(ContractList contractListImpl) {
+		this.contractListImpl = contractListImpl;
 	}
 
 	public boolean createContract(Contract contract) {
