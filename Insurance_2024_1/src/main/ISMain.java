@@ -8,8 +8,10 @@ import IF.ContractList;
 import IF.CounselList;
 import IF.CustomerList;
 import IF.EmployeeList;
-import IF.InsuranceList;
 import IF.PaymentList;
+import IF.RuleList;
+import IF.InsuranceList;
+
 import daoList.AccidentListImpl;
 import daoList.CompensationListImpl;
 import daoList.ContractListImpl;
@@ -65,10 +67,10 @@ public class ISMain {
 	private static CounselList counselListImpl;
 	private static CustomerList customerListImpl;
 	private static EmployeeList employeeListImpl;
-	private static InsuranceList insuranceListImpl;
+	private static InsuranceListImpl insuranceListImpl;
 	private static PaymentList paymentListImpl;
-	private static RuleListImpl ruleListImpl;
-	
+	private static RuleList ruleListImpl;
+
 	public static void main(String[] args) throws IOException {
 		// ListImpl Settings
 		accidentListImpl = new AccidentListImpl();
@@ -554,6 +556,7 @@ public class ISMain {
 		contract.setConclude(isConclude);
 		contract.setPassUW(isPassUW);
 		contract.setMonthlyPremium(Integer.parseInt(monthlyPremium));
+		contract.setPaymentInfo(paymentInfo);
 		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
 		boolean response = employee.createContract(contract);
 		if (response == true) System.out.println("[success] Successfully Create Contract!");
@@ -592,7 +595,11 @@ public class ISMain {
 		rule.setRuleID(Integer.parseInt(ruleID));
 		rule.setRuleName(ruleName);
 		rule.setRuleDetail(ruleDetail);
-		ruleListImpl.add(rule);
+		
+		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+		boolean response = employee.createRule(rule);
+		if (response == true) System.out.println("[success] Successfully Create Rule!");
+		else System.out.println("[error] Rule ID duplicate. Please try again");
 	}
 	private static void deleteRule(BufferedReader clientInputReader) throws IOException {
 		System.out.print("ruleID: "); 
@@ -607,7 +614,10 @@ public class ISMain {
 			return;
 		}
 		
-		ruleListImpl.delete(Integer.parseInt(ruleID));
+		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+		boolean response = employee.deleteRule(Integer.parseInt(ruleID));
+		if (response == true) System.out.println("[success] Successfully Delete Rule!");
+		else System.out.println("[error] Rule ID does not exist. Please try again");
 	}
 	private static void createCounsel(String usertype, BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
@@ -937,10 +947,12 @@ public class ISMain {
 			employee.setType(type);
 			
 			// association setting
+			employee.setRuleList(ruleListImpl);
 			employee.setContractList(contractListImpl);
 			employee.setInsuranceList(insuranceListImpl);
 			employee.setPaymentList(paymentListImpl);
 			employee.setCounselList(counselListImpl);
+
 			
 			boolean response = employeeListImpl.add(employee);
 			if (response == true) System.out.println("[success] Successfully Sign Up!");
