@@ -30,7 +30,7 @@ public class Customer {
 	public MedicalHistory m_MedicalHistory;
 	public PaymentList paymentListImpl;
 	public InsuranceList insuranceListImpl;
-  public AccidentList accidentListImpl;
+	public AccidentList accidentListImpl;
 	public CompensationList compensationListImpl;
 	
 	public Customer(){
@@ -134,27 +134,6 @@ public class Customer {
 	}
 	public void setM_Contract(Contract m_Contract) {
 		this.m_Contract = m_Contract;
-	}
-	public MedicalHistory getM_MedicalHistory() {
-		return m_MedicalHistory;
-	}
-	public void setM_MedicalHistory(MedicalHistory m_MedicalHistory) {
-		this.m_MedicalHistory = m_MedicalHistory;
-	}
-	public void setCounselList(CounselList counselListImpl) {
-		this.counselListImpl = counselListImpl;
-	}
-	public boolean requestCounsel(Counsel counsel) {
-		return counselListImpl.add(counsel);
-	}
-	public boolean deleteCounsel(int counselID) {
-		return counselListImpl.delete(counselID);
-	}
-	public void setPaymentList(PaymentList paymentListImpl) {
-		this.paymentListImpl = paymentListImpl;
-	}
-	public void setInsuranceList(InsuranceList insuranceListImpl) {
-		this.insuranceListImpl = insuranceListImpl;
 	}
 	public void setAccidentList(AccidentList accidentListImpl) {
 		this.accidentListImpl = accidentListImpl;
