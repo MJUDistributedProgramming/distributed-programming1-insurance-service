@@ -1,4 +1,6 @@
 package domain;
+
+import IF.CompensationList;
 import IF.ContractList;
 import IF.RuleList;
 import IF.CounselList;
@@ -14,14 +16,14 @@ public class Employee {
 	private String phone;
 	private String type;
 
-
 	public RuleList ruleListImpl;
 	public InsuranceList insuranceListImpl;
 	public ContractList contractListImpl;
-	public Compensation m_Compensation;
+	public CompensationList compensationListImpl;
 	public CounselList counselListImpl;
 	public PaymentList paymentListImpl;
-	//
+
+  //
 	public Employee(){
 
 	}
@@ -93,15 +95,6 @@ public class Employee {
 	public void setInsuranceList(InsuranceList insuranceListImpl) {
 		this.insuranceListImpl = insuranceListImpl;
 	}
-
-	public Compensation getM_Compensation() {
-		return m_Compensation;
-	}
-
-	public void setM_Compensation(Compensation m_Compensation) {
-		this.m_Compensation = m_Compensation;
-	}
-
 	public CounselList getCounselList() {
 		return counselListImpl;
 	}
@@ -148,7 +141,6 @@ public class Employee {
 	public boolean deleteInsurance(int insuranceID) {
 		return this.insuranceListImpl.delete(insuranceID);
 	}
-
 	public boolean createPayment(Payment payment) {
 		return this.paymentListImpl.add(payment);
 	}
@@ -159,6 +151,17 @@ public class Employee {
 
 	public void setPaymentList(PaymentList paymentListImpl) {
 		this.paymentListImpl = paymentListImpl;
-
+	}
+	public CompensationList getCompensationList() {
+		return compensationListImpl;
+	}
+	public void setCompensationList(CompensationList compensationListImpl) {
+		this.compensationListImpl = compensationListImpl;
+	}
+	public boolean createCompensation(Compensation compensation) {
+		return this.compensationListImpl.add(compensation);
+	}
+	public boolean deleteCompensation(int compensationID) {
+		return this.compensationListImpl.deleteById(compensationID);
 	}
 }

@@ -16,6 +16,7 @@ public class RuleListImpl implements RuleList {
 	}
 
 	public void finalize() throws Throwable {
+
 	}
 
 	
@@ -45,6 +46,7 @@ public class RuleListImpl implements RuleList {
 	}
 
 	public ArrayList<Rule> retrieveAll() {
+
 		return ruleList;
 	}
 

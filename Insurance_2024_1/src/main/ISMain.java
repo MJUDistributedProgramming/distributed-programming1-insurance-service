@@ -12,6 +12,14 @@ import IF.PaymentList;
 import IF.RuleList;
 import IF.InsuranceList;
 
+import IF.AccidentList;
+import IF.CompensationList;
+import IF.ContractList;
+import IF.CounselList;
+import IF.CustomerList;
+import IF.EmployeeList;
+import IF.InsuranceList;
+import IF.PaymentList;
 import daoList.AccidentListImpl;
 import daoList.CompensationListImpl;
 import daoList.ContractListImpl;
@@ -61,13 +69,13 @@ public class ISMain {
 	private static final String paymentInfoAutomatic = "automatic";
 	// main attributes
 	private static String token;
-	private static AccidentListImpl accidentListImpl;
-	private static CompensationListImpl compensationListImpl;
+	private static AccidentList accidentListImpl;
+	private static CompensationList compensationListImpl;
 	private static ContractList contractListImpl;
 	private static CounselList counselListImpl;
 	private static CustomerList customerListImpl;
 	private static EmployeeList employeeListImpl;
-	private static InsuranceListImpl insuranceListImpl;
+	private static InsuranceList insuranceListImpl;
 	private static PaymentList paymentListImpl;
 	private static RuleList ruleListImpl;
 
@@ -131,18 +139,18 @@ public class ISMain {
 			if (clientChoice.equals("1")) login(Customer , clientInputReader);
 			else if (clientChoice.equals("2")) signUp(Customer , clientInputReader);
 			else if (clientChoice.equals("3")) showInsuranceList();
-			else if (clientChoice.equals("3")) showAccidentList();
-			else if (clientChoice.equals("4")) showCompensationList();
-			else if (clientChoice.equals("5")) showCounselList();
-			else if (clientChoice.equals("6")) showPaymentList();
-			else if (clientChoice.equals("7")) createAccident(clientInputReader);
-			else if (clientChoice.equals("8")) deleteAccident(clientInputReader);
-			else if (clientChoice.equals("9")) createCompensation(Customer, clientInputReader);
-			else if (clientChoice.equals("10")) deleteCompensation(clientInputReader);
-			else if (clientChoice.equals("11")) createCounsel(Customer, clientInputReader);
-			else if (clientChoice.equals("12")) deleteCounsel(clientInputReader);
-			else if (clientChoice.equals("13")) logout();
-			else if (clientChoice.equals("14")) deleteMembership(Customer , clientInputReader);
+			else if (clientChoice.equals("4")) showAccidentList();
+			else if (clientChoice.equals("5")) showCompensationList();
+			else if (clientChoice.equals("6")) showCounselList();
+			else if (clientChoice.equals("7")) showPaymentList();
+			else if (clientChoice.equals("8")) createAccident(clientInputReader);
+			else if (clientChoice.equals("9")) deleteAccident(clientInputReader);
+			else if (clientChoice.equals("10")) createCompensation(Customer, clientInputReader);
+			else if (clientChoice.equals("11")) deleteCompensation(clientInputReader);
+			else if (clientChoice.equals("12")) createCounsel(Customer, clientInputReader);
+			else if (clientChoice.equals("13")) deleteCounsel(clientInputReader);
+			else if (clientChoice.equals("14")) logout();
+			else if (clientChoice.equals("15")) deleteMembership(Customer , clientInputReader);
 			else if (clientChoice.equals("R")) {
 				System.out.println("|*** Return to HomePage ***|");
 				return;
@@ -155,8 +163,8 @@ public class ISMain {
 			System.out.println("[error] please login first.");
 			return;
 		}
-		ArrayList<Accident> accidentList = accidentListImpl.retrieveByCustomerID(Integer.parseInt(TokenManager.getID(token)));
 		int index = 1;
+		ArrayList<Accident> accidentList = accidentListImpl.retrieveByCustomerId(Integer.parseInt(TokenManager.getID(token)));
 		if(accidentList.size() == 0) {
 			System.out.println("No Accident");
 			return;
@@ -206,8 +214,13 @@ public class ISMain {
 		accident.setAccidentType(accidentType);
 		accident.setCarInformation(carInfomation);
 		accident.setCarNumber(Integer.parseInt(carNumber));
-		accidentListImpl.add(accident);
 		
+		// Association setting
+		Customer customer = customerListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+		customer.setAccidentList(accidentListImpl);
+		boolean response = customer.createAccident(accident);
+		if(!response) System.out.println("[error] Accident ID duplicate. Please try again");
+		else System.out.println("[success] Successfully created Accident!");		
 	}
 	private static void deleteAccident(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
@@ -216,7 +229,13 @@ public class ISMain {
 		}
 		System.out.println("--Delete Accident Infomation--");
 		System.out.print("Accident ID: "); String accidentID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		accidentListImpl.delete(Integer.parseInt(accidentID));		
+		
+		// Association setting
+		Customer customer = customerListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+		customer.setAccidentList(accidentListImpl);
+		boolean response = customer.deleteAccident(Integer.parseInt(accidentID));
+		if(!response) System.out.println("[error] The Accident id does not exist.");
+		else System.out.println("[success] Successfully Delete Accident!");	
 	}
 	private static void createPayment(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
@@ -595,7 +614,7 @@ public class ISMain {
 		rule.setRuleID(Integer.parseInt(ruleID));
 		rule.setRuleName(ruleName);
 		rule.setRuleDetail(ruleDetail);
-		
+
 		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
 		boolean response = employee.createRule(rule);
 		if (response == true) System.out.println("[success] Successfully Create Rule!");
@@ -701,7 +720,12 @@ public class ISMain {
 		compensation.setBill(bill);
 		compensation.setLoss(loss);
 		
-		compensationListImpl.add(compensation);		
+		// Association setting
+		Customer customer = customerListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+		customer.setCompensationList(compensationListImpl);
+		boolean response = customer.createCompensation(compensation);
+		if(!response) System.out.println("[error] Compensation ID duplicate. Please try again");
+		else System.out.println("[success] Successfully created Compensation!");		
 	}
 	private static void deleteCompensation(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
@@ -714,7 +738,13 @@ public class ISMain {
 		}
 		System.out.println("--Delete Compensation Infomation--");
 		System.out.print("CompensationID: "); String compensationID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		compensationListImpl.delete(Integer.parseInt(compensationID));
+		
+		// Association setting
+		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+		employee.setCompensationList(compensationListImpl);
+		boolean response = employee.deleteCompensation(Integer.parseInt(compensationID));
+		if(!response) System.out.println("[error] The Compensation id does not exist.");
+		else System.out.println("[success] Successfully Delete Compensation!");	
 				
 	}
 	private static void createInsurance(BufferedReader clientInputReader) throws IOException {
@@ -952,7 +982,6 @@ public class ISMain {
 			employee.setInsuranceList(insuranceListImpl);
 			employee.setPaymentList(paymentListImpl);
 			employee.setCounselList(counselListImpl);
-
 			
 			boolean response = employeeListImpl.add(employee);
 			if (response == true) System.out.println("[success] Successfully Sign Up!");

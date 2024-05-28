@@ -1,37 +1,20 @@
 package IF;
 
+import java.util.ArrayList;
+
 import domain.Accident;
 
-/**
- * @author junkyulee
- * @version 1.0
- * @created 16-5-2024 오후 6:54:55
- */
 public interface AccidentList {
 
-	/**
-	 * 
-	 * @param accident
-	 */
-	public void add(Accident accident);
+	public boolean add(Accident accident);
 
-	/**
-	 * 
-	 * @param accidentID
-	 */
-	public void delete(int accidentID);
+	public boolean deleteById(int accidentID);
 
-	/**
-	 * 
-	 * @param accidentID
-	 */
-	public Accident retrieve(int accidentID);
+	public Accident retrieveById(int accidentID);
+	
+	public ArrayList<Accident> retrieveByCustomerId(int customerId);
+	
+	public ArrayList<Accident> retrieveAll();
 
-	/**
-	 * 
-	 * @param accident
-	 * @param accidentID
-	 */
 	public void update(Accident accident, int accidentID);
-
 }
