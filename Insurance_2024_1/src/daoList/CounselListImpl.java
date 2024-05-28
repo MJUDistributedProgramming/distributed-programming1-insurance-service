@@ -18,26 +18,23 @@ public class CounselListImpl implements CounselList {
 
 	}
 
-	public void add(Counsel counsel){
+	public boolean add(Counsel counsel){
 		for (Counsel c: counselList) {
-			if (c.getCounselID() == counsel.getCounselID()) {
-				System.out.println("[error] Counsel ID duplicate. Please try again");
-				return;
-			}
+			if (c.getCounselID() == counsel.getCounselID()) 
+				return false;
 		}
-		this.counselList.add(counsel);
-		System.out.println("\"[success] Successfully requested Counsel!\"");
+		counselList.add(counsel);
+		return true;
 	}
 
-	public void delete(int counselID){
+	public boolean delete(int counselID){
 		for (Counsel counsel : counselList) {
 			if (counsel.getCounselID() == counselID) {
 				counselList.remove(counsel);
-				System.out.println("\"[success] Successfully deleted Counsel!\"");
-				return;
+				return true;
 			}
 		}
-		System.out.println("\"[error] The counsel ID does not exist.\"");
+		return false;
 	}
 	
 	public Counsel retrieve(int counselID) {
@@ -63,8 +60,8 @@ public class CounselListImpl implements CounselList {
 		return this.counselList;
 	}
 	
-	public void update(Counsel counsel, int counselID){
-
+	public boolean update(Counsel counsel, int counselID){
+		return false;
 	}
 
 }
