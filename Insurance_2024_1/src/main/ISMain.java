@@ -110,6 +110,10 @@ public class ISMain {
 		System.out.println("13. Delete Counsel");
 		System.out.println("14. Logout");
 		System.out.println("15. Delete Membership");
+		//
+		System.out.println("16. 상담 신청 카테고리");
+		System.out.println("17. 보험 상품 종류 카테고리");
+		System.out.println("18. 보유 계약 조회 카테고리");
 		System.out.println("R. Return HomePage");
 	}
 	private static void startCustomerService(BufferedReader clientInputReader) throws IOException{
@@ -127,10 +131,14 @@ public class ISMain {
 			else if (clientChoice.equals("9")) deleteAccident(clientInputReader);
 			else if (clientChoice.equals("10")) createCompensation(Constant.Customer, clientInputReader);
 			else if (clientChoice.equals("11")) deleteCompensation(clientInputReader);
-			else if (clientChoice.equals("12")) createCounsel(Constant.Customer, clientInputReader);
+			else if (clientChoice.equals("12")) createCounsel(clientInputReader);
 			else if (clientChoice.equals("13")) deleteCounsel(clientInputReader);
 			else if (clientChoice.equals("14")) logout();
 			else if (clientChoice.equals("15")) deleteMembership(Constant.Customer , clientInputReader);
+			//
+			else if (clientChoice.equals("16")) counselCategory(clientInputReader);
+			else if (clientChoice.equals("17")) insuranceTypeCategory(clientInputReader);
+			else if (clientChoice.equals("18")) contractRetrieveCategory(clientInputReader);
 			else if (clientChoice.equals("R")) {
 				System.out.println("|*** Return to HomePage ***|");
 				return;
@@ -301,7 +309,7 @@ public class ISMain {
 			else if (clientChoice.equals("2")) signUp(Constant.Employee , clientInputReader);
 			else if (clientChoice.equals("3")) showCustomerList();
 			else if (clientChoice.equals("4")) showEmployeeList();
-			else if (clientChoice.equals("5")) showContractList();
+			else if (clientChoice.equals("5")) showAllContractList();
 			else if (clientChoice.equals("6")) showAllPaymentList();
 			else if (clientChoice.equals("7")) showInsuranceList();
 			else if (clientChoice.equals("8")) showAllCompensationList();
@@ -651,6 +659,155 @@ public class ISMain {
 		return true;
 	}
 	//-----------------------------------------------------------------
+	
+	//// 상담 신청 카테고리 - 보험 상담을 신청하다
+	private static void counselCategory(BufferedReader clientInputReader) throws IOException {
+		if (!TokenManager.isValidToken(token)) {
+			System.out.println("[error] please login first.");
+			return;
+		}
+		while(true) {
+			System.out.println("***************** 상담 신청 카테고리 메뉴 *****************");
+			System.out.println("1. 상담 신청");
+			System.out.println("2. 상담 신청 내역 조회");
+			System.out.println("R. 돌아가기");
+			
+			String clientChoice = clientInputReader.readLine().trim();
+			if (clientChoice.equals("1")) createCounsel(clientInputReader);
+			else if (clientChoice.equals("2")) showCounselList();
+			else if (clientChoice.equals("R")) {
+				System.out.println("|*** Return to Customer Main Menu ***|");
+				return;
+			}
+			else System.out.println("invalid choice");
+		}
+	}
+	
+    ////보험 상품 종류 카테고리 - 보험 상품을 조회하다
+	private static void insuranceTypeCategory(BufferedReader clientInputReader) throws IOException {
+		while(true) {
+			System.out.println("***************** 보험 상품 종류 카테고리 메뉴 *****************");
+			System.out.println("1. 자동차");
+			System.out.println("2. 생활");
+			System.out.println("3. 건강");
+			System.out.println("4. 여행");
+			System.out.println("R. 돌아가기");
+			
+			String clientChoice = clientInputReader.readLine().trim();
+			if(clientChoice.equals("1") || clientChoice.equals("2") || clientChoice.equals("3")|| clientChoice.equals("4")) {
+				showInsuranceTypeList(clientChoice, clientInputReader);
+			} else if (clientChoice.equals("R")) {
+				System.out.println("|*** Return to Customer Main Menu ***|");
+				return;
+			} else System.out.println("invalid choice");
+		}
+	}
+	
+	// 보험 상품 종류 조회
+	private static void showInsuranceTypeList(String clientChoice, BufferedReader clientInputReader) throws IOException {
+		while(true) {
+			int index = 1;
+			System.out.println();
+			ArrayList<Insurance> insuranceList = insuranceListImpl.retrieveTypeAll(clientChoice);
+			if(insuranceList.size() == 0) {
+				System.out.println("해당 종류의 보험 상품이 존재하지 않습니다.");
+				return;
+			}
+			System.out.println("-- 보험 상품명 리스트 --");
+			for(Insurance insurance: insuranceList) {
+				System.out.println(index + ". InsuranceID: " + insurance.getInsuranceID() + " Name: " + insurance.getInsuranceName() + " Category: "+insurance.getCategory());
+				index++;
+			}
+			System.out.println("가입을 원하는 보험의 ID를 입력해주세요.");
+			System.out.println("R. 돌아가기");
+			
+			String clientChoice2 = clientInputReader.readLine().trim();
+			if (clientChoice2.equals("R")) {
+				System.out.println("|*** Return to Insurance Type List Menu ***|");
+				return;
+			} 
+//			createContract(clientChoice2, clientInputReader); 해당 보험 ID로 가입 신청
+		}
+	}
+	
+	////보유 계약 조회 카테고리 - 계약을 확인하다, 계약을 해지하다
+	private static void contractRetrieveCategory(BufferedReader clientInputReader) throws IOException {
+		while(true) {
+			System.out.println("***************** 보유 계약 조회 카테고리 메뉴 *****************");
+			System.out.println("1. 보유 계약 조회");
+			System.out.println("R. 돌아가기");
+			
+			String clientChoice = clientInputReader.readLine().trim();
+			if(clientChoice.equals("1")) {
+				showContractList(clientInputReader);
+			} else if (clientChoice.equals("R")) {
+				System.out.println("|*** Return to Customer Main Menu ***|");
+				return;
+			} else System.out.println("invalid choice");
+		}
+	}
+	
+	// 계약을 확인하다
+	private static void showContractList(BufferedReader clientInputReader) throws IOException {
+		while(true) {
+			int index = 1;
+			System.out.println();
+			ArrayList<Contract> contractList = contractListImpl.retrieveByCustomerId(Integer.parseInt(TokenManager.getID(token)));
+			if(contractList.size() == 0) {
+				System.out.println("보유한 계약이 존재하지 않습니다.");
+				return;
+			}
+			System.out.println("-- 보유 계약 리스트 --");
+			for(Contract contract : contractList) {
+				System.out.println(index + ". ContractID: " + contract.getContractID());
+			}
+			System.out.println("상세 내용 조회를 원하는 계약의 ID를 입력해주세요.");
+			System.out.println("R. 돌아가기");
+			
+			String clientChoice = clientInputReader.readLine().trim();
+			if (clientChoice.equals("R")) {
+				System.out.println("|*** Return to Contract List Menu ***|");
+				return;
+			}
+			Contract contract = contractListImpl.retrieveById(Integer.parseInt(clientChoice));
+			if(contract != null) showContractDetail(contract, clientInputReader);
+			else System.out.println("등록되지 않은 계약입니다.");
+		}
+	}
+	// 계약 상세 내용
+	private static void showContractDetail(Contract contract, BufferedReader clientInputReader) throws IOException {
+		while(true) {
+			Insurance insurance = insuranceListImpl.retrieve(contract.getInsuranceID());
+			Customer customer = customerListImpl.retrieveById(contract.getCustomerID());
+			System.out.println("보험 상품명: "+insurance.getInsuranceName());
+			System.out.println("고객 이름: " + customer.getName());
+			System.out.println("전화번호: "+ customer.getPhone());
+			System.out.println("보장 내용: " + insurance.getGuarantee().getGuaranteeName());
+			System.out.println("월 보험료: " + contract.getMonthlyPremium());
+			System.out.println("남은 납부기간: "); // expiration Date으로
+			System.out.println("계약 시작일: " + contract.getCreatedDate());
+			System.out.println("계약 만기일: "+ contract.getExpirationDate());
+			System.out.println("계약 상태: "+ contract.getContractStatus());
+			System.out.println("D. 계약 해지");
+			System.out.println("R. 돌아가기");
+			
+			String clientChoice = clientInputReader.readLine().trim();
+			if(clientChoice.equals("D")) {
+				requestDeleteContract(contract.getContractID());
+			} else if (clientChoice.equals("R")) {
+				System.out.println("|*** Return to Contract List Menu ***|");
+				return;
+			} else System.out.println("invalid choice");
+		}
+	}
+	
+	private static void requestDeleteContract(int contractId) {
+		contractListImpl.deleteById(contractId);
+	}
+	
+	
+	
+	
 	private static void showAllPaymentList() {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
@@ -688,7 +845,7 @@ public class ISMain {
 			index++;
 		}
 	}
-	private static void showContractList() {
+	private static void showAllContractList() {
 		int index = 1;
 		System.out.println();
 		System.out.println("-- Contract List --");
@@ -946,7 +1103,7 @@ public class ISMain {
 		if (response == true) System.out.println("[success] Successfully Delete Rule!");
 		else System.out.println("[error] Rule ID does not exist. Please try again");
 	}
-	private static void createCounsel(String usertype, BufferedReader clientInputReader) throws IOException {
+	private static void createCounsel(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
 			return;
@@ -973,6 +1130,7 @@ public class ISMain {
 		if (response == true) System.out.println("[success] Successfully requested Counsel!");
 		else System.out.println("[error] Counsel ID duplicate. Please try again");
 	}
+	
 	private static void deleteCounsel(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
@@ -1062,6 +1220,10 @@ public class ISMain {
 		}
 		System.out.println("InsuranceCategory: 1. 자동차  2. 주택화재  3. 암건강  4. 해외여행"); 
 		String insuranceCategory = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		if(insuranceCategory.equals("1")) insuranceCategory = "자동차";
+		else if(insuranceCategory.equals("2")) insuranceCategory = "주택화재";
+		else if(insuranceCategory.equals("3")) insuranceCategory = "암건강";
+		else if(insuranceCategory.equals("4")) insuranceCategory = "해외여행";
 		
 		System.out.println("--Create Insurance Infomation--");
 		// basic attribute settings
