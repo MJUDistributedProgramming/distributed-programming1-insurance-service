@@ -7,4 +7,5 @@ public interface ContractList {
 	public Contract retrieveById(int id);
 	public ArrayList<Contract> retrieveAll();
 	public void update(int id, Contract Contract);
+	public ArrayList<Contract> retrieveByContractStatus(String contractStatus);
 }

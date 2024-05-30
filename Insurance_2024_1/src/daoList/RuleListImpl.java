@@ -18,7 +18,6 @@ public class RuleListImpl implements RuleList {
 	public void finalize() throws Throwable {
 
 	}
-
 	
 	public boolean add(Rule rule){
 		for(Rule rule1 : ruleList) {
@@ -26,9 +25,7 @@ public class RuleListImpl implements RuleList {
 				return false;
 			}
 		}
-		
 		return this.ruleList.add(rule);
-
 	}
 
 	public Rule retrieveById(int ruleID){
