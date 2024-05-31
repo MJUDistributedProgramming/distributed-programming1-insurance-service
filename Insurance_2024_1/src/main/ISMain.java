@@ -63,7 +63,7 @@ public class ISMain {
 	private static InsuranceList insuranceListImpl;
 	private static PaymentList paymentListImpl;
 	private static RuleList ruleListImpl;
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, ParseException {
 		// ListImpl Settings
 		accidentListImpl = new AccidentListImpl();
 		compensationListImpl = new CompensationListImpl();
@@ -84,7 +84,7 @@ public class ISMain {
 		System.out.println("2. EmployeeService");
 		System.out.println("X. Exit");
 	}
-	private static void startInsuranceService(BufferedReader clientInputReader) throws IOException{
+	private static void startInsuranceService(BufferedReader clientInputReader) throws IOException, ParseException{
 		while(true) {
 			printMainMenu();
 			String clientChoice = clientInputReader.readLine().trim();
@@ -307,7 +307,7 @@ public class ISMain {
 		
 		System.out.println("R. Return HomePage");
 	}
-	private static void startEmployeeService(BufferedReader clientInputReader) throws IOException{
+	private static void startEmployeeService(BufferedReader clientInputReader) throws IOException, ParseException{
 		while(true) {
 			printEmployeeMainMenu();
 			String clientChoice = clientInputReader.readLine().trim();
