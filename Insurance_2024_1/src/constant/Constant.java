@@ -14,4 +14,6 @@ public class Constant {
 	public static final String paymentInfoCard = "card";
 	public static final String paymentInfoBank = "bank";
 	public static final String paymentInfoAutomatic = "automatic";
+	public static final int maximumLatePaymentPeriod = 30;
+	public static final String dateFormat = "yyyy-MM-dd";
 }
