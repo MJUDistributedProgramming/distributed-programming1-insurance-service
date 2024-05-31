@@ -14,8 +14,8 @@ public class Payment {
 	public Payment(){}
 	public void finalize() throws Throwable {}
 	
-	public void processPayment(){
-
+	public boolean processPayment(int cardNumber, int cvcNumber, int password){
+		return false;
 	}
 	
 	// get & set
