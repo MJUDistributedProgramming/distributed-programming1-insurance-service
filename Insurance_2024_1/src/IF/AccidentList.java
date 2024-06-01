@@ -11,5 +11,5 @@ public interface AccidentList {
 	public Accident retrieveById(int accidentID);
 	public ArrayList<Accident> retrieveByCustomerId(int customerId);
 	public ArrayList<Accident> retrieveAll();
-	public boolean updateAccident(int accidentId, Accident accident);
+	public boolean update(int accidentId, Accident accident);
 }

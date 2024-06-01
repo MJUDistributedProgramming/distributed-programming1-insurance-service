@@ -65,7 +65,7 @@ public class AccidentListImpl implements AccidentList {
 		return this.accidentList;
 	}
 
-    public boolean updateAccident(int accidentId, Accident updatedAccident) {
+    public boolean update(int accidentId, Accident updatedAccident) {
         for (int i = 0; i < accidentList.size(); i++) {
             Accident accident = accidentList.get(i);
             if (accident.getAccidentID() == accidentId) {

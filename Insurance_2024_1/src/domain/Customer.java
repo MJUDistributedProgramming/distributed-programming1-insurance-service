@@ -144,6 +144,9 @@ public class Customer {
 	public boolean createAccident(Accident accident) {
 		return this.accidentListImpl.add(accident);
 	}
+	public boolean updateAccident(int accidentID, Accident accident) {
+		return this.accidentListImpl.update(accidentID, accident);
+	}
 	public boolean deleteAccident(int accidentId) {
 		return this.accidentListImpl.deleteById(accidentId);
 	}
@@ -155,6 +158,12 @@ public class Customer {
 	}
 	public boolean createCompensation(Compensation compensation) {
 		return this.compensationListImpl.add(compensation);
+	}
+	public boolean updateCompensation(Compensation compensation, int compensationID) {
+		return this.compensationListImpl.update(compensation, compensationID);
+	}
+	public boolean createBill(Compensation compensation, int compensationID) {
+		return this.compensationListImpl.update(compensation, compensationID);
 	}
 	public void setCounselList(CounselList counselListImpl) {
 		this.counselListImpl = counselListImpl;

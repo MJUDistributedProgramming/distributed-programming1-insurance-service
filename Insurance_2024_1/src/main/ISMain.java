@@ -114,8 +114,9 @@ public class ISMain {
 		System.out.println("13. Delete Counsel");
 		System.out.println("14. Logout");
 		System.out.println("15. Delete Membership");
-		
+		//
 		System.out.println("50. 사고접수 카테고리");
+		System.out.println("51. 보상 카테고리");
 
 		System.out.println("R. Return HomePage");
 	}
@@ -140,6 +141,7 @@ public class ISMain {
 			else if (clientChoice.equals("15")) deleteMembership(Constant.Customer , clientInputReader);
 			//
 			else if (clientChoice.equals("50")) accidentCategory(clientInputReader);
+			else if (clientChoice.equals("51")) compensationCategory(clientInputReader);
 			
 			else if (clientChoice.equals("R")) {
 				System.out.println("|*** Return to HomePage ***|");
@@ -148,8 +150,7 @@ public class ISMain {
 			else System.out.println("invalid choice");
 		}
 	}
-	// -------------------------------------------------------------
-	//// 사고접수 카테고리 - 사고접수 신청. 사고접수 조회, 사고접수 수정, 사고접수 삭제
+	//// 사고접수 카테고리 - 사고접수 신청, 사고접수 조회, 사고접수 수정, 사고접수 삭제
 	private static void accidentCategory(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] 로그인 먼저 해주세요.");
@@ -269,7 +270,10 @@ public class ISMain {
 	        accident.setCarInformation(carInformation);
 	        accident.setCarNumber(Integer.parseInt(carNumber));
 
-	        boolean response = accidentListImpl.updateAccident(Integer.parseInt(accidentID), accident);
+
+			Customer customer = customerListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+			customer.setAccidentList(accidentListImpl);
+			boolean response = customer.updateAccident(Integer.parseInt(accidentID), accident);
 	        if (!response) {
 	            System.out.println("[error] 사고 정보를 업데이트하는 동안 오류가 발생했습니다. 다시 시도해주세요.");
 	        } else {
@@ -283,6 +287,11 @@ public class ISMain {
 	private static void deleteAccident(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] 로그인 먼저 해주세요.");
+			return;
+		}
+		String role = TokenManager.getRole(token);
+		if (role.equals(Constant.Customer)) {
+			System.out.println("[error] 당신이 접근할 수 없습니다.");
 			return;
 		}
 		System.out.println("--사고 정보 입력란--");
@@ -388,6 +397,9 @@ public class ISMain {
 		System.out.println("25. 계약체결 카테고리");
 		System.out.println("26. 고객정보 DB 서비스 카테고리");
 		//
+		System.out.println("50. 사고접수 카테고리");
+		System.out.println("51. 보상 카테고리");
+		//
 		System.out.println("91. 상품 개발 카테고리");
 		System.out.println("92. 제관리 지침 카테고리");
 		System.out.println("93. 수금을 관리한다");
@@ -430,6 +442,9 @@ public class ISMain {
 			else if (clientChoice.equals("24")) underWritingCategory(clientInputReader);
 			else if (clientChoice.equals("25")) concludeContractCategory(clientInputReader);
 			else if (clientChoice.equals("26")) customerDBServiceCategory(clientInputReader);
+			//
+			else if (clientChoice.equals("50")) accidentCategory(clientInputReader);
+			else if (clientChoice.equals("51")) compensationCategory(clientInputReader);
 			//
 			else if (clientChoice.equals("91")) createInsuranceCategory(clientInputReader);
 			else if (clientChoice.equals("92")) ruleCategory(clientInputReader);
@@ -1318,51 +1333,6 @@ public class ISMain {
 			index++;
 		}
 	}
-	private static void showCompensationList() {
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] 로그인 먼저 해주세요.");
-			return;
-		}
-		ArrayList<Compensation> compensationList = compensationListImpl.retrieveByCustomerID(Integer.parseInt(TokenManager.getID(token)));
-		int index = 1;
-		
-		if(compensationList.size() == 0) {
-			System.out.println("No Compensation");
-			return;
-		}
-		
-		System.out.println("-- 보상 리스트 --");
-		for(Compensation compensation : compensationList) {
-			System.out.println(index + ". 보상ID: " + compensation.getCompensationID() + " 고객ID: " + compensation.getCustomerID()+ " 계약ID: " + compensation.getContractID() + " 보험금: " + compensation.getInsuranceAmount() + " 손해ID: " + compensation.getLoss().getLossID() + " 사고ID: " + compensation.getLoss().getAccidentID() + " 직원ID : " + compensation.getLoss().getEmployeeID() + " 직원 의견: " + compensation.getLoss().getEmployeeOpinion() + " 손해액 평가: " + compensation.getLoss().getLossAmount() + " 청구ID: " + compensation.getBill().getBillID() + " 청구 사유: " + compensation.getBill().getBillReason());
-			index++;
-		}
-	}
-	private static void showAllCompensationList() {
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] 로그인 먼저 해주세요.");
-			return;
-		}
-		
-		String role = TokenManager.getRole(token);
-		if (role.equals(Constant.Customer)) {
-			System.out.println("[error] 당신이 접근할 수 없습니다.");
-			return;
-		}
-		
-		int index = 1;
-		System.out.println();
-		ArrayList<Compensation> compensationList = compensationListImpl.retrieveAll();
-		if(compensationList.size() == 0) {
-			System.out.println("No Compensation");
-			return;
-		}
-		System.out.println("-- 보상 리스트 --");
-		for(Compensation compensation : compensationList) {
-			System.out.println(index + ". 보상ID: " + compensation.getCompensationID() + " 고객ID: " + compensation.getCustomerID() + " 계약ID: " + compensation.getContractID() + " 보험금: " + compensation.getInsuranceAmount() + " 손해ID: " + compensation.getLoss().getLossID() + " 사고ID: " + compensation.getLoss().getAccidentID() + " 직원ID: " + compensation.getLoss().getEmployeeID() + " 직원 의견: " + compensation.getLoss().getEmployeeOpinion() + " 손해액 평가: " + compensation.getLoss().getLossAmount() + " 청구ID: " + compensation.getBill().getBillID() + " 청구 사유: " + compensation.getBill().getBillReason());
-			index++;
-		}
-		
-	}
 	private static void createContract(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
@@ -1493,27 +1463,55 @@ public class ISMain {
 		else System.out.println("[error] The counsel ID does not exist.");
 		
 	}
+	//// 보상 카테고리 - 보상 신청, 보상 조회, 보상 리스트 조회, 보상 수정, 보상 삭제, 보험금 청구, 손해 조사, 보험금 산출, 보험금 지급
+	private static void compensationCategory(BufferedReader clientInputReader) throws IOException {
+		while(true) {
+			System.out.println("***************** 보상 카테고리 메뉴 *****************");
+			System.out.println("1. 보상 신청");
+			System.out.println("2. 보상 조회");
+			System.out.println("3. 모든 고객의 보상 조회");
+			System.out.println("4. 보상 수정");
+			System.out.println("5. 보상 삭제");
+			System.out.println("6. 보험금 청구");
+			System.out.println("7. 손해 조사");
+			System.out.println("8. 보험금 산출");
+			System.out.println("9. 보험금 지급");
+			System.out.println("R. 돌아가기");
+			String clientChoice = clientInputReader.readLine().trim();
+			if (clientChoice.equals("1")) createCompensation(Constant.Customer, clientInputReader);
+			else if (clientChoice.equals("2")) showCompensationList();
+			else if (clientChoice.equals("3")) showAllCompensationList();
+			else if (clientChoice.equals("4")) updateCompensation(clientInputReader);
+			else if (clientChoice.equals("5")) deleteCompensation(clientInputReader);
+			else if (clientChoice.equals("6")) requestInsuranceAmount(clientInputReader);
+			else if (clientChoice.equals("7")) investigateLoss(clientInputReader);
+			else if (clientChoice.equals("8")) calculateInsuranceAmount(clientInputReader);
+			else if (clientChoice.equals("9")) giveInsuranceAmount(clientInputReader);
+			else if (clientChoice.equals("R")) {
+				System.out.println("|*** Return to Employee Main Menu ***|");
+				return;
+			}
+			else System.out.println("invalid choice");
+		}
+	}
+	// 보상 신청
 	private static void createCompensation(String usertype, BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] 로그인 먼저 해주세요.");
 			return;
 		}
-		System.out.println("-- 보험금 청구 정보 입력란 --");
+		System.out.println("-- 보상 정보 입력란 --");
 		
 		// basic attribute settings
-		System.out.print("보험금 청구ID: "); String compensationID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("보상ID: "); String compensationID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
 		System.out.print("계약ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		System.out.print("고객ID: "); String customerID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		System.out.print("보험금 청구 금액: "); String insuranceAmount = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
 
 		// composition to whole settings
-		System.out.println("-- 청구서 정보 입력란 --");
-		System.out.print("청구서ID: "); String billID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		System.out.print("청구서 사유: "); String billReason = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-		
+		// Bill setting - 보험금 청구하기 전
 		Bill bill = new Bill();
-		bill.setBillID(Integer.parseInt(billID));
-		bill.setBillReason(billReason);
+		bill.setBillID(0);
+		bill.setBillReason(null);
+		bill.setCustomerID(0);
 		
 		// Loss setting - 손해조사하기 전
 		Loss loss = new Loss();
@@ -1525,12 +1523,132 @@ public class ISMain {
 
 		// ListImpl Add
 		Compensation compensation = new Compensation();
-		System.out.println("-- 보험금 청구를 신청하시겠습니까?[Y/N] --");
+		System.out.println("-- 보상을 신청하시겠습니까?[Y/N] --");
 		String save = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
 		if(save.equals("Y")) {
 			compensation.setCompensationID(Integer.parseInt(compensationID));
 			compensation.setContractID(Integer.parseInt(contractID));
 			compensation.setCustomerID(Integer.parseInt(TokenManager.getID(token)));
+			compensation.setInsuranceAmount(0);
+
+			// composition to whole settings
+			compensation.setBill(bill);
+			compensation.setLoss(loss);
+			
+			// Association setting
+			Customer customer = customerListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+			customer.setCompensationList(compensationListImpl);
+			boolean response = customer.createCompensation(compensation);
+			if(!response) System.out.println("[error] 보상ID가 중복되었습니다. 다시 시도해주세요.");
+			else System.out.println("[success] 보상 신청이 완료되었습니다.");
+		}else {
+			System.out.println("[info] 보상 신청을 취소했습니다. 본 페이지를 다시 출력합니다.");
+		}
+	}	
+	// 보상 조회
+	private static void showCompensationList() {
+		if (!TokenManager.isValidToken(token)) {
+			System.out.println("[error] 로그인 먼저 해주세요.");
+			return;
+		}
+	    String role = TokenManager.getRole(token);
+		if (role.equals(Constant.Employee)) {
+			System.out.println("[error] 당신이 접근할 수 없습니다.");
+			return;
+		}
+		ArrayList<Compensation> compensationList = compensationListImpl.retrieveByCustomerID(Integer.parseInt(TokenManager.getID(token)));
+		int index = 1;
+		
+		if(compensationList.size() == 0) {
+			System.out.println("No Compensation");
+			return;
+		}
+		
+		System.out.println("-- 보상 리스트 --");
+		for(Compensation compensation : compensationList) {
+			System.out.println(index + ". 보상ID: " + compensation.getCompensationID() + " 고객ID: " + compensation.getCustomerID() + " 보험금: " + compensation.getInsuranceAmount() + " 계약ID: " + compensation.getContractID() + " 손해ID: " + compensation.getLoss().getLossID() + " 사고ID: " + compensation.getLoss().getAccidentID() + " 직원ID : " + compensation.getLoss().getEmployeeID() + " 직원 의견: " + compensation.getLoss().getEmployeeOpinion() + " 손해액 평가: " + compensation.getLoss().getLossAmount() + " 청구ID: " + compensation.getBill().getBillID() + " 청구 사유: " + compensation.getBill().getBillReason());
+			index++;
+		}
+	}
+	// 모든 고객의 보상 조회
+	private static void showAllCompensationList() {
+		if (!TokenManager.isValidToken(token)) {
+			System.out.println("[error] 로그인 먼저 해주세요.");
+			return;
+		}
+		String role = TokenManager.getRole(token);
+		if (role.equals(Constant.Customer)) {
+			System.out.println("[error] 당신이 접근할 수 없습니다.");
+			return;
+		}
+		int index = 1;
+		System.out.println();
+		ArrayList<Compensation> compensationList = compensationListImpl.retrieveAll();
+		if(compensationList.size() == 0) {
+			System.out.println("No Compensation");
+			return;
+		}
+		System.out.println("-- 보상 리스트 --");
+		for(Compensation compensation : compensationList) {
+			System.out.println(index + ". 보상ID: " + compensation.getCompensationID() + " 고객ID: " + compensation.getCustomerID() + " 보험금: " + compensation.getInsuranceAmount() + " 계약ID: " + compensation.getContractID() + " 손해ID: " + compensation.getLoss().getLossID() + " 사고ID: " + compensation.getLoss().getAccidentID() + " 직원ID : " + compensation.getLoss().getEmployeeID() + " 직원 의견: " + compensation.getLoss().getEmployeeOpinion() + " 손해액 평가: " + compensation.getLoss().getLossAmount() + " 청구ID: " + compensation.getBill().getBillID() + " 청구 사유: " + compensation.getBill().getBillReason());
+			index++;
+		}
+	}
+	// 보상 수정
+	private static void updateCompensation(BufferedReader clientInputReader) throws IOException {
+	    if (!TokenManager.isValidToken(token)) {
+	        System.out.println("[error] 로그인 먼저 해주세요.");
+	        return;
+	    }
+	    String role = TokenManager.getRole(token);
+		if (role.equals(Constant.Customer)) {
+			System.out.println("[error] 당신이 접근할 수 없습니다.");
+			return;
+		}
+	    System.out.println("-- 보상 정보 수정란 --");
+
+	    // get compensationID to update
+	    System.out.print("수정할 보상ID: ");
+	    String compensationID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+	    Compensation compensation = compensationListImpl.retrieveById(Integer.parseInt(compensationID));
+	    if (compensation == null) {
+	        System.out.println("[error] 해당 보상ID의 보상이 존재하지 않습니다.");
+	        return;
+	    }
+
+		// new attribute settings
+ 		System.out.print("계약ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+ 		System.out.print("고객ID: "); String customerID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+ 		System.out.print("보험금: "); String insuranceAmount = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+
+ 		// composition to whole settings
+ 		System.out.println("-- 청구 정보 입력란 --");
+ 		System.out.print("청구ID: "); String billID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+ 		System.out.print("청구 사유: "); String billReason = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+ 		
+ 		Bill bill = new Bill();
+ 		bill.setBillID(Integer.parseInt(billID));
+ 		bill.setBillReason(billReason);
+ 		
+		System.out.println("-- 손해 조사 정보 입력란 --");
+ 		System.out.print("손해조사ID: "); String lossID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("사고ID: "); String accidentID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("직원ID: "); String employeeID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("직원 의견: "); String employeeOpinion = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+		System.out.print("손해액 평가 : "); String lossAmount = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+ 		
+		Loss loss = new Loss();
+		loss.setLossID(Integer.parseInt(lossID));
+		loss.setAccidentID(Integer.parseInt(accidentID));
+		loss.setEmployeeID(Integer.parseInt(employeeID));
+		loss.setEmployeeOpinion(employeeOpinion);
+		loss.setLossAmount(Integer.parseInt(lossAmount));
+		
+	    System.out.println("-- 보상을 수정하시겠습니까?[Y/N] --");
+	    String save = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+	    if (save.equalsIgnoreCase("Y")) {
+			compensation.setContractID(Integer.parseInt(contractID));
+			compensation.setCustomerID(Integer.parseInt(customerID));
 			compensation.setInsuranceAmount(Integer.parseInt(insuranceAmount));
 			
 			// composition to whole settings
@@ -1540,13 +1658,17 @@ public class ISMain {
 			// Association setting
 			Customer customer = customerListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
 			customer.setCompensationList(compensationListImpl);
-			boolean response = customer.createCompensation(compensation);
-			if(!response) System.out.println("[error] 보험금 청구 ID가 중복되었습니다. 다시 시도해주세요.");
-			else System.out.println("[success] 보험금 청구 신청이 완료되었습니다.");
-		}else {
-			System.out.println("[info] 보험금 청구 신청을 취소했습니다. 본 페이지를 다시 출력합니다.");
-		}
-	}		
+			boolean response = customer.updateCompensation(compensation, Integer.parseInt(compensationID));
+	        if (!response) {
+	            System.out.println("[error] 보상 정보를 업데이트하는 동안 오류가 발생했습니다. 다시 시도해주세요.");
+	        } else {
+	            System.out.println("[success] 보상 정보가 성공적으로 업데이트되었습니다.");
+	        }
+	    } else {
+	        System.out.println("[info] 보상 수정을 취소했습니다. 본 페이지를 다시 출력합니다.");
+	    }
+	}
+	// 보상 삭제
 	private static void deleteCompensation(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] 로그인 먼저 해주세요.");
@@ -1556,17 +1678,165 @@ public class ISMain {
 			System.out.println("[error] 당신이 접근할 수 없습니다.");
 			return;
 		}
-		System.out.println("-- 보험금 청구 정보 입력란 --");
-		System.out.print("보험금 청구ID: "); String compensationID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.println("-- 보상 정보 입력란 --");
+		System.out.print("보상ID: "); String compensationID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
 		
 		// Association setting
 		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
 		employee.setCompensationList(compensationListImpl);
 		boolean response = employee.deleteCompensation(Integer.parseInt(compensationID));
-		if(!response) System.out.println("[error] 보험금 청구ID가 존재하지 않습니다. 다시 시도해주세요");
-		else System.out.println("[success] 성공적으로 보험금 청구가 삭제되었습니다!");					
+		if(!response) System.out.println("[error] 보상ID가 존재하지 않습니다. 다시 시도해주세요");
+		else System.out.println("[success] 성공적으로 보상이 삭제되었습니다!");					
 	}
-	
+	// 보험금 청구
+	private static void requestInsuranceAmount(BufferedReader clientInputReader) throws IOException {
+		System.out.print("보험금 청구할 보상ID: ");
+	    String compensationID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+	    Compensation compensation = compensationListImpl.retrieveById(Integer.parseInt(compensationID));
+	    if (compensation == null) {
+	        System.out.println("[error] 해당 보상ID의 보상이 존재하지 않습니다.");
+	        return;
+	    }
+
+		System.out.println("-- 청구 정보 입력란 --");
+		System.out.print("청구ID: "); String billID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("청구 사유: "); String billReason = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+		
+		System.out.println("-- 보험금 청구를 신청하시겠습니까?[Y/N] --");
+		String save = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+		if(save.equals("Y")) {
+			Bill bill = new Bill();
+			bill.setBillID(Integer.parseInt(billID));
+			bill.setBillReason(billReason);
+			
+			// composition to whole settings
+			compensation.setBill(bill);
+			
+			// Association setting
+			Customer customer = customerListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+			customer.setCompensationList(compensationListImpl);
+			boolean response = customer.createBill(compensation, Integer.parseInt(compensationID));
+			if(!response) System.out.println("[error] 보험금 청구ID가 중복되었습니다. 다시 시도해주세요.");
+			else System.out.println("[success] 보험금 청구 신청이 완료되었습니다.");
+		}else {
+			System.out.println("[info] 보험금 청구 신청을 취소했습니다. 본 페이지를 다시 출력합니다.");
+		}
+	}
+	// 손해 조사
+	private static void investigateLoss(BufferedReader clientInputReader) throws IOException {
+		if (!TokenManager.isValidToken(token)) {
+			System.out.println("[error] 로그인 먼저 해주세요.");
+			return;
+		}
+		if (TokenManager.getRole(token).equals(Constant.Customer)) {
+			System.out.println("[error] 당신이 접근할 수 없습니다.");
+			return;
+		}
+		
+		System.out.print("손해 조사할 보상ID: ");
+	    String compensationID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+	    Compensation compensation = compensationListImpl.retrieveById(Integer.parseInt(compensationID));
+	    if (compensation == null) {
+	        System.out.println("[error] 해당 보상ID의 보상이 존재하지 않습니다.");
+	        return;
+	    }
+
+		System.out.println("-- 손해 조사 정보 입력란 --");
+		System.out.print("손해조사ID: "); String lossID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("사고ID: "); String accidentID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("직원ID: "); String employeeID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+		System.out.print("직원 의견: "); String employeeOpinion = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+		System.out.print("손해액 평가 : "); String lossAmount = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+
+		System.out.println("-- 손해 조사를 진행하시겠습니까?[Y/N] --");
+		String save = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+		if(save.equals("Y")) {
+			Loss loss = new Loss();
+			loss.setLossID(Integer.parseInt(lossID));
+			loss.setAccidentID(Integer.parseInt(accidentID));
+			loss.setEmployeeID(Integer.parseInt(employeeID));
+			loss.setEmployeeOpinion(employeeOpinion);
+			loss.setLossAmount(Integer.parseInt(lossAmount));
+
+			// composition to whole settings
+			compensation.setLoss(loss);
+			
+			// Association setting
+			Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+			employee.setCompensationList(compensationListImpl);
+			boolean response = employee.createLoss(compensation, Integer.parseInt(compensationID));
+			if(!response) System.out.println("[error] 손해조사ID가 중복되었습니다. 다시 시도해주세요.");
+			else System.out.println("[success] 손해조사가 완료되었습니다.");
+		} else {
+			System.out.println("[info] 손해조사를 취소했습니다. 본 페이지를 다시 출력합니다.");
+		}
+	}
+	// 보험금 산출
+	private static void calculateInsuranceAmount (BufferedReader clientInputReader) throws IOException {
+		if (!TokenManager.isValidToken(token)) {
+			System.out.println("[error] 로그인 먼저 해주세요.");
+			return;
+		}
+		if (TokenManager.getRole(token).equals(Constant.Customer)) {
+			System.out.println("[error] 당신이 접근할 수 없습니다.");
+			return;
+		}
+		
+		System.out.print("보험금 산출할 보상ID: ");
+	    String compensationID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+	    Compensation compensation = compensationListImpl.retrieveById(Integer.parseInt(compensationID));
+	    if (compensation == null) {
+	        System.out.println("[error] 해당 보상ID의 보상이 존재하지 않습니다.");
+	        return;
+	    }
+	    
+	    System.out.println("-- 손해 조사 내용을 불러와 보험금 산출을 진행하시겠습니까?[Y/N] --");
+		String save = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+		if(save.equals("Y")) {
+			int calculatedInsuarnceAmount = compensation.getLoss().getLossAmount();
+			compensation.setInsuranceAmount(calculatedInsuarnceAmount);
+			
+			// Association setting
+			Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+			employee.setCompensationList(compensationListImpl);
+			boolean response = employee.calculateInsuranceAmount(compensation, Integer.parseInt(compensationID));
+			if(!response) System.out.println("[error] 오류로 인해 보험금 산출이 중지되었습니다. 다시 시도해주세요.");
+			else System.out.println("[success] 보험금 산출이 완료되었습니다.");
+		} else {
+			System.out.println("[info] 보험금 산출을 취소했습니다. 본 페이지를 다시 출력합니다.");
+		}
+		
+	}
+	// 보험금 지급
+	private static void giveInsuranceAmount(BufferedReader clientInputReader) throws IOException {
+		if (!TokenManager.isValidToken(token)) {
+			System.out.println("[error] 로그인 먼저 해주세요.");
+			return;
+		}
+		if (TokenManager.getRole(token).equals(Constant.Customer)) {
+			System.out.println("[error] 당신이 접근할 수 없습니다.");
+			return;
+		}
+		
+		System.out.print("보험금을 지급할 보상ID: ");
+	    String compensationID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
+	    Compensation compensation = compensationListImpl.retrieveById(Integer.parseInt(compensationID));
+	    if (compensation == null) {
+	        System.out.println("[error] 해당 보상ID의 보상이 존재하지 않습니다.");
+	        return;
+	    }
+	    
+	    System.out.println("-- 보상 내용을 불러와 보험금 지급을 진행하시겠습니까?[Y/N] --");
+		String save = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
+		if(save.equals("Y")) {
+			System.out.println("[success] 보험금 지급이 완료되었습니다.");
+			System.out.println("고객ID:  " + compensation.getCustomerID());
+			System.out.println("보험금: " + compensation.getInsuranceAmount());			
+		} else {
+			System.out.println("[info] 보험금 지급을 취소했습니다. 본 페이지를 다시 출력합니다.");
+		}	
+	}
+	// -------------------------------------------------------------
 	private static void deleteInsurance(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
