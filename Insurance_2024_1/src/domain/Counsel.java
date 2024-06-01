@@ -19,9 +19,10 @@ public class Counsel {
 		return false;
 	}
 
-	public boolean updateCounsel(String counselDetail2, String note2) {
-		
-		return false;
+	public boolean updateCounsel(String counselDetail, String note) {
+		this.counselDetail = counselDetail;
+		this.note = note;
+		return true;
 	}
 	
 	// get & set

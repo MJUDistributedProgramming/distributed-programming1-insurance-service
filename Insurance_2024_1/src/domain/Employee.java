@@ -123,6 +123,18 @@ public class Employee {
 		customer.setMedicalHistory(medicalHistory);
 		return true;
 	}
+	public boolean confirmCounsel(Counsel counsel) {
+		if(counsel.isConfirmedCounsel()) return false;
+		else {
+			counsel.setStatusOfCounsel(true);
+			return true;
+		}
+	}
+	public boolean updateCounsel(Counsel counsel, String counselDetail, String note) {
+		if(counsel == null) return false;
+		else return counsel.updateCounsel(counselDetail, note);
+	}
+	
 	// get & set
 	public String getEmail() {return email;}
 	public void setEmail(String email) {this.email = email;}
@@ -151,4 +163,6 @@ public class Employee {
 	public void setContractList(ContractList contractListImpl) {this.contractListImpl = contractListImpl;}
 	public void setRuleList(RuleList ruleListImpl) {this.ruleListImpl = ruleListImpl;}
 	public RuleList getRuleList() {return ruleListImpl;}
+	
+	
 }
