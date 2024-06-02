@@ -54,14 +54,4 @@ public class InsuranceListImpl implements InsuranceList {
 		return false;
 	}
 
-	public ArrayList<Insurance> retrieveTypeAll(String clientChoice) {
-		ArrayList<Insurance> insuranceTypeList = new ArrayList<>();
-		for (Insurance insurance: insuranceList) {
-			if (insurance.getCategory().equals(clientChoice)) {
-				insuranceTypeList.add(insurance);
-			}
-		}
-		return insuranceTypeList;
-	}
-
 }
