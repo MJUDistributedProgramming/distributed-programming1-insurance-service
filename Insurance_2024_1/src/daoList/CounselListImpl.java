@@ -64,14 +64,4 @@ public class CounselListImpl implements CounselList {
 		return false;
 	}
 
-	public ArrayList<Counsel> retrieveByEmployeeId(int employeeId) {
-		ArrayList<Counsel> consultedCounselList = new ArrayList<>();
-		for (Counsel counsel: counselList) {
-			if (counsel.getEmployeeID() == employeeId) {
-				consultedCounselList.add(counsel);
-			}
-		}
-		return consultedCounselList;
-	}
-
 }
