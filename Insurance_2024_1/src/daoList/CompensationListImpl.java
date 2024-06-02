@@ -16,7 +16,9 @@ public class CompensationListImpl implements CompensationList {
 		this.compensationList = new ArrayList<Compensation>();
 	}
 
-	public void finalize() throws Throwable {}
+	public void finalize() throws Throwable {
+
+	}
 
 	public boolean add(Compensation compensation){
 		for (Compensation cp : compensationList) {
@@ -38,7 +40,7 @@ public class CompensationListImpl implements CompensationList {
 		return compensationList.remove(deletedCompensation);
 	}
 
-	public Compensation retrieveById(int compensationID){
+	public Compensation retrieve(int compensationID){
 		for (Compensation compensation : compensationList) {
 			if (compensation.getCompensationID() == compensationID) {
 				return compensation;
@@ -61,15 +63,8 @@ public class CompensationListImpl implements CompensationList {
 		return this.compensationList;
 	}
 
-	public boolean update(Compensation updatedCompensation, int compensationID){
-		for (int i = 0; i < compensationList.size(); i++) {
-            Compensation compensation = compensationList.get(i);
-            if (compensation.getCompensationID() == compensationID) {
-            	compensationList.set(i, updatedCompensation);
-                return true;
-            }
-        }
-        return false;
+	public void update(Compensation compensation, int compensationID){
+
 	}
 
 }
