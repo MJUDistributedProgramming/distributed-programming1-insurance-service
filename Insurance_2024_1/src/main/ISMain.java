@@ -1837,6 +1837,7 @@ public class ISMain {
 		}	
 	}
 	// -------------------------------------------------------------
+
 	private static void deleteInsurance(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
@@ -1850,7 +1851,6 @@ public class ISMain {
 		if(response) System.out.println("[success] Successfully deleted Insurance!");
 		else System.out.println("[error] The Insurance ID does not exist.");
 	}
-	
 	private static void login(String userType, BufferedReader clientInputReader) throws IOException {
 		System.out.println("--Login Infomation--");
 		if (userType.equals(Constant.Customer)) {
