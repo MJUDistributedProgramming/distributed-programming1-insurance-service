@@ -40,13 +40,7 @@ public class Customer {
 	public void finalize() throws Throwable {
 
 	}
-	public boolean deleteCounsel(int counselID) {
-		return counselListImpl.delete(counselID);
-	}
 	
-	public boolean requestCounsel(Counsel counsel) {
-		return counselListImpl.add(counsel);
-	}
 	
 	public boolean requestJoinInsurance(Customer customer, Insurance insurance) {
 		
@@ -158,6 +152,9 @@ public class Customer {
 	public boolean createAccident(Accident accident) {
 		return this.accidentListImpl.add(accident);
 	}
+	public boolean updateAccident(int accidentID, Accident accident) {
+		return this.accidentListImpl.update(accidentID, accident);
+	}
 	public boolean deleteAccident(int accidentId) {
 		return this.accidentListImpl.deleteById(accidentId);
 	}
@@ -170,16 +167,29 @@ public class Customer {
 	public boolean createCompensation(Compensation compensation) {
 		return this.compensationListImpl.add(compensation);
 	}
+
+	public boolean updateCompensation(Compensation compensation, int compensationID) {
+		return this.compensationListImpl.update(compensation, compensationID);
+	}
+	public boolean createBill(Compensation compensation, int compensationID) {
+		return this.compensationListImpl.update(compensation, compensationID);
+	}
 	public void setCounselList(CounselList counselListImpl) {
 		this.counselListImpl = counselListImpl;
 	}
-	
+	public boolean requestCounsel(Counsel counsel) {
+		return counselListImpl.add(counsel);
+	}
+	public boolean deleteCounsel(int counselID) {
+		return counselListImpl.delete(counselID);
+	}
 	public void setPaymentList(PaymentList paymentListImpl) {
 		this.paymentListImpl = paymentListImpl;
 	}
 	public void setInsuranceList(InsuranceList insuranceListImpl) {
 		this.insuranceListImpl = insuranceListImpl;
 	}
+
 	public boolean deleteContract(Contract contract) {
 		this.contractListImpl.deleteById(contract.getContractID());
 		return true;
@@ -187,5 +197,5 @@ public class Customer {
 	public boolean payPremium(Payment payment, int cardNumber, int cvcNumber, int password) {
 		return payment.processPayment(cardNumber, cvcNumber, password);
 	}
-	
+
 }
