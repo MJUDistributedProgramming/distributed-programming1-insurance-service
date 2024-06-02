@@ -105,7 +105,7 @@ public class Employee {
 		customer.setMedicalHistory(medicalHistory);
 		return true;
 	}
-	//seohyun
+
 	public boolean confirmCounsel(Counsel counsel) {
 		if(counsel.isConfirmedCounsel()) return false;
 		else {
@@ -117,7 +117,7 @@ public class Employee {
 		if(counsel == null) return false;
 		else return counsel.updateCounsel(counselDetail, note);
 	}
-
+	
 	public boolean setPaymentInfo(String contractID, PaymentInfo paymentInfo) {
 		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
 		contract.setPaymentInfo(paymentInfo);
@@ -145,12 +145,7 @@ public class Employee {
 		contractListImpl.update(contractID, contract);
 		return contractListImpl.contains(contractListImpl.retrieveById(contractID));
 	}
-	public boolean createLoss(Compensation compensation, int compensationID) {
-		return this.compensationListImpl.update(compensation, compensationID);
-	}
-	public boolean calculateInsuranceAmount(Compensation compensation, int compensationID) {
-		return this.compensationListImpl.update(compensation, compensationID);
-	}
+
 	// get & set
 	public String getEmail() {return email;}
 	public void setEmail(String email) {this.email = email;}
@@ -179,4 +174,5 @@ public class Employee {
 	public void setContractList(ContractList contractListImpl) {this.contractListImpl = contractListImpl;}
 	public void setRuleList(RuleList ruleListImpl) {this.ruleListImpl = ruleListImpl;}
 	public RuleList getRuleList() {return ruleListImpl;}
+
 }
