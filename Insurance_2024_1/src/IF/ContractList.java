@@ -9,4 +9,5 @@ public interface ContractList {
 	public void update(int id, Contract Contract);
 	public ArrayList<Contract> retrieveByContractStatus(String contractStatus);
 	public ArrayList<Contract> retrieveByCustomerId(int customerId);
+	public boolean contains(Contract contract);
 }

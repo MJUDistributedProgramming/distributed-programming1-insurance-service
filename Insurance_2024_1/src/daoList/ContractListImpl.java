@@ -42,7 +42,8 @@ public class ContractListImpl implements ContractList {
 		return null;
 	}
 	public void update(int id, Contract Contract){
-
+		int index =ContractList.indexOf(Contract);
+		ContractList.set(index, Contract);
 	}
 	@Override
 	public ArrayList<Contract> retrieveByContractStatus(String contractStatus) {
@@ -63,5 +64,8 @@ public class ContractListImpl implements ContractList {
 			}
 		}
 		return customerContractList;
+	@Override
+	public boolean contains(Contract contract) {
+		return ContractList.contains(contract);
 	}
 }

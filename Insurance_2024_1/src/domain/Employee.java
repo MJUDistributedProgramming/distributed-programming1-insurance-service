@@ -1,7 +1,10 @@
 package domain;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import IF.CompensationList;
 import IF.ContractList;
@@ -33,37 +36,16 @@ public class Employee {
 	public Employee(){}
 	public void finalize() throws Throwable {}
 	// operate
-	public boolean createContract(Contract contract) {
-		return contractListImpl.add(contract);
-	}
-	public boolean deleteContract(int contractID) {
-		return contractListImpl.deleteById(contractID);
-	}
-	public boolean createRule(Rule rule) {
-		return this.ruleListImpl.add(rule);
-	}
-	public boolean deleteRule(int ruleID) {
-		return this.ruleListImpl.deleteById(ruleID);
-	}
-	public boolean createInsurance(Insurance insurance) {
-		return this.insuranceListImpl.add(insurance);
-	}
-	public boolean deleteInsurance(int insuranceID) {
-		return this.insuranceListImpl.delete(insuranceID);
-	}
-	public boolean createPayment(Payment payment) {
-		return this.paymentListImpl.add(payment);
-	}
-
-	public boolean deletePayment(int paymentID) {
-		return this.paymentListImpl.delete(paymentID);
-	}
-	public boolean createCompensation(Compensation compensation) {
-		return this.compensationListImpl.add(compensation);
-	}
-	public boolean deleteCompensation(int compensationID) {
-		return this.compensationListImpl.deleteById(compensationID);
-	}
+	public boolean createContract(Contract contract) {return contractListImpl.add(contract);}
+	public boolean deleteContract(int contractID) {return contractListImpl.deleteById(contractID);}
+	public boolean createRule(Rule rule) {return this.ruleListImpl.add(rule);}
+	public boolean deleteRule(int ruleID) {return this.ruleListImpl.deleteById(ruleID);}
+	public boolean createInsurance(Insurance insurance) {return this.insuranceListImpl.add(insurance);}
+	public boolean deleteInsurance(int insuranceID) {return this.insuranceListImpl.delete(insuranceID);}
+	public boolean createPayment(Payment payment) {return this.paymentListImpl.add(payment);}
+	public boolean deletePayment(int paymentID) {return this.paymentListImpl.delete(paymentID);}
+	public boolean createCompensation(Compensation compensation) {return this.compensationListImpl.add(compensation);}
+	public boolean deleteCompensation(int compensationID) {return this.compensationListImpl.deleteById(compensationID);}
 	public boolean processUnderwriting(Contract contract, String evaluation, String result) {
 		contract.setEvaluation(evaluation);
 		if (result.equals("Y")) {
@@ -123,6 +105,7 @@ public class Employee {
 		customer.setMedicalHistory(medicalHistory);
 		return true;
 	}
+
 	public boolean confirmCounsel(Counsel counsel) {
 		if(counsel.isConfirmedCounsel()) return false;
 		else {
@@ -135,6 +118,34 @@ public class Employee {
 		else return counsel.updateCounsel(counselDetail, note);
 	}
 	
+	public boolean setPaymentInfo(String contractID, PaymentInfo paymentInfo) {
+		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
+		contract.setPaymentInfo(paymentInfo);
+		return true;
+	}
+	public boolean manageLatePayment(String contractID) {
+		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
+		if(contract.getNonPaymentPeriod()>= Constant.maximumLatePaymentPeriod) {
+			return contractListImpl.deleteById(Integer.parseInt(contractID));
+		}
+		return false;
+	}
+	public boolean revive(Contract contract) {
+		return contractListImpl.add(contract);
+	}
+	public void manageExpirationContract(String contractID) throws ParseException {
+		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
+		if(!contract.isRenewalStatus()) {
+				contractListImpl.deleteById(Integer.parseInt(contractID));
+		}
+	}
+	public boolean update(Contract contract) {
+		// TODO Auto-generated method stub
+		int contractID = contract.getContractID();
+		contractListImpl.update(contractID, contract);
+		return contractListImpl.contains(contractListImpl.retrieveById(contractID));
+	}
+
 	// get & set
 	public String getEmail() {return email;}
 	public void setEmail(String email) {this.email = email;}
@@ -163,6 +174,5 @@ public class Employee {
 	public void setContractList(ContractList contractListImpl) {this.contractListImpl = contractListImpl;}
 	public void setRuleList(RuleList ruleListImpl) {this.ruleListImpl = ruleListImpl;}
 	public RuleList getRuleList() {return ruleListImpl;}
-	
-	
+
 }
