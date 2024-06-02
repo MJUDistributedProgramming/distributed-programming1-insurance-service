@@ -3,6 +3,7 @@ import java.util.ArrayList;
 
 import IF.AccidentList;
 import IF.CompensationList;
+import IF.ContractList;
 import IF.CounselList;
 import IF.InsuranceList;
 import IF.PaymentList;
@@ -26,7 +27,7 @@ public class Customer {
 	
 	// associations
 	public CounselList counselListImpl;
-	public Contract m_Contract;
+	public ContractList contractListImpl;
 	public MedicalHistory m_MedicalHistory;
 	public PaymentList paymentListImpl;
 	public InsuranceList insuranceListImpl;
@@ -39,6 +40,19 @@ public class Customer {
 	public void finalize() throws Throwable {
 
 	}
+	public boolean deleteCounsel(int counselID) {
+		return counselListImpl.delete(counselID);
+	}
+	
+	public boolean requestCounsel(Counsel counsel) {
+		return counselListImpl.add(counsel);
+	}
+	
+	public boolean requestJoinInsurance(Customer customer, Insurance insurance) {
+		
+		return false;
+	}
+	
 	public String getAccount() {
 		return account;
 	}
@@ -134,6 +148,12 @@ public class Customer {
 	}
 	public void setM_Contract(Contract m_Contract) {
 		this.m_Contract = m_Contract;
+  }
+	public ContractList getContractList() {
+		return contractListImpl;
+	}
+	public void setM_Contract(ContractList contractListImpl) {
+		this.contractListImpl = contractListImpl;
 	}
 	public void setAccidentList(AccidentList accidentListImpl) {
 		this.accidentListImpl = accidentListImpl;
@@ -159,6 +179,7 @@ public class Customer {
 	public boolean createCompensation(Compensation compensation) {
 		return this.compensationListImpl.add(compensation);
 	}
+
 	public boolean updateCompensation(Compensation compensation, int compensationID) {
 		return this.compensationListImpl.update(compensation, compensationID);
 	}
@@ -174,10 +195,25 @@ public class Customer {
 	public boolean deleteCounsel(int counselID) {
 		return counselListImpl.delete(counselID);
 	}
+
+	public void setCounselList(CounselList counselListImpl) {
+		this.counselListImpl = counselListImpl;
+	}
+	
+
 	public void setPaymentList(PaymentList paymentListImpl) {
 		this.paymentListImpl = paymentListImpl;
 	}
 	public void setInsuranceList(InsuranceList insuranceListImpl) {
 		this.insuranceListImpl = insuranceListImpl;
 	}
+
+	public boolean deleteContract(Contract contract) {
+		this.contractListImpl.deleteById(contract.getContractID());
+		return true;
+	}
+	public boolean payPremium(Payment payment, int cardNumber, int cvcNumber, int password) {
+		return payment.processPayment(cardNumber, cvcNumber, password);
+	}
+
 }
