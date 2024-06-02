@@ -1,6 +1,7 @@
 package daoList;
 import java.util.ArrayList;
 import IF.ContractList;
+import constant.Constant;
 import domain.Contract;
 public class ContractListImpl implements ContractList {
 	private ArrayList<Contract> ContractList;
@@ -42,5 +43,25 @@ public class ContractListImpl implements ContractList {
 	}
 	public void update(int id, Contract Contract){
 
+	}
+	@Override
+	public ArrayList<Contract> retrieveByContractStatus(String contractStatus) {
+		ArrayList<Contract> contractListByStatus = new ArrayList<>();
+		for (Contract Contract : ContractList) {
+			if (Contract.getContractStatus().equals(contractStatus)) {
+				contractListByStatus.add(Contract);
+			}
+		}
+		return contractListByStatus;
+	}
+	
+	public ArrayList<Contract> retrieveByCustomerId(int customerId) {
+		ArrayList<Contract> customerContractList = new ArrayList<>();
+		for (Contract Contract : ContractList) {
+			if (Contract.getCustomerID() == customerId) {
+				customerContractList.add(Contract);
+			}
+		}
+		return customerContractList;
 	}
 }
