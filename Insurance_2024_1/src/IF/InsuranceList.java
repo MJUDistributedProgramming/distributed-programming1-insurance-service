@@ -11,5 +11,6 @@ public interface InsuranceList {
 	public Insurance retrieve(int insuranceID);
 	public boolean update(int insuranceID, Insurance insurance);
 	public ArrayList<Insurance> retrieveAll();
+	public ArrayList<Insurance> retrieveTypeAll(String clientChoice);
 
 }
