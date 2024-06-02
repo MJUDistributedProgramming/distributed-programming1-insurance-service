@@ -1746,53 +1746,6 @@ public class ISMain {
 		if (response == true) System.out.println("[success] Successfully deleted this Contract!");
 		else System.out.println("[error] The contract id does not exist.");
 	}
-
-  private static void createRule(BufferedReader clientInputReader) throws IOException {
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] please login first.");
-			return;
-		}
-		if (TokenManager.getRole(token).equals(Constant.Customer)) {
-			System.out.println("[error] You do not have access.");
-			return;
-		}
-		System.out.println("--Create Rule Infomation--");
-		System.out.print("ruleID: "); 
-		String ruleID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);	
-		System.out.print("ruleName: "); 
-		String ruleName =dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		System.out.print("ruleDetail: "); 
-		String ruleDetail = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		
-		Rule rule = new Rule();
-		rule.setRuleID(Integer.parseInt(ruleID));
-		rule.setRuleName(ruleName);
-		rule.setRuleDetail(ruleDetail);
-
-		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
-		boolean response = employee.createRule(rule);
-		if (response == true) System.out.println("[success] Successfully Create Rule!");
-		else System.out.println("[error] Rule ID duplicate. Please try again");
-	}
-	private static void deleteRule(BufferedReader clientInputReader) throws IOException {
-		System.out.print("ruleID: "); 
-		String ruleID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);	
-
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] please login first.");
-			return;
-		}
-		if (TokenManager.getRole(token).equals(Constant.Customer)) {
-			System.out.println("[error] You do not have access.");
-			return;
-		}
-		
-		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
-		boolean response = employee.deleteRule(Integer.parseInt(ruleID));
-		if (response == true) System.out.println("[success] Successfully Delete Rule!");
-		else System.out.println("[error] Rule ID does not exist. Please try again");
-	}
-	
 	
 	private static void createCounsel(String usertype, BufferedReader clientInputReader) throws IOException {
 		System.out.println("-- Counsel Information--");
@@ -1900,109 +1853,6 @@ public class ISMain {
 		else System.out.println("[success] Successfully Delete Compensation!");	
 				
 	}
-
-	private static void createInsurance(BufferedReader clientInputReader) throws IOException {
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] please login first.");
-			return;
-		}
-		System.out.println("InsuranceCategory: 1. 자동차  2. 주택화재  3. 암건강  4. 해외여행"); 
-		String insuranceCategory = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		if(insuranceCategory.equals("1")) insuranceCategory = "자동차";
-		else if(insuranceCategory.equals("2")) insuranceCategory = "주택화재";
-		else if(insuranceCategory.equals("3")) insuranceCategory = "암건강";
-		else if(insuranceCategory.equals("4")) insuranceCategory = "해외여행";
-		
-		System.out.println("--Create Insurance Infomation--");
-		// basic attribute settings
-		System.out.print("Insurance ID: "); String insuranceID = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		System.out.print("Insurance Name: "); String insuranceName = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-		System.out.print("category: "); String category = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-		System.out.print("Minimum Period: "); String minimumPeriod = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		System.out.print("Minimum Premium: "); String minimumPremium = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		System.out.print("Process of Compensation: "); String processOfCompensation = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-		System.out.print("Process of Subscription: "); String processOfSubscription = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		System.out.print("Insurance Rate: "); String insuranceRate = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		System.out.print("Notice: "); String notice = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-		
-		// composition to whole settings
-
-		Guarantee guarantee = new Guarantee();
-		System.out.println("--Guarantee Information--");
-		System.out.print("Guarantee Name: "); String guaranteeName = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-		System.out.print("Description: "); String guranteeDescription = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-		System.out.print("Max Converage: "); String maxCoverage = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-		guarantee.setGuaranteeName(guaranteeName);
-		guarantee.setDescription(guranteeDescription);
-		guarantee.setMaxCoverage(Integer.parseInt(maxCoverage));
-		
-		SpecialProvision specialProvision = new SpecialProvision();
-		System.out.println("--Special Provision Information--");
-		System.out.print("Special Provision Name: "); String specialProvisionName = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-		System.out.print("Description: "); String provisionDescription = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-		System.out.print("Rate of Discount: "); String rateOfDiscount  = dataValidation(clientInputReader.readLine().trim(), "Double", clientInputReader);
-		specialProvision.setSpecialProvisionName(specialProvisionName);
-		specialProvision.setDescription(provisionDescription);
-		specialProvision.setRateOfDiscount(Double.parseDouble(rateOfDiscount));
-		
-		Insurance insurance = null;
-		if(insuranceCategory.equals("1")) {
-			insurance = new Car();
-			System.out.println("--Car Insurance Information--");
-			System.out.print("Model: "); String model = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-			System.out.print("Price: "); String carPrice = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-			System.out.print("VIN: "); String VIN = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-			System.out.print("Black box: enter [Y/N]"); String blackbox = dataValidation(clientInputReader.readLine().trim(), "boolean", clientInputReader);
-			((Car) insurance).setModel(model);
-			((Car) insurance).setPriceOfCar(Integer.parseInt(carPrice));
-			((Car) insurance).setVIN(VIN);
-			if(blackbox.equals("Y")) ((Car) insurance).setHasBlackbox(true);
-			else if(blackbox.equals("N")) ((Car) insurance).setHasBlackbox(false);
-			
-		}else if(insuranceCategory.equals("2")) {
-			insurance = new HouseFire();
-			System.out.println("--HouseFire Insurance Information--");
-			System.out.print("Category of House: "); String categoryOfHouse = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-			System.out.print("Price: "); String housePrice = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-			((HouseFire) insurance).setCategoryOfHouse(categoryOfHouse);
-			((HouseFire) insurance).setPriceOfHouse(Integer.parseInt(housePrice));
-			
-		}else if(insuranceCategory.equals("3")) {
-			insurance = new CancerHealth();
-			System.out.println("--CancerHealth Insurance Information--");
-			System.out.print("Category of Cancer: "); String categoryOfCancer = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-			((CancerHealth) insurance).setCategoryOfCancer(categoryOfCancer);
-			
-		}else if(insuranceCategory.equals("4")) {
-			insurance = new InternationalTravel();
-			System.out.println("--InternationalTravel Insurance Information--");
-			System.out.print("Country to travel: "); String travelCountry = dataValidation(clientInputReader.readLine().trim(), "String", clientInputReader);
-			System.out.print("Travel Period: "); String travelPeriod = dataValidation(clientInputReader.readLine().trim(), "Integer", clientInputReader);
-			((InternationalTravel) insurance).setTravelCountry(travelCountry);
-			((InternationalTravel) insurance).setTravelPeriod(Integer.parseInt(travelPeriod));
-		}
-		
-		// ListImpl Add
-		insurance.setInsuranceID(Integer.parseInt(insuranceID));
-		insurance.setInsuranceName(insuranceName);
-		insurance.setCategory(category);
-		insurance.setMinimumPeriod(Integer.parseInt(minimumPeriod));
-		insurance.setMinimumPremium(Integer.parseInt(minimumPremium));
-		insurance.setProcessOfCompoensation(processOfCompensation);
-		insurance.setProcessOfSubscription(processOfSubscription);
-		insurance.setInsuranceRate(Integer.parseInt(insuranceRate));
-		insurance.setNotice(notice);
-		
-		// composition to whole settings
-		insurance.setGuarantee(guarantee);
-		insurance.setSpecialProvision(specialProvision);
-		
-		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
-		boolean response = employee.createInsurance(insurance);
-		if(response) System.out.println("[error] Insurance ID duplicate. Please try again");
-		else System.out.println("[success] Successfully created Insurance!");
-	}
-
 	private static void deleteInsurance(BufferedReader clientInputReader) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
@@ -2016,7 +1866,6 @@ public class ISMain {
 		if(response) System.out.println("[success] Successfully deleted Insurance!");
 		else System.out.println("[error] The Insurance ID does not exist.");
 	}
-	
 	private static void login(String userType, BufferedReader clientInputReader) throws IOException {
 		System.out.println("--Login Infomation--");
 		if (userType.equals(Constant.Customer)) {
