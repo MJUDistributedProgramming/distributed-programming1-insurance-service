@@ -55,6 +55,7 @@ public class ContractListImpl implements ContractList {
 		}
 		return contractListByStatus;
 	}
+	
 	public ArrayList<Contract> retrieveByCustomerId(int customerId) {
 		ArrayList<Contract> customerContractList = new ArrayList<>();
 		for (Contract Contract : ContractList) {
@@ -63,7 +64,6 @@ public class ContractListImpl implements ContractList {
 			}
 		}
 		return customerContractList;
-  }
 	@Override
 	public boolean contains(Contract contract) {
 		return ContractList.contains(contract);
