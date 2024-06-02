@@ -64,9 +64,15 @@ public class AccidentListImpl implements AccidentList {
 	public ArrayList<Accident> retrieveAll(){
 		return this.accidentList;
 	}
-	
-	public void update(Accident accident, int accidentID){
 
-	}
-
+    public boolean update(int accidentId, Accident updatedAccident) {
+        for (int i = 0; i < accidentList.size(); i++) {
+            Accident accident = accidentList.get(i);
+            if (accident.getAccidentID() == accidentId) {
+                accidentList.set(i, updatedAccident);
+                return true;
+            }
+        }
+        return false;
+    }
 }
