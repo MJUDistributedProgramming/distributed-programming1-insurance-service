@@ -753,6 +753,7 @@ public class ISMain {
 		System.out.println("고객병력-치료여부 : "+medicalHistory.isCured());
 		System.out.println("-------------------------------");
 		System.out.print("평가결과: "); String evaluation = clientInputReader.readLine().trim();
+		System.out.println("[info] 평가결과가 저장되었습니다.");
 		System.out.print("인수여부 [Y/N]: "); String result = dataValidation(clientInputReader.readLine().trim(), "boolean", clientInputReader);
 		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
 		boolean response = employee.processUnderwriting(contract, evaluation, result);
@@ -2213,7 +2214,7 @@ public class ISMain {
 				String customerPW = customer.getCustomerPW();
 				if (customerID.equals(ID) && customerPW.equals(PW)) {
 					token = TokenManager.createToken(ID, Constant.Customer);
-					System.out.println("[success] " + TokenManager.getID(token)+", Welcome - Login successfully");
+					System.out.println("[success] " + TokenManager.getID(token)+"님, 환영합니다. 로그인이 완료되었습니다.");
 					return;
 				}
 			}
@@ -2227,7 +2228,7 @@ public class ISMain {
 				String employeePW = employee.getEmployeePW();
 				if (employeeID.equals(ID) && employeePW.equals(PW)) {
 					token = TokenManager.createToken(ID, employee.getType());
-					System.out.println("[success] " + TokenManager.getID(token)+", Welcome - Login successfully");
+					System.out.println("[success] " + TokenManager.getID(token)+"님, 환영합니다. 로그인이 완료되었습니다.");
 					return;
 				}
 			}
