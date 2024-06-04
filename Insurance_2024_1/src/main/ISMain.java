@@ -19,15 +19,6 @@ import constant.Constant;
 import IF.InsuranceList;
 import IF.AccidentList;
 import IF.CompensationList;
-import daoList.AccidentListImpl;
-import daoList.CompensationListImpl;
-import daoList.ContractListImpl;
-import daoList.CounselListImpl;
-import daoList.CustomerListImpl;
-import daoList.EmployeeListImpl;
-import daoList.InsuranceListImpl;
-import daoList.PaymentListImpl;
-import daoList.RuleListImpl;
 import domain.Accident;
 import domain.AutomaticPayment;
 import domain.BankPayment;
@@ -50,6 +41,15 @@ import domain.Payment;
 import domain.PaymentInfo;
 import domain.Rule;
 import domain.SpecialProvision;
+import listImpl.AccidentListImpl;
+import listImpl.CompensationListImpl;
+import listImpl.ContractListImpl;
+import listImpl.CounselListImpl;
+import listImpl.CustomerListImpl;
+import listImpl.EmployeeListImpl;
+import listImpl.InsuranceListImpl;
+import listImpl.PaymentListImpl;
+import listImpl.RuleListImpl;
 import token.TokenManager;
 public class ISMain {
 	// main attributes
@@ -68,7 +68,7 @@ public class ISMain {
 	private static Customer customer;
 	private static BufferedReader clientInputReader;
 	public ISMain() {
-		this.clientInputReader = new BufferedReader(new InputStreamReader(System.in));
+		clientInputReader = new BufferedReader(new InputStreamReader(System.in));
 		accidentListImpl = new AccidentListImpl();
 		compensationListImpl = new CompensationListImpl();
 		contractListImpl = new ContractListImpl();
@@ -495,6 +495,10 @@ public class ISMain {
 	}
 	//// 고객 DB 서비스 카테고리 - 입수한 고객정보를 DB에 반영한다.
 	private void customerDBServiceCategory() throws IOException {
+		if (employee==null) {
+			System.out.println("[error] 로그인을 먼저 진행해주세요.");
+			return;
+		}
 		while(true) {
 			System.out.println("***************** 고객 DB 서비스 카테고리 메뉴 *****************");
 			System.out.println("1. 고객정보 생성");
@@ -572,12 +576,8 @@ public class ISMain {
 		customer.setCounselList(counselListImpl);
 		customer.setPaymentList(paymentListImpl);
 		customer.setInsuranceList(insuranceListImpl);
-		
-		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
 		System.out.print("해당 고객의 정보를 DB에 추가하여 반영하시겠습니까? [Y/N]"); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
-		boolean response = employee.createCustomer(customer, result);
-		if (response == true) System.out.println("[success]  새로운 고객정보가 등록되었습니다.");
-		else System.out.println("[info] 고객정보를 DB에 반영하지 않았습니다. 본 페이지로 이동합니다.");
+		System.out.println(employee.createCustomer(customer, result));
 	}
 	private void retrieveCustomer(BufferedReader clientInputReader) {
 		showCustomerList();
@@ -616,22 +616,22 @@ public class ISMain {
 		medicalHistory.setCured(isCured);
 		medicalHistory.setCurePeriod(curePeriod);
 		medicalHistory.setDiseases(diseases);
-
-		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
+		
 		System.out.println(employee.updateCustomer(customerID, name, account, address, age, birthDate, email, gender, height, job, phone, weight, medicalHistory));
 	}
 	private void deleteCustomer(BufferedReader clientInputReader) throws IOException {
 		System.out.println("-- 삭제할 고객 정보 입력 --");
 		System.out.print("삭제할 고객 ID: "); String customerID = dataValidation(clientInputReader.readLine().trim(), "Integer");
-		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
-		boolean response = employee.deleteCustomer(Integer.parseInt(customerID));
-		if (response == true) System.out.println("[success] 해당 고객 정보가 삭제되었습니다.");
-		else System.out.println("[info] 고객정보 삭제에 실패했습니다. 본 페이지를 다시 출력합니다.");
-	}
+		System.out.println(employee.deleteCustomer(Integer.parseInt(customerID)));
+		}
 	// -------------------------------------------------------------
 	
 	//// 계약체결 카테고리 - 계약을 체결한다.
 	private void concludeContractCategory() throws IOException {
+		if (employee==null) {
+			System.out.println("[error] 로그인을 먼저 진행해주세요.");
+			return;
+		}
 		while(true) {
 			System.out.println("***************** 계약체결 카테고리 메뉴 *****************");
 			System.out.println("1. 계약체결 진행");
@@ -648,10 +648,6 @@ public class ISMain {
 		}
 	}
 	private void concludeContract() throws IOException {
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] please login first.");
-			return;
-		}
 		int index = 1;
 		ArrayList<Contract> permitContractList = contractListImpl.retrieveByContractStatus(Constant.contractStatus4);
 		if(permitContractList.size() == 0) {
@@ -666,11 +662,8 @@ public class ISMain {
 		System.out.println("-----------------------------");
 		System.out.print("체결할 계약 id: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "String");
 		System.out.print("계약을 체결하시겠습니까? [Y/N]"); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
-		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
 		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
-		boolean response = employee.concludeContract(contract, result);
-		if (response == true) System.out.println("[success] 계약체결이 완료되었습니다.");
-		else System.out.println("[info] 계약진행에 실패했습니다. 본 페이지를 다시 출력합니다.");
+		System.out.println(employee.concludeContract(contract, result));
 	}
 	private void requestReUnderwriting() throws IOException {
 		boolean status = showRejectedUnderwriteContractList();
@@ -679,15 +672,16 @@ public class ISMain {
 		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
 		System.out.println("-- 재심사를 요청하려는 계약의 정보");
 		System.out.println("재심사 하려는 계약정보. " + "계약 id: "+contract.getContractID() + ", 탈락사유: "+contract.getEvaluation());
-		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
-		boolean response = employee.requestReUnderwriting(contract);
-		if (response == true) System.out.println("[success] 재심사 요청이 완료되었습니다.");
-		else System.out.println("[info] 재심사 요청이 완료되지 않았습니다. 다시 페이지를 출력합니다.");
+		System.out.println(employee.requestReUnderwriting(contract));;
 	}
 	// ------------------------------------------------------
 	
 	//// 인수심사 카테고리 - 계약의 인수심사를 하다, 계약 진행을 허가한다.	
 	private void underWritingCategory() throws IOException {
+		if (employee==null) {
+			System.out.println("[error] 로그인을 먼저 진행해주세요.");
+			return;
+		}
 		while(true) {
 			System.out.println("***************** 인수심사 카테고리 메뉴 *****************");
 			System.out.println("1. 인수심사 진행");
@@ -716,17 +710,10 @@ public class ISMain {
 		System.out.println("-- 계약진행을 허가하려는 계약의 정보 --");
 		System.out.println("진행 허가 계약정보. " + "계약 id: "+contract.getContractID() + " 고객id: "+contract.getCustomerID()+" 계약날짜: "+contract.getCreatedDate()+" 보험 상품 id: "+contract.getInsuranceID() +" 인수한 U/W직원 id: " +contract.getUnderwritingEID());
 		System.out.print("계약 진행 허가 [Y/N]"); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
-		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
-		boolean response = employee.permitContract(contract, result);
-		if (response == true) System.out.println("[success] 계약 진행을 허가하셨습니다.");
-		else System.out.println("[info] 계약 진행이 완료되지 않았습니다. 다시 페이지를 출력합니다.");
+		System.out.println(employee.permitContract(contract, result));
 	}
 	// 계약의 인수심사를 한다.
 	private void showRequestedUnderwriteContractList() throws IOException {
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] 로그인을 먼저 진행해주세요.");
-			return;
-		}
 		int index = 1;
 		ArrayList<Contract> requestedUnderwriteContractList = contractListImpl.retrieveByContractStatus(Constant.contractStatus1);
 		if(requestedUnderwriteContractList.size() == 0) {
@@ -768,16 +755,9 @@ public class ISMain {
 		System.out.print("평가결과: "); String evaluation = clientInputReader.readLine().trim();
 		System.out.println("[info] 평가결과가 저장되었습니다.");
 		System.out.print("인수여부 [Y/N]: "); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
-		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
-		boolean response = employee.processUnderwriting(contract, evaluation, result);
-		if (response == true) System.out.println("[success] 인수심사를 완료하였습니다.");
-		else System.out.println("[info] 인수심사를 거절하였습니다. 해당 계약건을 인수 제한한 계약건으로 분류합니다");
+		System.out.println(employee.processUnderwriting(contract, evaluation, result));
 	}
 	private boolean showUnderwritedContractList() {
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] please login first.");
-			return false;
-		}
 		int index = 1;
 		ArrayList<Contract> underwritedContractList = contractListImpl.retrieveByContractStatus(Constant.contractStatus3);
 		if(underwritedContractList.size() == 0) {
@@ -793,10 +773,6 @@ public class ISMain {
 		return true;
 	}
 	private boolean showRejectedUnderwriteContractList() {
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] please login first.");
-			return false;
-		}
 		int index = 1;
 		ArrayList<Contract> rejectedUnderwriteContractList = contractListImpl.retrieveByContractStatus(Constant.contractStatus2);
 		if(rejectedUnderwriteContractList.size() == 0) {
@@ -873,7 +849,6 @@ public class ISMain {
 		}
 	}
 	// -------------------------------------------------------------
-	
     //// 보험 상품 종류 카테고리 - 보험 상품을 조회하다
 	private void insuranceTypeCategory() throws IOException {
 		if (!TokenManager.isValidToken(token)) {
@@ -897,7 +872,7 @@ public class ISMain {
 			} else System.out.println("invalid choice");
 		}
 	}
-	
+
 	// 보험 상품 종류 조회
 	private void showInsuranceTypeList(String clientChoice) throws IOException {
 		while(true) {
@@ -1621,8 +1596,7 @@ public class ISMain {
 			System.out.println(index + ". ID: " + employee.getEmployeeID() + " Name: " + employee.getName() + " Gender: " + employee.getGender()+ " Email: " + employee.getEmail()+ " Phone: " + employee.getName()+ " type: " + employee.getType());
 			index++;
 		}
-  }
-
+	}
 	private void showAllContractList() {
 		int index = 1;
 		System.out.println();
@@ -1632,7 +1606,6 @@ public class ISMain {
 			index++;
 		}
 	}
-	
 	private void showCounselList() {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
@@ -1678,12 +1651,7 @@ public class ISMain {
 			index++;
 		}
 	}
-
-  private void createContract() throws IOException {
-    if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] please login first.");
-			return;
-		}
+	private void createContract() throws IOException {
 		System.out.println("--Create Contract Infomation--");
 		// basic attribute settings
 		System.out.print("contractID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer");
@@ -1742,7 +1710,7 @@ public class ISMain {
 		contract.setContractID(Integer.parseInt(contractID));
 		contract.setContractStatus(contractStatus);
 		contract.setCustomerID(Integer.parseInt(customerID));
-		contract.setCreateContractEID(Integer.parseInt(TokenManager.getID(token)));
+		contract.setCreateContractEID(employee.getEmployeeID());
 		contract.setExpirationDate(expirationDate);
 		contract.setInsuranceID(Integer.parseInt(insuranceID));
 		contract.setCreatedDate(createdDate);
@@ -2146,7 +2114,6 @@ public class ISMain {
 		}	
 	}
 	// -------------------------------------------------------------
-
 	private void deleteInsurance() throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
@@ -2157,7 +2124,6 @@ public class ISMain {
 		
 		System.out.println(employee.deleteInsurance(Integer.parseInt(insuranceID)));
 	}
-	
 	private void login(String userType) throws IOException {
 		System.out.println("--Login Infomation--");
 		if (userType.equals(Constant.Customer)) {
@@ -2167,11 +2133,8 @@ public class ISMain {
 				String customerID = Integer.toString(customer.getCustomerID());
 				String customerPW = customer.getCustomerPW();
 				if (customerID.equals(ID) && customerPW.equals(PW)) {
-					//원래 코드
-					token = TokenManager.createToken(ID, Constant.Customer);
-					System.out.println("[success] " + TokenManager.getID(token)+"님, 환영합니다. 로그인이 완료되었습니다.");
-					// 수정코드
-					this.customer = customer;
+					ISMain.customer = customer;
+					System.out.println("[success] " + customer.getCustomerID()+"님, 환영합니다. 로그인이 완료되었습니다.");
 					return;
 				}
 			}
@@ -2184,11 +2147,8 @@ public class ISMain {
 				String employeeID = Integer.toString(employee.getEmployeeID());
 				String employeePW = employee.getEmployeePW();
 				if (employeeID.equals(ID) && employeePW.equals(PW)) {
-					// 원래 코드
-					token = TokenManager.createToken(ID, employee.getType());
-					System.out.println("[success] " + TokenManager.getID(token)+"님, 환영합니다. 로그인이 완료되었습니다.");
-					// 수정 코드
-					this.employee = employee;
+					ISMain.employee = employee;
+					System.out.println("[success] " + employee.getEmployeeID()+"님, 환영합니다. 로그인이 완료되었습니다.");
 					return;
 				}
 			}
@@ -2254,10 +2214,7 @@ public class ISMain {
 			customer.setCounselList(counselListImpl);
 			customer.setPaymentList(paymentListImpl);
 			customer.setInsuranceList(insuranceListImpl);
-			
-			boolean response = customerListImpl.add(customer);		
-			if (response == true) System.out.println("[success] Successfully Sign Up!");
-			else System.out.println("[error] ID duplicate. Please sign up again");
+			System.out.println(customerListImpl.add(customer));	
 		} else if (userType.equals(Constant.Employee)) {
 			System.out.println("--SignUp Infomation--");
 			
@@ -2289,20 +2246,13 @@ public class ISMain {
 			employee.setPaymentList(paymentListImpl);
 			employee.setCounselList(counselListImpl);
 			employee.setCustomerList(customerListImpl);
-			
-			boolean response = employeeListImpl.add(employee);
-			if (response == true) System.out.println("[success] Successfully Sign Up!");
-			else System.out.println("[error] ID duplicate. Please sign up again");
+			System.out.println(employeeListImpl.add(employee));
 		}
 	}
 	private void logout() {
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] please login first.");
-			return;
-		}
-		TokenManager.invalidateToken(token);
-		System.out.println("[success] logout successfully!");
-		
+		employee = null;
+		customer = null;
+		System.out.println("[success] 로그아웃 되었습니다. 본 페이지로 돌아갑니다.");
 	}
 	private void deleteMembership(String userType) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
@@ -2312,8 +2262,8 @@ public class ISMain {
 		System.out.println("--deleteMembership Infomation--");
 		System.out.print("Do you want to delete your membership? [Y/N] : "); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if (result.equals("Y")) {
-			if (userType.equals(Constant.Customer)) customerListImpl.deleteById(Integer.parseInt(TokenManager.getID(token)));
-			else if (userType.equals(Constant.Employee)) employeeListImpl.deleteById(Integer.parseInt(TokenManager.getID(token)));
+			if (userType.equals(Constant.Customer)) System.out.println(customerListImpl.deleteById(Integer.parseInt(TokenManager.getID(token))));
+			else if (userType.equals(Constant.Employee)) System.out.println(employeeListImpl.deleteById(Integer.parseInt(TokenManager.getID(token))));;
 			TokenManager.invalidateToken(token);
 		} else System.out.println("[error] you enter 'N', return to homePage");
 	}
