@@ -618,9 +618,7 @@ public class ISMain {
 		medicalHistory.setDiseases(diseases);
 
 		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
-		boolean response = employee.updateCustomer(customerID, name, account, address, age, birthDate, email, gender, height, job, phone, weight, medicalHistory);
-		if (response == true) System.out.println("[success] 수정이 완료되었습니다.");
-		else System.out.println("[info] 해당 고객이 존재하지 않아 고객정보 수정에 실패했습니다. 본 페이지로 이동합니다.");
+		System.out.println(employee.updateCustomer(customerID, name, account, address, age, birthDate, email, gender, height, job, phone, weight, medicalHistory));
 	}
 	private void deleteCustomer(BufferedReader clientInputReader) throws IOException {
 		System.out.println("-- 삭제할 고객 정보 입력 --");
@@ -1181,9 +1179,7 @@ public class ISMain {
 		if(save.equals("Y")) {System.out.println("보험요율:" + insuranceRate);}
 	
 		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
-		boolean response = employee.createInsurance(insurance);
-		if(response) System.out.println("[error] Insurance ID duplicate. Please try again");
-		else System.out.println("[success] Successfully created Insurance!");
+		System.out.println(employee.createInsurance(insurance));
 	}
 	// 상품 리스트를 확인한다. (만들어진 함수 그대로 씀)
 	private void showInsuranceList() {
@@ -1225,14 +1221,7 @@ public class ISMain {
 		}
 	}
 	private void createRule() throws IOException {
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] 로그인 먼저 해주세요.");
-			return;
-		}
-		if (TokenManager.getRole(token).equals(Constant.Customer)) {
-			System.out.println("[error] 당신이 접근할 수 없습니다.");
-			return;
-		}
+		
 		System.out.println("--제관리 지침 정보를 입력하세요--");
 		System.out.print("제관리 지침 ID: "); 
 		String ruleID = dataValidation(clientInputReader.readLine().trim(), "Integer");	
@@ -1246,39 +1235,18 @@ public class ISMain {
 		rule.setRuleName(ruleName);
 		rule.setRuleDetail(ruleDetail);
 
-		boolean response = employee.createRule(rule);
-		if (response == true) System.out.println("[success] Successfully Create Rule!");
-		else System.out.println("[error] Rule ID duplicate. Please try again");
+		System.out.println(employee.createRule(rule));
+		
 	}
 	private void deleteRule() throws IOException {
 		System.out.print("제관리 지침 ID: "); 
 		String ruleID = dataValidation(clientInputReader.readLine().trim(), "Integer");	
-
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] 로그인 먼저 해주세요.");
-			return;
-		}
-		if (TokenManager.getRole(token).equals(Constant.Customer)) {
-			System.out.println("[error] 당신이 접근할 수 없습니다.");
-			return;
-		}
 		
-		boolean response = employee.deleteRule(Integer.parseInt(ruleID));
-		if (response == true) System.out.println("[success] 성공적으로 제관리지침이 삭제되었습니다!");
-		else System.out.println("[error] 제관리지침 ID가 존재하지 않습니다. 다시 시도해주세요");
+		System.out.println( employee.deleteRule(Integer.parseInt(ruleID)));
+	
 	}
 	private static void showRuleList() {
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] 로그인 먼저 해주세요.");
-			return;
-		}
-		String role = TokenManager.getRole(token);
-		int index = 1;
-		if (role.equals(Constant.Customer)) {
-			System.out.println("[error] 당신이 접근할 수 없습니다.");
-			return;
-		}
-		System.out.println();
+		int index=1;
 		System.out.println("-- 제관리 지침 리스트 --");
 		for(Rule rule : ruleListImpl.retrieveAll()) {
 			System.out.println(index + ". RuleID: " + rule.getRuleID() + " RuleName: " + rule.getRuleName()+ " RuleDetail: " + rule.getRuleDetail());
@@ -1332,17 +1300,13 @@ public class ISMain {
 			automaticPayment.setRelationshipToApplicant(relationshipToApplicant);
 		}
 		
-		boolean response = employee.setPaymentInfo(contractID,paymentInfo);
-		if (response == true) System.out.println("[success] 성공적으로 결제정보가 등록되었습니다.!");
-		else System.out.println("[error] 계약 ID가 존재하지 않습니다. 다시 시도해주세요");
+		System.out.println(employee.setPaymentInfo(contractID,paymentInfo));
 	}
 	// -------------------------------------------------------------
 	// 미납을 관리한다.
 	private void manageLatePayment() throws IOException {
 		System.out.print("계약 ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer");
-		boolean response =employee.manageLatePayment(contractID);
-		if (response == true) System.out.println("[success] 성공적으로 미납 계약이 삭제되었습니다.!");
-		else System.out.println("[error] 계약 ID가 존재하지 않습니다. 다시 시도해주세요");
+		System.out.println(employee.manageLatePayment(contractID));
 	}
 	// -------------------------------------------------------------
 
@@ -1544,9 +1508,7 @@ public class ISMain {
 		contract.setMonthlyPremium(Integer.parseInt(monthlyPremium));
 		contract.setPaymentInfo(paymentInfo);
 		
-		boolean response =employee.revive(contract);
-		if (response == true) System.out.println("[success] 성공적으로 부활이 완료되었습니다.!");
-		else System.out.println("[error] 계약 ID가 존재하지 않습니다. 다시 시도해주세요");
+		System.out.println(employee.revive(contract));
 	}
 	
 	// -------------------------------------------------------------
@@ -1555,25 +1517,14 @@ public class ISMain {
 		System.out.print("만기 계약ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
 		String expirationDate = contract.getExpirationDate();
-		SimpleDateFormat dateFormat =new SimpleDateFormat(Constant.dateFormat);
-		Date date = dateFormat.parse(expirationDate);
-		Date today = new Date();
-		if(date.before(today)) {
-			employee.manageExpirationContract(contractID);
-		}else {
-			System.out.println("[error]만기된 계약이 아닙니다.");
-		}
+		System.out.println(employee.manageExpirationContract(contractID, expirationDate));
 	}
 	// -------------------------------------------------------------
 	// 재계약을 관리한다.
 	private void manageRenewalContract() throws IOException {
 		System.out.print("재계약ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
-		if(contract.isRenewalStatus()) {
-			createContract();
-		}else {
-			System.out.println("재계약에 동의하지 않아 재계약이 불가능합니다.");
-		}
+		System.out.println(employee.manageRenewal(contract));
 	}
 	// -------------------------------------------------------------
 	// 배서를 관리한다.
@@ -1642,9 +1593,7 @@ public class ISMain {
 		contract.setMonthlyPremium(Integer.parseInt(monthlyPremium));
 		contract.setPaymentInfo(paymentInfo);
 		
-		boolean response =employee.update(contract);
-		if (response == true) System.out.println("[success] 성공적으로 부활이 완료되었습니다.!");
-		else System.out.println("[error] 계약 ID가 존재하지 않습니다. 다시 시도해주세요");
+		System.out.println(employee.update(contract));
 	}
 	//// 고객 DB 서비스 카테고리 - 입수한 고객정보를 DB에 반영한다.
 	private void showAllPaymentList() {
@@ -2206,9 +2155,7 @@ public class ISMain {
 		System.out.println("--Delete Insurance Infomation--");
 		System.out.print("Insurance ID: "); String insuranceID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		
-		boolean response = employee.deleteInsurance(Integer.parseInt(insuranceID));
-		if(response) System.out.println("[success] Successfully deleted Insurance!");
-		else System.out.println("[error] The Insurance ID does not exist.");
+		System.out.println(employee.deleteInsurance(Integer.parseInt(insuranceID)));
 	}
 	
 	private void login(String userType) throws IOException {

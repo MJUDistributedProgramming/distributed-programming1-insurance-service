@@ -38,10 +38,26 @@ public class Employee {
 	// operate
 	public boolean createContract(Contract contract) {return contractListImpl.add(contract);}
 	public boolean deleteContract(int contractID) {return contractListImpl.deleteById(contractID);}
-	public boolean createRule(Rule rule) {return this.ruleListImpl.add(rule);}
-	public boolean deleteRule(int ruleID) {return this.ruleListImpl.deleteById(ruleID);}
-	public boolean createInsurance(Insurance insurance) {return this.insuranceListImpl.add(insurance);}
-	public boolean deleteInsurance(int insuranceID) {return this.insuranceListImpl.delete(insuranceID);}
+	public String createRule(Rule rule) {
+		boolean response = this.ruleListImpl.add(rule);
+		if (response == true) return "[success] 성공적으로 제관리지침이 생성되었습니다!";
+		else return "[error] 제관리지침 ID가 겹칩니다. 다시 시도해주세요";
+		}
+	public String deleteRule(int ruleID) {
+		boolean response = this.ruleListImpl.deleteById(ruleID);
+		if (response == true) return "[success] 성공적으로 제관리지침이 삭제되었습니다!";
+		else return "[error] 제관리지침 ID가 겹칩니다. 다시 시도해주세요";
+		}
+	public String createInsurance(Insurance insurance) {
+		boolean response = this.insuranceListImpl.add(insurance);
+		if (response == true) return "[success] 성공적으로 보험 상품이 생성되었습니다!";
+		else return "[error] 보험상품 ID가 겹칩니다. 다시 시도해주세요";
+	}
+	public String deleteInsurance(int insuranceID) {
+		boolean response = this.insuranceListImpl.delete(insuranceID);
+		if (response == true) return "[success] 성공적으로 보험 상품이 삭제되었습니다!";
+		else return "[error] 보험상품 ID가 겹칩니다. 다시 시도해주세요";
+		}
 	public boolean createPayment(Payment payment) {return this.paymentListImpl.add(payment);}
 	public boolean deletePayment(int paymentID) {return this.paymentListImpl.delete(paymentID);}
 	public boolean createCompensation(Compensation compensation) {return this.compensationListImpl.add(compensation);}
@@ -86,11 +102,11 @@ public class Employee {
 	public boolean deleteCustomer(int customerID) {
 		return this.customerList.deleteById(customerID);
 	}
-	public boolean updateCustomer(String customerID, String name, String account, String address, String age,
-			String birthDate, String email, String gender, String height, String job, String phone, String weight,
-			MedicalHistory medicalHistory) {
+	public String updateCustomer(String customerID, String name, String account, String address, String age,
+		String birthDate, String email, String gender, String height, String job, String phone, String weight,
+		MedicalHistory medicalHistory) {
 		Customer customer = customerList.retrieveById(Integer.parseInt(customerID));
-		if (customer == null) return false;
+		if (customer == null) return "[error] 고객 정보 수정에 실패했습니다. 다시 시도해주세요.";
 		customer.setName(name);
 		customer.setAccount(account);
 		customer.setAddress(address);
@@ -103,7 +119,7 @@ public class Employee {
 		customer.setPhone(phone);
 		customer.setWeight(Integer.parseInt(weight));
 		customer.setMedicalHistory(medicalHistory);
-		return true;
+		return "[success] 성공적으로 고객 정보가 수정되었습니다!";
 	}
 	//seohyun
 	public boolean confirmCounsel(Counsel counsel) {
@@ -118,25 +134,46 @@ public class Employee {
 		else return counsel.updateCounsel(counselDetail, note);
 	}
 
-	public boolean setPaymentInfo(String contractID, PaymentInfo paymentInfo) {
+	public String setPaymentInfo(String contractID, PaymentInfo paymentInfo) {
 		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
 		contract.setPaymentInfo(paymentInfo);
-		return true;
+		return "[success] 성공적으로 결제 정보가 등록되었습니다!";
 	}
-	public boolean manageLatePayment(String contractID) {
+	public String manageLatePayment(String contractID) {
+		boolean response = false;
 		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
 		if(contract.getNonPaymentPeriod()>= Constant.maximumLatePaymentPeriod) {
-			return contractListImpl.deleteById(Integer.parseInt(contractID));
+			response= contractListImpl.deleteById(Integer.parseInt(contractID));
 		}
-		return false;
+		if(response) return "[success] 성공적으로 미납 관리가 되었습니다!";
+		else return "[error] 미납 관리에 실패했습니다. 다시시도해주세요!";
 	}
-	public boolean revive(Contract contract) {
-		return contractListImpl.add(contract);
+	public String revive(Contract contract) {
+		boolean response= contractListImpl.add(contract);
+		if(response) return "[success] 성공적으로 부활관리가 되었습니다!";
+		else return "[error] 부활 관리에 실패했습니다. 다시시도해주세요!";
 	}
-	public void manageExpirationContract(String contractID) throws ParseException {
+	public String manageExpirationContract(String contractID, String expirationDate) throws ParseException {
+		boolean response=false;
+		SimpleDateFormat dateFormat =new SimpleDateFormat(Constant.dateFormat);
+		Date date = dateFormat.parse(expirationDate);
+		Date today = new Date();
+		if(date.before(today)) {
+			return "만기된 계약이 아닙니다";
+		}
 		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
 		if(!contract.isRenewalStatus()) {
-				contractListImpl.deleteById(Integer.parseInt(contractID));
+				response=contractListImpl.deleteById(Integer.parseInt(contractID));
+		}
+		if(response) return "[success] 성공적으로 만기계약 관리가 되었습니다!";
+		else return "[error] 만기계약 관리에 실패했습니다. 다시시도해주세요!";
+	}
+	public String manageRenewal(Contract contract) {
+		if(contract.isRenewalStatus()) {
+			createContract(contract);
+			return "[success] 성공적으로 재계약이 되었습니다!";
+		}else {
+			return "[error] 재계약에 동의하지 않아 재계약에 실패했습니다!";
 		}
 	}
 	public boolean update(Contract contract) {
@@ -179,4 +216,5 @@ public class Employee {
 	public void setContractList(ContractList contractListImpl) {this.contractListImpl = contractListImpl;}
 	public void setRuleList(RuleList ruleListImpl) {this.ruleListImpl = ruleListImpl;}
 	public RuleList getRuleList() {return ruleListImpl;}
+	
 }
