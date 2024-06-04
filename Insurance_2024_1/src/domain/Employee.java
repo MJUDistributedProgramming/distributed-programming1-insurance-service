@@ -10,7 +10,7 @@ import IF.CompensationList;
 import IF.ContractList;
 import IF.RuleList;
 import constant.Constant;
-import daoList.CustomerListImpl;
+import listImpl.CustomerListImpl;
 import IF.CounselList;
 import IF.CustomerList;
 import IF.InsuranceList;
@@ -62,44 +62,44 @@ public class Employee {
 	public boolean deletePayment(int paymentID) {return this.paymentListImpl.delete(paymentID);}
 	public boolean createCompensation(Compensation compensation) {return this.compensationListImpl.add(compensation);}
 	public boolean deleteCompensation(int compensationID) {return this.compensationListImpl.deleteById(compensationID);}
-	public boolean processUnderwriting(Contract contract, String evaluation, String result) {
+	public String processUnderwriting(Contract contract, String evaluation, String result) {
 		contract.setEvaluation(evaluation);
 		if (result.equals("Y")) {
 			contract.setContractStatus(Constant.contractStatus3);
 			contract.setUnderwritingEID(this.employeeID);
 			contract.setPassUW(true);
-			return true;
+			return "[success] 인수심사를 완료하였습니다.";
 		} else contract.setContractStatus(Constant.contractStatus2);
-		return false;
+		return "[info] 인수심사를 거절하였습니다. 해당 계약건을 인수 제한한 계약건으로 분류합니다";
 	}
-	public boolean permitContract(Contract contract, String result) {
+	public String permitContract(Contract contract, String result) {
 		if (result.equals("Y")) {
 			contract.setContractStatus(Constant.contractStatus4);
-			return true;
+			return "[success] 계약 진행을 허가하셨습니다.";
 		}
-		return false;
+		return "[info] 계약 허가가 완료되지 않았습니다. 다시 페이지를 출력합니다.";
 	}
-	public boolean concludeContract(Contract contract, String result) {
+	public String concludeContract(Contract contract, String result) {
 		if (result.equals("Y")) {
 			contract.setContractStatus(Constant.contractStatus5);
 			contract.setConcludeEID(this.employeeID);
 			contract.setConcludedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
 			contract.setConclude(true);
-			return true;
+			return "[success] 계약체결이 완료되었습니다.";
 		}
-		return false;
+		return "[info] 계약진행에 실패했습니다. 본 페이지를 다시 출력합니다.";
 	}
-	public boolean requestReUnderwriting(Contract contract) {
+	public String requestReUnderwriting(Contract contract) {
 		contract.setContractStatus(Constant.contractStatus1);
-		return true;
+		return "[success] 재심사 요청이 완료되었습니다.";
 	}
-	public boolean createCustomer(Customer customer, String result) {
+	public String createCustomer(Customer customer, String result) {
 		if (result.equals("Y")) {
 			return this.customerList.add(customer);
 		}
-		return false;
+		return "[info] 고객정보를 DB에 반영하지 않았습니다. 본 페이지로 이동합니다.";
 	}
-	public boolean deleteCustomer(int customerID) {
+	public String deleteCustomer(int customerID) {
 		return this.customerList.deleteById(customerID);
 	}
 	public String updateCustomer(String customerID, String name, String account, String address, String age,

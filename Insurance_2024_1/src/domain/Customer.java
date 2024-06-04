@@ -40,13 +40,10 @@ public class Customer {
 	public void finalize() throws Throwable {
 
 	}
-	
-	
 	public boolean requestJoinInsurance(Customer customer, Insurance insurance) {
 		
 		return false;
 	}
-	
 	public String getAccount() {
 		return account;
 	}
