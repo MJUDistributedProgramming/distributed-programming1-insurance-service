@@ -15,6 +15,17 @@ public class PaymentInfo {
 	
 	public PaymentInfo(){}
 	public void finalize() throws Throwable {}
+	public String toString() {
+		return "PaymentInfo{" +
+	            "automaticPayment=" + automaticPayment.toString() +
+	            ", bankPayment=" + bankPayment.toString() +
+	            ", cardPayment=" + cardPayment.toString() +
+	            ", fixedMonthlyPayment=" + fixedMonthlyPayment +
+	            ", fixedMonthlyPaymentDate='" + fixedMonthlyPaymentDate + '\'' +
+	            ", paymentInfoID=" + paymentInfoID +
+	            ", paymentType='" + paymentType + '\'' +
+	            '}';
+	}
 	public String getPaymentType() {return paymentType;}
 	public AutomaticPayment getAutomaticPayment() {return automaticPayment;}
 	public BankPayment getBankPayment() {return bankPayment;}

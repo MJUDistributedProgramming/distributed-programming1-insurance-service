@@ -5,6 +5,12 @@ public class BankPayment {
 	private String payerPhoneNum;
 
 	public BankPayment(){}
+	public String toString() {
+		return "BankPayment{" +
+	            "  payerName=" + payerName +
+	            ", payerPhoneNum=" + payerPhoneNum + '\'' +
+	            '}';
+	}
 	public void finalize() throws Throwable {}
 	public void updateBankPaymentInfo(BankPayment bankPayment){}
 	public String getPayerName() {return payerName;}
