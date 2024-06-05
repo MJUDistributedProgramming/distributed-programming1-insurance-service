@@ -2,9 +2,9 @@ package listImpl;
 import java.util.ArrayList;
 import IF.CustomerList;
 import domain.Customer;
+import exception.DuplicateIDException;
 public class CustomerListImpl implements CustomerList {
 	private ArrayList<Customer> customerList;
-	private String DBAccesskey;
 	public Customer m_Customer;
 	public ArrayList<Customer> retrieveAll(){
 		return customerList;
@@ -15,10 +15,10 @@ public class CustomerListImpl implements CustomerList {
 	public void finalize() throws Throwable {
 
 	}
-	public String add(Customer Customer){
+	public String add(Customer Customer) throws DuplicateIDException{
 		for (Customer customer : customerList) {
 			if (customer.getCustomerID() == Customer.getCustomerID()) {
-				return "[error] id가 중복되었습니다. 다시 시도해주세요";
+				throw new DuplicateIDException();
 			}
 		}
 		this.customerList.add(Customer);

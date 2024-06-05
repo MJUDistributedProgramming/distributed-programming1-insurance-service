@@ -10,6 +10,7 @@ import IF.CompensationList;
 import IF.ContractList;
 import IF.RuleList;
 import constant.Constant;
+import exception.DuplicateIDException;
 import listImpl.CustomerListImpl;
 import IF.CounselList;
 import IF.CustomerList;
@@ -93,7 +94,7 @@ public class Employee {
 		contract.setContractStatus(Constant.contractStatus1);
 		return "[success] 재심사 요청이 완료되었습니다.";
 	}
-	public String createCustomer(Customer customer, String result) {
+	public String createCustomer(Customer customer, String result) throws DuplicateIDException {
 		if (result.equals("Y")) {
 			return this.customerList.add(customer);
 		}
