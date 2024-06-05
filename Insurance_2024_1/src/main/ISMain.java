@@ -41,6 +41,10 @@ import domain.Payment;
 import domain.PaymentInfo;
 import domain.Rule;
 import domain.SpecialProvision;
+import exception.AuthenticationException;
+import exception.AuthorizationException;
+import exception.DuplicateIDException;
+import exception.NotFoundProfileException;
 import listImpl.AccidentListImpl;
 import listImpl.CompensationListImpl;
 import listImpl.ContractListImpl;
@@ -103,10 +107,8 @@ public class ISMain {
 				}
 				else System.out.println("invalid choice");
 			} catch (IOException e) {
-					// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ParseException e) {
-					// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -145,35 +147,46 @@ public class ISMain {
 		while(true) {
 			printCustomerMainMenu();
 			String clientChoice = clientInputReader.readLine().trim();
-			if (clientChoice.equals("1")) login(Constant.Customer);
-			else if (clientChoice.equals("2")) signUp(Constant.Customer);
-			else if (clientChoice.equals("3")) logout();
-			else if (clientChoice.equals("4")) deleteMembership(Constant.Customer);
-			//
-			else if (clientChoice.equals("5")) accidentCategory();
-			else if (clientChoice.equals("6")) compensationCategory();
-			//
-			else if (clientChoice.equals("7")) counselCategory();
-			else if (clientChoice.equals("8")) insuranceTypeCategory();
-			else if (clientChoice.equals("9")) contractRetrieveCategory();
-			else if (clientChoice.equals("10")) paymentCategory();
-			//
-			else if (clientChoice.equals("11")) showInsuranceList();
-			else if (clientChoice.equals("12")) showAccidentList();
-			else if (clientChoice.equals("13")) showCompensationList();
-			else if (clientChoice.equals("14")) showCounselList();
-			else if (clientChoice.equals("15")) showPaymentList();
-			else if (clientChoice.equals("16")) createAccident();
-			else if (clientChoice.equals("17")) deleteAccident();
-			else if (clientChoice.equals("18")) createCompensation(Constant.Customer);
-			else if (clientChoice.equals("19")) deleteCompensation();
-			else if (clientChoice.equals("20")) createCounsel();
-			else if (clientChoice.equals("21")) deleteCounsel();
-			else if (clientChoice.equals("R")) {
-				System.out.println("|*** Return to HomePage ***|");
-				return;
-			}
-			else System.out.println("invalid choice");
+			try {
+				if (clientChoice.equals("1")) login(Constant.Customer);
+				else if (clientChoice.equals("2")) signUp(Constant.Customer);
+				else if (clientChoice.equals("3")) logout();
+				else if (clientChoice.equals("4")) deleteMembership(Constant.Customer);
+				//
+				else if (clientChoice.equals("5")) accidentCategory();
+				else if (clientChoice.equals("6")) compensationCategory();
+				//
+				else if (clientChoice.equals("7")) counselCategory();
+				else if (clientChoice.equals("8")) insuranceTypeCategory();
+				else if (clientChoice.equals("9")) contractRetrieveCategory();
+				else if (clientChoice.equals("10")) paymentCategory();
+				//
+				else if (clientChoice.equals("11")) showInsuranceList();
+				else if (clientChoice.equals("12")) showAccidentList();
+				else if (clientChoice.equals("13")) showCompensationList();
+				else if (clientChoice.equals("14")) showCounselList();
+				else if (clientChoice.equals("15")) showPaymentList();
+				else if (clientChoice.equals("16")) createAccident();
+				else if (clientChoice.equals("17")) deleteAccident();
+				else if (clientChoice.equals("18")) createCompensation(Constant.Customer);
+				else if (clientChoice.equals("19")) deleteCompensation();
+				else if (clientChoice.equals("20")) createCounsel();
+				else if (clientChoice.equals("21")) deleteCounsel();
+				else if (clientChoice.equals("R")) {
+					System.out.println("|*** Return to HomePage ***|");
+					return;
+				}
+				else System.out.println("invalid choice");
+			} catch (DuplicateIDException e) {
+				System.out.println(e.getMessage());
+			} catch (NotFoundProfileException e) {
+				System.out.println(e.getMessage());
+			} 
+//			catch (AuthenticationException e) {
+//				System.out.println(e.getMessage());
+//			} catch (AuthorizationException e) {
+//				System.out.println(e.getMessage());
+//			} 
 		}
 	}
 	//// 사고접수 카테고리 - 사고접수 신청, 사고접수 조회, 사고접수 수정, 사고접수 삭제
@@ -444,60 +457,69 @@ public class ISMain {
 		while(true) {
 			printEmployeeMainMenu();
 			String clientChoice = clientInputReader.readLine().trim();
-			if (clientChoice.equals("1")) login(Constant.Employee);
-			else if (clientChoice.equals("2")) signUp(Constant.Employee);
-			else if (clientChoice.equals("3")) logout();
-			else if (clientChoice.equals("4")) deleteMembership(Constant.Employee);
-			//
-			else if (clientChoice.equals("5")) underWritingCategory();
-			else if (clientChoice.equals("6")) concludeContractCategory();
-			else if (clientChoice.equals("7")) customerDBServiceCategory();
-			//
-			else if (clientChoice.equals("8")) councelScheduleCategory();
-			else if (clientChoice.equals("9")) counselDetailCategory();
-			//
-			else if (clientChoice.equals("10")) accidentCategory();
-			else if (clientChoice.equals("11")) compensationCategory();
-			else if (clientChoice.equals("12")) createInsuranceCategory();
-			else if (clientChoice.equals("13")) ruleCategory();
-			else if (clientChoice.equals("14")) setPaymentInfo();
-			else if (clientChoice.equals("15")) manageLatePayment();
-			else if (clientChoice.equals("16")) manageRevive();
-			else if (clientChoice.equals("17")) manageExpirationContract();
-			else if (clientChoice.equals("18")) manageRenewalContract();
-			else if (clientChoice.equals("19")) manageUpdate();
-			//
-			else if (clientChoice.equals("20")) showCustomerList();
-			else if (clientChoice.equals("21")) showEmployeeList();
-			else if (clientChoice.equals("22")) showAllContractList();
-			else if (clientChoice.equals("23")) showAllPaymentList();
-			else if (clientChoice.equals("24")) showInsuranceList();
-			else if (clientChoice.equals("25")) showAllCompensationList();
-			else if (clientChoice.equals("26")) showAllCounselList();
-			else if (clientChoice.equals("27")) showRuleList();
-			else if (clientChoice.equals("28")) createContract();
-			else if (clientChoice.equals("29")) deleteContract();
-			else if (clientChoice.equals("30")) createInsurance();
-			else if (clientChoice.equals("31")) deleteInsurance();
-			else if (clientChoice.equals("32")) createCompensation(Constant.Employee);
-			else if (clientChoice.equals("33")) deleteCompensation();
-			else if (clientChoice.equals("34")) updateCounsel(Constant.Employee);
-			else if (clientChoice.equals("35")) createRule();
-			else if (clientChoice.equals("36")) deleteRule();
-			else if (clientChoice.equals("37")) createPayment();
-			else if (clientChoice.equals("38")) deletePayment();
-			else if (clientChoice.equals("R")) {
-				System.out.println("|*** Return to HomePage ***|");
-				return;
+			try {
+				if (clientChoice.equals("1")) login(Constant.Employee);
+				else if (clientChoice.equals("2")) signUp(Constant.Employee);
+				else if (clientChoice.equals("3")) logout();
+				else if (clientChoice.equals("4")) deleteMembership(Constant.Employee);
+				//
+				else if (clientChoice.equals("5")) underWritingCategory();
+				else if (clientChoice.equals("6")) concludeContractCategory();
+				else if (clientChoice.equals("7")) customerDBServiceCategory();
+				//
+				else if (clientChoice.equals("8")) councelScheduleCategory();
+				else if (clientChoice.equals("9")) counselDetailCategory();
+				//
+				else if (clientChoice.equals("10")) accidentCategory();
+				else if (clientChoice.equals("11")) compensationCategory();
+				else if (clientChoice.equals("12")) createInsuranceCategory();
+				else if (clientChoice.equals("13")) ruleCategory();
+				else if (clientChoice.equals("14")) setPaymentInfo();
+				else if (clientChoice.equals("15")) manageLatePayment();
+				else if (clientChoice.equals("16")) manageRevive();
+				else if (clientChoice.equals("17")) manageExpirationContract();
+				else if (clientChoice.equals("18")) manageRenewalContract();
+				else if (clientChoice.equals("19")) manageUpdate();
+				//
+				else if (clientChoice.equals("20")) showCustomerList();
+				else if (clientChoice.equals("21")) showEmployeeList();
+				else if (clientChoice.equals("22")) showAllContractList();
+				else if (clientChoice.equals("23")) showAllPaymentList();
+				else if (clientChoice.equals("24")) showInsuranceList();
+				else if (clientChoice.equals("25")) showAllCompensationList();
+				else if (clientChoice.equals("26")) showAllCounselList();
+				else if (clientChoice.equals("27")) showRuleList();
+				else if (clientChoice.equals("28")) createContract();
+				else if (clientChoice.equals("29")) deleteContract();
+				else if (clientChoice.equals("30")) createInsurance();
+				else if (clientChoice.equals("31")) deleteInsurance();
+				else if (clientChoice.equals("32")) createCompensation(Constant.Employee);
+				else if (clientChoice.equals("33")) deleteCompensation();
+				else if (clientChoice.equals("34")) updateCounsel(Constant.Employee);
+				else if (clientChoice.equals("35")) createRule();
+				else if (clientChoice.equals("36")) deleteRule();
+				else if (clientChoice.equals("37")) createPayment();
+				else if (clientChoice.equals("38")) deletePayment();
+				else if (clientChoice.equals("R")) {
+					System.out.println("|*** Return to HomePage ***|");
+					return;
+				}
+				else System.out.println("invalid choice");
+			} catch (DuplicateIDException e) {
+				System.out.println(e.getMessage());
+			} catch (AuthorizationException e) {
+				System.out.println(e.getMessage());
+			} catch (NotFoundProfileException e) {
+				System.out.println(e.getMessage());
+			} catch (AuthenticationException e) {
+				System.out.println(e.getMessage());
 			}
-			else System.out.println("invalid choice");
 		}
 	}
 	//// 고객 DB 서비스 카테고리 - 입수한 고객정보를 DB에 반영한다.
-	private void customerDBServiceCategory() throws IOException {
+	private void customerDBServiceCategory() throws IOException, DuplicateIDException, AuthenticationException, AuthorizationException {
 		if (employee==null) {
-			System.out.println("[error] 로그인을 먼저 진행해주세요.");
-			return;
+			throw new AuthenticationException();
 		}
 		while(true) {
 			System.out.println("***************** 고객 DB 서비스 카테고리 메뉴 *****************");
@@ -519,34 +541,37 @@ public class ISMain {
 		}
 	}
 	// 입수한 고객정보를 DB에 반영한다.
-	private void createCustomer(BufferedReader clientInputReader) throws IOException {
+	private void createCustomer(BufferedReader clientInputReader) throws IOException, DuplicateIDException, AuthorizationException {
+		if (!employee.getType().equals(Constant.CutomerInfomationManage)) {
+			throw new AuthorizationException();
+		}
 		System.out.println("-- 입수한 고객 정보 입력 --");
 		
 		// basic attribute settings
-		System.out.print("Name: "); String name = dataValidation(clientInputReader.readLine().trim(), "String");
+		System.out.print("이름 : "); String name = dataValidation(clientInputReader.readLine().trim(), "String");
 		System.out.print("ID: "); String customerID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("PW: "); String customerPW = dataValidation(clientInputReader.readLine().trim(), "String");
-		System.out.print("Account: "); String account = dataValidation(clientInputReader.readLine().trim(), "String");
-		System.out.print("Address: "); String address = dataValidation(clientInputReader.readLine().trim(), "String");
-		System.out.print("Age: "); String age = dataValidation(clientInputReader.readLine().trim(), "Integer");
-		System.out.print("BirthDate: "); String birthDate = dataValidation(clientInputReader.readLine().trim(), "String");
-		System.out.print("Email: "); String email = dataValidation(clientInputReader.readLine().trim(), "String");
-		System.out.print("Gender: enter [M/W]"); String gender = dataValidation(clientInputReader.readLine().trim(), "gender");
-		System.out.print("Height: "); String height = dataValidation(clientInputReader.readLine().trim(), "Integer");
-		System.out.print("Job: "); String job = dataValidation(clientInputReader.readLine().trim(), "String");
-		System.out.print("Phone: "); String phone = dataValidation(clientInputReader.readLine().trim(), "String");
-		System.out.print("Weight: "); String weight = dataValidation(clientInputReader.readLine().trim(), "Integer");
+		System.out.print("계좌: "); String account = dataValidation(clientInputReader.readLine().trim(), "String");
+		System.out.print("주소: "); String address = dataValidation(clientInputReader.readLine().trim(), "String");
+		System.out.print("나이: "); String age = dataValidation(clientInputReader.readLine().trim(), "Integer");
+		System.out.print("생일: "); String birthDate = dataValidation(clientInputReader.readLine().trim(), "String");
+		System.out.print("이메일: "); String email = dataValidation(clientInputReader.readLine().trim(), "String");
+		System.out.print("성별: enter [M/W]"); String gender = dataValidation(clientInputReader.readLine().trim(), "gender");
+		System.out.print("키: "); String height = dataValidation(clientInputReader.readLine().trim(), "Integer");
+		System.out.print("직업: "); String job = dataValidation(clientInputReader.readLine().trim(), "String");
+		System.out.print("폰번호: "); String phone = dataValidation(clientInputReader.readLine().trim(), "String");
+		System.out.print("몸무게: "); String weight = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		
 		// composition to whole settings
 		// MedicalHistorys
 		MedicalHistory medicalHistory = new MedicalHistory();
 		ArrayList<String> diseases = new ArrayList<>();
-		System.out.print("CurePeriod: "); String curePeriod = dataValidation(clientInputReader.readLine().trim(), "String");
-		System.out.print("IsCured: enter [Y/N]"); String isCuredResult = dataValidation(clientInputReader.readLine().trim(), "boolean");
+		System.out.print("치료기간: "); String curePeriod = dataValidation(clientInputReader.readLine().trim(), "String");
+		System.out.print("치료유무: enter [Y/N]"); String isCuredResult = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		boolean isCured;
 		if (isCuredResult.equals("Y")) isCured = true;
 		else isCured = false;
-		System.out.print("Diseases: "); String diseasesString = dataValidation(clientInputReader.readLine().trim(), "multiValue");
+		System.out.print("질병: "); String diseasesString = dataValidation(clientInputReader.readLine().trim(), "multiValue");
 		String[] diseasesStrings = diseasesString.split(" ");
 		for (String disease : diseasesStrings) {
 			diseases.add(disease);
@@ -627,10 +652,9 @@ public class ISMain {
 	// -------------------------------------------------------------
 	
 	//// 계약체결 카테고리 - 계약을 체결한다.
-	private void concludeContractCategory() throws IOException {
+	private void concludeContractCategory() throws IOException, AuthenticationException {
 		if (employee==null) {
-			System.out.println("[error] 로그인을 먼저 진행해주세요.");
-			return;
+			throw new AuthenticationException();
 		}
 		while(true) {
 			System.out.println("***************** 계약체결 카테고리 메뉴 *****************");
@@ -677,10 +701,9 @@ public class ISMain {
 	// ------------------------------------------------------
 	
 	//// 인수심사 카테고리 - 계약의 인수심사를 하다, 계약 진행을 허가한다.	
-	private void underWritingCategory() throws IOException {
+	private void underWritingCategory() throws IOException, AuthenticationException {
 		if (employee==null) {
-			System.out.println("[error] 로그인을 먼저 진행해주세요.");
-			return;
+			throw new AuthenticationException();
 		}
 		while(true) {
 			System.out.println("***************** 인수심사 카테고리 메뉴 *****************");
@@ -1030,7 +1053,6 @@ public class ISMain {
 		}
 	}
 	// -------------------------------------------------------------
-	
 
 	//// 상품 개발 카테고리 - 상품을 개발한다. 상품리스트를 확인한다.
 	private void createInsuranceCategory() throws IOException {
@@ -2121,11 +2143,10 @@ public class ISMain {
 		}
 		System.out.println("--Delete Insurance Infomation--");
 		System.out.print("Insurance ID: "); String insuranceID = dataValidation(clientInputReader.readLine().trim(), "Integer");
-		
 		System.out.println(employee.deleteInsurance(Integer.parseInt(insuranceID)));
 	}
-	private void login(String userType) throws IOException {
-		System.out.println("--Login Infomation--");
+	private void login(String userType) throws IOException, NotFoundProfileException {
+		System.out.println("-- 로그인 정보 입력란 --");
 		if (userType.equals(Constant.Customer)) {
 			System.out.print("ID: "); String ID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 			System.out.print("PW: "); String PW = dataValidation(clientInputReader.readLine().trim(), "String");
@@ -2138,8 +2159,7 @@ public class ISMain {
 					return;
 				}
 			}
-			System.out.println("[error] ID or PW is incorrect. \n please retry..");
-			return;
+			throw new NotFoundProfileException();
 		} else if (userType.equals(Constant.Employee)) {
 			System.out.print("ID: "); String ID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 			System.out.print("PW: "); String PW = dataValidation(clientInputReader.readLine().trim(), "String");
@@ -2152,39 +2172,38 @@ public class ISMain {
 					return;
 				}
 			}
-			System.out.println("[error] ID or PW is incorrect. \n please retry..");
-			return;
+			throw new NotFoundProfileException();
 		}
 	}
-	private void signUp(String userType) throws IOException {
+	private void signUp(String userType) throws IOException, DuplicateIDException {
 		if (userType.equals(Constant.Customer)) {
-			System.out.println("--SignUp Infomation--");
+			System.out.println("-- 회원가입 정보 입력란 --");
 			
 			// basic attribute settings
-			System.out.print("Name: "); String name = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("이름: "); String name = dataValidation(clientInputReader.readLine().trim(), "String");
 			System.out.print("ID: "); String customerID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 			System.out.print("PW: "); String customerPW = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("Account: "); String account = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("Address: "); String address = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("Age: "); String age = dataValidation(clientInputReader.readLine().trim(), "Integer");
-			System.out.print("BirthDate: "); String birthDate = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("Email: "); String email = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("Gender: enter [M/W]"); String gender = dataValidation(clientInputReader.readLine().trim(), "gender");
-			System.out.print("Height: "); String height = dataValidation(clientInputReader.readLine().trim(), "Integer");
-			System.out.print("Job: "); String job = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("Phone: "); String phone = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("Weight: "); String weight = dataValidation(clientInputReader.readLine().trim(), "Integer");
+			System.out.print("계좌: "); String account = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("주소: "); String address = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("나이: "); String age = dataValidation(clientInputReader.readLine().trim(), "Integer");
+			System.out.print("생일: "); String birthDate = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("이메일: "); String email = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("성별: enter [M/W]"); String gender = dataValidation(clientInputReader.readLine().trim(), "gender");
+			System.out.print("키: "); String height = dataValidation(clientInputReader.readLine().trim(), "Integer");
+			System.out.print("직업: "); String job = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("폰번호: "); String phone = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("무게: "); String weight = dataValidation(clientInputReader.readLine().trim(), "Integer");
 			
 			// composition to whole settings
 			// MedicalHistorys
 			MedicalHistory medicalHistory = new MedicalHistory();
 			ArrayList<String> diseases = new ArrayList<>();
-			System.out.print("CurePeriod: "); String curePeriod = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("IsCured: enter [Y/N]"); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
+			System.out.print("치료기간: "); String curePeriod = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("치료유무: enter [Y/N]"); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
 			boolean isCured;
 			if (result.equals("Y")) isCured = true;
 			else isCured = false;
-			System.out.print("Diseases: "); String diseasesString = dataValidation(clientInputReader.readLine().trim(), "multiValue");
+			System.out.print("질병: "); String diseasesString = dataValidation(clientInputReader.readLine().trim(), "multiValue");
 			String[] diseasesStrings = diseasesString.split(" ");
 			for (String disease : diseasesStrings) {
 				diseases.add(disease);
@@ -2219,14 +2238,14 @@ public class ISMain {
 			System.out.println("--SignUp Infomation--");
 			
 			// basic attribute settings
-			System.out.print("Name: "); String name = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("이름: "); String name = dataValidation(clientInputReader.readLine().trim(), "String");
 			System.out.print("ID: "); String employeeID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 			System.out.print("PW: "); String employeePW = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("Phone: "); String phone = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("Email: "); String email = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("Gender: enter [M/W]"); String gender = dataValidation(clientInputReader.readLine().trim(), "gender");
-			System.out.print("type: enter [ \"S\" / \"UW\" / \"CI\" / \"CP\" ]");
-			System.out.print("S = Sales, UW = UnderWriting, CI = CutomerInfomationManage, CP = CompensationProcessing");
+			System.out.print("폰번호: "); String phone = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("이메일: "); String email = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("성별: enter [M/W]"); String gender = dataValidation(clientInputReader.readLine().trim(), "gender");
+			System.out.print("직원 타입: enter [ \"S\" / \"UW\" / \"CI\" / \"CP\" ]");
+			System.out.print("S = 영업활동자, UW = UW팀, CI = 고객정보관리자, CP = CompensationProcessing");
 			String type = dataValidation(clientInputReader.readLine().trim(), "type");
 			
 			// ListImpl Add
@@ -2256,16 +2275,16 @@ public class ISMain {
 	}
 	private void deleteMembership(String userType) throws IOException {
 		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] please login first.");
+			System.out.println("[error] 로그인을 먼저 진행해주세요.");
 			return;
 		}
-		System.out.println("--deleteMembership Infomation--");
-		System.out.print("Do you want to delete your membership? [Y/N] : "); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
+		System.out.println("-- 회원탈퇴 정보 --");
+		System.out.print("회원탈퇴를 진행하시겠습니까? [Y/N] : "); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if (result.equals("Y")) {
 			if (userType.equals(Constant.Customer)) System.out.println(customerListImpl.deleteById(Integer.parseInt(TokenManager.getID(token))));
 			else if (userType.equals(Constant.Employee)) System.out.println(employeeListImpl.deleteById(Integer.parseInt(TokenManager.getID(token))));;
 			TokenManager.invalidateToken(token);
-		} else System.out.println("[error] you enter 'N', return to homePage");
+		} else System.out.println("[error] 회원탈퇴를 진행하지 않았습니다. 본 페이지로 돌아갑니다.");
 	}
 	private String dataValidation(String inputData, String type) throws IOException {
 	    while (true) {
