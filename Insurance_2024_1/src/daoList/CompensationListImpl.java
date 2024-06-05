@@ -1,7 +1,7 @@
+
 package daoList;
 
 import java.util.ArrayList;
-
 import IF.CompensationList;
 import domain.Accident;
 import domain.Compensation;
@@ -71,5 +71,4 @@ public class CompensationListImpl implements CompensationList {
         }
         return false;
 	}
-
 }

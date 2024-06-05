@@ -1,3 +1,4 @@
+
 package daoList;
 
 import java.util.ArrayList;
@@ -63,5 +64,4 @@ public class InsuranceListImpl implements InsuranceList {
 		}
 		return insuranceTypeList;
 	}
-
 }

@@ -26,6 +26,9 @@ import daoList.EmployeeListImpl;
 import daoList.InsuranceListImpl;
 import daoList.PaymentListImpl;
 import daoList.RuleListImpl;
+import IF.InsuranceList;
+import IF.AccidentList;
+import IF.CompensationList;
 import domain.Accident;
 import domain.AutomaticPayment;
 import domain.BankPayment;
@@ -100,10 +103,10 @@ public class ISMain {
 				if (clientChoice.equals("1")) startCustomerService();
 				else if (clientChoice.equals("2")) startEmployeeService();
 				else if (clientChoice.equals("X")) {
-					System.out.println("|*** Thank you for using the this Insurance program! ***|");
+					System.out.println("|*** 보험사 시스템을 이용해주셔서 감사합니다! ***|");
 					System.exit(0);
 				}
-				else System.out.println("invalid choice");
+				else System.out.println("--잘못된 입력입니다.--");
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ParseException e) {
@@ -113,33 +116,18 @@ public class ISMain {
 		}
 	}
 	private static void printCustomerMainMenu() {
-		System.out.println("***************** Customer Main Menu *****************");
+		System.out.println("***************** 고객 서비스 메뉴 *****************");
 		System.out.println("1. 로그인");
 		System.out.println("2. 회원가입");
 		System.out.println("3. 로그아웃");
 		System.out.println("4. 회원탈퇴");
-		System.out.println("------------ 본 시나리오 ------------");
-		//
 		System.out.println("5. 사고접수 카테고리");
 		System.out.println("6. 보상 카테고리");
-		//
 		System.out.println("7. 상담 신청 카테고리");
 		System.out.println("8. 보험 상품 종류 카테고리");
 		System.out.println("9. 보유 계약 조회 카테고리");
 		System.out.println("10. 보험료 납부 카테고리");
-		System.out.println("------------ crud ------------");
-		System.out.println("11. List Insurance");
-		System.out.println("12. List Accident");
-		System.out.println("13. List Compensation");
-		System.out.println("14. List Counsel");
-		System.out.println("15. List Payment");
-		System.out.println("16. Create Accident.");
-		System.out.println("17. Delete Accident");
-		System.out.println("18. Create Compensation");
-		System.out.println("19. Delete Compensation");
-		System.out.println("20. Create Counsel");
-		System.out.println("21. Delete Counsel");
-		System.out.println("R. Return HomePage");
+		System.out.println("R. 홈페이지");
 	}
 	private void startCustomerService() throws IOException{
 		while(true) {
@@ -150,28 +138,14 @@ public class ISMain {
 				else if (clientChoice.equals("2")) signUp(Constant.Customer);
 				else if (clientChoice.equals("3")) logout();
 				else if (clientChoice.equals("4")) deleteMembership(Constant.Customer);
-				//
 				else if (clientChoice.equals("5")) accidentCategory();
 				else if (clientChoice.equals("6")) compensationCategory();
-				//
 				else if (clientChoice.equals("7")) counselCategory();
 				else if (clientChoice.equals("8")) insuranceTypeCategory();
 				else if (clientChoice.equals("9")) contractRetrieveCategory();
 				else if (clientChoice.equals("10")) paymentCategory();
-				//
-				else if (clientChoice.equals("11")) showInsuranceList();
-				else if (clientChoice.equals("12")) showAccidentList();
-				else if (clientChoice.equals("13")) showCompensationList();
-				else if (clientChoice.equals("14")) showCounselList();
-				else if (clientChoice.equals("15")) showPaymentList();
-				else if (clientChoice.equals("16")) createAccident();
-				else if (clientChoice.equals("17")) deleteAccident();
-				else if (clientChoice.equals("18")) createCompensation(Constant.Customer);
-				else if (clientChoice.equals("19")) deleteCompensation();
-				else if (clientChoice.equals("20")) createCounsel();
-				else if (clientChoice.equals("21")) deleteCounsel();
 				else if (clientChoice.equals("R")) {
-					System.out.println("|*** Return to HomePage ***|");
+					System.out.println("|*** 본 홈페이지로 돌아갑니다. ***|");
 					return;
 				}
 				else System.out.println("invalid choice");
@@ -405,20 +379,16 @@ public class ISMain {
 		else System.out.println("[error] The payment id does not exist.");
 	}
 	private static void printEmployeeMainMenu() {
-		System.out.println("***************** Employee Main Menu *****************");
+		System.out.println("***************** 직원 서비스 메뉴 *****************");
 		System.out.println("1. 로그인");
 		System.out.println("2. 회원가입");
 		System.out.println("3. 로그아웃");
 		System.out.println("4. 회원탈퇴");
-		System.out.println("------------ 본 시나리오 ------------");
-		//
 		System.out.println("5. 인수심사 카테고리");
 		System.out.println("6. 계약체결 카테고리");
 		System.out.println("7. 고객정보 DB 서비스 카테고리");
-		//
 		System.out.println("8. 상담신청 일정 관리 카테고리");
 		System.out.println("9. 상담 내역 관리 카테고리");
-		//
 		System.out.println("10. 사고접수 카테고리");
 		System.out.println("11. 보상 카테고리");
 		System.out.println("12. 상품 개발 카테고리");
@@ -429,27 +399,7 @@ public class ISMain {
 		System.out.println("17. 만기계약을 관리한다");
 		System.out.println("18. 재계약을 관리한다");
 		System.out.println("19. 배서을 관리한다");
-		System.out.println("------------ crud ------------");
-		System.out.println("20. List Customers");
-		System.out.println("21. List Employee");
-		System.out.println("22. List Contract");
-		System.out.println("23. List Payment");
-		System.out.println("24. List Insurance");
-		System.out.println("25. List Compensation");
-		System.out.println("26. List Counsel");
-		System.out.println("27. List Rule");
-		System.out.println("28. Create Contract");
-		System.out.println("29. Delete Contract");
-		System.out.println("30. Create Insurance");
-		System.out.println("31. Delete Insurance");
-		System.out.println("32. Create Compensation");
-		System.out.println("33. Delete Compensation");
-		System.out.println("34. Update Counsel");
-		System.out.println("35. Create Rule");
-		System.out.println("36. Delete Rule");
-		System.out.println("37, Create Payment");
-		System.out.println("38. Delete Payment");
-		System.out.println("R. Return HomePage");
+		System.out.println("R. 홈페이지");
 	}
 	private void startEmployeeService() throws IOException, ParseException{
 		while(true) {
@@ -460,14 +410,11 @@ public class ISMain {
 				else if (clientChoice.equals("2")) signUp(Constant.Employee);
 				else if (clientChoice.equals("3")) logout();
 				else if (clientChoice.equals("4")) deleteMembership(Constant.Employee);
-				//
 				else if (clientChoice.equals("5")) underWritingCategory();
 				else if (clientChoice.equals("6")) concludeContractCategory();
 				else if (clientChoice.equals("7")) customerDBServiceCategory();
-				//
 				else if (clientChoice.equals("8")) councelScheduleCategory();
 				else if (clientChoice.equals("9")) counselDetailCategory();
-				//
 				else if (clientChoice.equals("10")) accidentCategory();
 				else if (clientChoice.equals("11")) compensationCategory();
 				else if (clientChoice.equals("12")) createInsuranceCategory();
@@ -478,31 +425,11 @@ public class ISMain {
 				else if (clientChoice.equals("17")) manageExpirationContract();
 				else if (clientChoice.equals("18")) manageRenewalContract();
 				else if (clientChoice.equals("19")) manageUpdate();
-				//
-				else if (clientChoice.equals("20")) showCustomerList();
-				else if (clientChoice.equals("21")) showEmployeeList();
-				else if (clientChoice.equals("22")) showAllContractList();
-				else if (clientChoice.equals("23")) showAllPaymentList();
-				else if (clientChoice.equals("24")) showInsuranceList();
-				else if (clientChoice.equals("25")) showAllCompensationList();
-				else if (clientChoice.equals("26")) showAllCounselList();
-				else if (clientChoice.equals("27")) showRuleList();
-				else if (clientChoice.equals("28")) createContract();
-				else if (clientChoice.equals("29")) deleteContract();
-				else if (clientChoice.equals("30")) createInsurance();
-				else if (clientChoice.equals("31")) deleteInsurance();
-				else if (clientChoice.equals("32")) createCompensation(Constant.Employee);
-				else if (clientChoice.equals("33")) deleteCompensation();
-				else if (clientChoice.equals("34")) updateCounsel(Constant.Employee);
-				else if (clientChoice.equals("35")) createRule();
-				else if (clientChoice.equals("36")) deleteRule();
-				else if (clientChoice.equals("37")) createPayment();
-				else if (clientChoice.equals("38")) deletePayment();
 				else if (clientChoice.equals("R")) {
-					System.out.println("|*** Return to HomePage ***|");
+					System.out.println("|*** 본 홈페이지로 돌아갑니다. ***|");
 					return;
 				}
-				else System.out.println("invalid choice");
+				else System.out.println("--잘못된 입력입니다.--");
 			} catch (DuplicateIDException e) {
 				System.out.println(e.getMessage());
 			} catch (AuthorizationException e) {

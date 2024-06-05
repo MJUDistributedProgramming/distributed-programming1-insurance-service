@@ -1,3 +1,4 @@
+
 package daoList;
 
 import java.util.ArrayList;
@@ -39,5 +40,4 @@ public class RuleListImpl implements RuleList {
 		}
 		return ruleList.remove(deleteRule);
 	}
-
 }
