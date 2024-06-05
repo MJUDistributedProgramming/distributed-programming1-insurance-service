@@ -39,6 +39,29 @@ public class Contract {
 
 	public void saveRenewalStatus(boolean renewalStatus){
 	}
+	public String toString() {
+		  return "Contract{" +
+	                "concludeEID=" + concludeEID +
+	                ", createContractEID=" + createContractEID +
+	                ", createdDate='" + createdDate + '\'' +
+	                ", concludedDate='" + concludedDate + '\'' +
+	                ", contractID=" + contractID +
+	                ", contractStatus='" + contractStatus + '\'' +
+	                ", customerID=" + customerID +
+	                ", evaluation='" + evaluation + '\'' +
+	                ", expirationDate='" + expirationDate + '\'' +
+	                ", insuranceID=" + insuranceID +
+	                ", isConclude=" + isConclude +
+	                ", isPassUW=" + isPassUW +
+	                ", monthlyPremium=" + monthlyPremium +
+	                ", nonPaymentPeriod=" + nonPaymentPeriod +
+	                ", paymentInfo=" + (paymentInfo != null ? paymentInfo.toString() : "null") +
+	                ", renewalStatus=" + renewalStatus +
+	                ", resurrectionDate='" + resurrectionDate + '\'' +
+	                ", resurrectionReason='" + resurrectionReason + '\'' +
+	                ", underwritingEID=" + underwritingEID +
+	                '}';
+	}
 	//
 	public int getConcludeEID() {return concludeEID;}
 	public void setConcludeEID(int concludeEID) {this.concludeEID = concludeEID;}

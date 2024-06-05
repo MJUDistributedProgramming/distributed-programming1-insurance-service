@@ -6,6 +6,13 @@ public class CardPayment {
 	private String password;
 
 	public CardPayment(){}
+	public String toString() {
+		return "CardPayment{" +
+	            "  cardNum=" + cardNum +
+	            ", cvcNum=" + cvcNum + '\'' +
+	            ", password=" + password +
+	            '}';
+	}
 	public void finalize() throws Throwable {}
 	public void updateCardPaymentInfo(CardPayment cardPayment){}
 	public String getCardNum() {return cardNum;}

@@ -146,19 +146,19 @@ public class Employee {
 			response= contractListImpl.deleteById(Integer.parseInt(contractID));
 		}
 		if(response) return "[success] 성공적으로 미납 관리가 되었습니다!";
-		else return "[error] 미납 관리에 실패했습니다. 다시시도해주세요!";
+		else return "[error] 계약ID가 존재하지 않아 미납 관리에 실패했습니다. 다시시도해주세요!";
 	}
 	public String revive(Contract contract) {
 		boolean response= contractListImpl.add(contract);
 		if(response) return "[success] 성공적으로 부활관리가 되었습니다!";
-		else return "[error] 부활 관리에 실패했습니다. 다시시도해주세요!";
+		else return "[error] 계약 부활에 실패했습니다. 다시시도해주세요!";
 	}
 	public String manageExpirationContract(String contractID, String expirationDate) throws ParseException {
 		boolean response=false;
 		SimpleDateFormat dateFormat =new SimpleDateFormat(Constant.dateFormat);
 		Date date = dateFormat.parse(expirationDate);
 		Date today = new Date();
-		if(date.before(today)) {
+		if(!date.before(today)) {
 			return "만기된 계약이 아닙니다";
 		}
 		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
@@ -170,17 +170,35 @@ public class Employee {
 	}
 	public String manageRenewal(Contract contract) {
 		if(contract.isRenewalStatus()) {
-			createContract(contract);
+			contract.setExpirationDate(new Date().getYear()+2 + "-"+ new Date().getMonth() + "-" + new Date().getDay());
+			this.permitUpdate(contract);
 			return "[success] 성공적으로 재계약이 되었습니다!";
 		}else {
 			return "[error] 재계약에 동의하지 않아 재계약에 실패했습니다!";
 		}
 	}
-	public boolean update(Contract contract) {
+	public void update(Contract contract) {
 		// TODO Auto-generated method stub
 		int contractID = contract.getContractID();
-		contractListImpl.update(contractID, contract);
-		return contractListImpl.contains(contractListImpl.retrieveById(contractID));
+		if(contractListImpl.contains(contractListImpl.retrieveById(contractID))) {
+			contractListImpl.update(contractID, contract);
+		}
+	}
+	public String permitUpdate(Contract contract) {
+		if(contractListImpl.retrieveById(contract.getContractID()).equals(null)) {
+			return "[error] 존재하지 않는 계약 ID입니다.";
+		}else {
+			update(contract);
+			return "[success] 성공적으로 배서가 반영 되었습니다!";
+		}	
+	}
+	public String permitRevive(Contract contract) {
+		if(contractListImpl.retrieveById(contract.getContractID()).equals(null)) {
+			return "[error] 존재하지 않는 계약 ID입니다.";
+		}else {
+			revive(contract);
+			return "[success] 성공적으로 계약이 부활 되었습니다!";
+		}	
 	}
 	public boolean createLoss(Compensation compensation, int compensationID) {
 		return this.compensationListImpl.update(compensation, compensationID);
@@ -216,5 +234,7 @@ public class Employee {
 	public void setContractList(ContractList contractListImpl) {this.contractListImpl = contractListImpl;}
 	public void setRuleList(RuleList ruleListImpl) {this.ruleListImpl = ruleListImpl;}
 	public RuleList getRuleList() {return ruleListImpl;}
+
+	
 	
 }
