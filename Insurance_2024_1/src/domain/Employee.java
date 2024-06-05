@@ -12,7 +12,6 @@ import IF.RuleList;
 import constant.Constant;
 import exception.DuplicateIDException;
 import exception.NotFoundProfileException;
-import listImpl.CustomerListImpl;
 import IF.CounselList;
 import IF.CustomerList;
 import IF.InsuranceList;
