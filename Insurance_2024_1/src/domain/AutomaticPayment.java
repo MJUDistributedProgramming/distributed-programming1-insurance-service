@@ -8,6 +8,15 @@ public class AutomaticPayment {
 	private String relationshipToApplicant;
 
 	public AutomaticPayment(){}
+	public String toString() {
+		return "AutomaticPayment{" +
+	            "  accountNum=" + accountNum +
+	            ", applicantName=" + applicantName + '\'' +
+	            ", applicantRRN=" + applicantRRN +
+	            ", paymentCompanyName=" + paymentCompanyName + '\'' +
+	            ", relationshipToApplicant=" + relationshipToApplicant +
+	            '}';
+	}
 	public void finalize() throws Throwable {}
 	public String getAccountNum() {return accountNum;}
 	public String getApplicantName() {return applicantName;}

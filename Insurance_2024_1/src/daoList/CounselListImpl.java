@@ -1,3 +1,4 @@
+
 package daoList;
 
 import java.util.ArrayList;
@@ -73,5 +74,4 @@ public class CounselListImpl implements CounselList {
 		}
 		return consultedCounselList;
 	}
-
 }

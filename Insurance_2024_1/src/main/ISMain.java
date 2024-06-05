@@ -3,16 +3,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 
+import IF.AccidentList;
+import IF.CompensationList;
 import IF.ContractList;
 import IF.CounselList;
 import IF.CustomerList;
 import IF.EmployeeList;
+import IF.InsuranceList;
 import IF.PaymentList;
 import IF.RuleList;
 import constant.Constant;
@@ -566,7 +567,12 @@ public class ISMain {
 		medicalHistory.setCurePeriod(curePeriod);
 		medicalHistory.setDiseases(diseases);
 		
-		System.out.println(employee.updateCustomer(customerID, name, account, address, age, birthDate, email, gender, height, job, phone, weight, medicalHistory));
+		try {
+			System.out.println(employee.updateCustomer(customerID, name, account, address, age, birthDate, email, gender, height, job, phone, weight, medicalHistory));
+		} catch (NotFoundProfileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	private void deleteCustomer(BufferedReader clientInputReader) throws IOException {
 		System.out.println("-- 삭제할 고객 정보 입력 --");
@@ -997,10 +1003,6 @@ public class ISMain {
 	}
 	// 상품을 개발한다. (만들어진 함수 그대로 씀)
 	private void createInsurance() throws IOException {
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] 로그인 먼저 해주세요.");
-			return;
-		}
 		// 상품 정보 입력
 		System.out.println("--상품 정보 입력란--");
 		System.out.print("보험 ID: "); String insuranceID = dataValidation(clientInputReader.readLine().trim(), "Integer");
@@ -1100,7 +1102,12 @@ public class ISMain {
 		if(save.equals("Y")) {System.out.println("보험요율:" + insuranceRate);}
 	
 		Employee employee = employeeListImpl.retrieveById(Integer.parseInt(TokenManager.getID(token)));
-		System.out.println(employee.createInsurance(insurance));
+		try {
+			System.out.println(employee.createInsurance(insurance));
+		} catch (DuplicateIDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	// 상품 리스트를 확인한다. (만들어진 함수 그대로 씀)
 	private void showInsuranceList() {
@@ -1156,14 +1163,26 @@ public class ISMain {
 		rule.setRuleName(ruleName);
 		rule.setRuleDetail(ruleDetail);
 
-		System.out.println(employee.createRule(rule));
+		try {
+			System.out.println(employee.createRule(rule));
+		} catch (DuplicateIDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	private void deleteRule() throws IOException {
 		System.out.print("제관리 지침 ID: "); 
 		String ruleID = dataValidation(clientInputReader.readLine().trim(), "Integer");	
-		
-		System.out.println( employee.deleteRule(Integer.parseInt(ruleID)));
+		try {
+			System.out.println( employee.deleteRule(Integer.parseInt(ruleID)));
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DuplicateIDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 	}
 	private static void showRuleList() {
@@ -1220,6 +1239,8 @@ public class ISMain {
 			automaticPayment.setPaymentCompanyName(paymentCompanyName);
 			automaticPayment.setRelationshipToApplicant(relationshipToApplicant);
 		}
+		System.out.println("==특정 수금 정보==");
+		System.out.println(paymentInfo.toString());
 		
 		System.out.println(employee.setPaymentInfo(contractID,paymentInfo));
 	}
@@ -1227,7 +1248,14 @@ public class ISMain {
 	// 미납을 관리한다.
 	private void manageLatePayment() throws IOException {
 		System.out.print("계약 ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer");
-		System.out.println(employee.manageLatePayment(contractID));
+		System.out.println("==특정 미납 정보==");
+		System.out.println(contractListImpl.retrieveById(Integer.parseInt(contractID)).toString());
+		try {
+			System.out.println(employee.manageLatePayment(contractID));
+		} catch (DuplicateIDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	// -------------------------------------------------------------
 
@@ -1357,10 +1385,6 @@ public class ISMain {
 		}
 	}
 	private void manageRevive() throws IOException {
-		if (!TokenManager.isValidToken(token)) {
-			System.out.println("[error] please login first.");
-			return;
-		}
 		System.out.println("--부활 계약 정보--");
 		// basic attribute settings
 		System.out.print("계약ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer");
@@ -1368,7 +1392,9 @@ public class ISMain {
 		System.out.print("고객ID: "); String customerID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("만료일: "); String expirationDate = dataValidation(clientInputReader.readLine().trim(), "String");
 		System.out.print("보험ID: "); String insuranceID = dataValidation(clientInputReader.readLine().trim(), "Integer");
-		String createdDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+		System.out.print("부활 사유: "); String resurrectionReason = dataValidation(clientInputReader.readLine().trim(), "String");
+		
+		String resurrectionDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 		boolean isConclude = false;
 		boolean isPassUW = false;
 		System.out.print("월 보험료: "); String monthlyPremium = dataValidation(clientInputReader.readLine().trim(), "Integer");
@@ -1423,13 +1449,32 @@ public class ISMain {
 		contract.setCreateContractEID(Integer.parseInt(TokenManager.getID(token)));
 		contract.setExpirationDate(expirationDate);
 		contract.setInsuranceID(Integer.parseInt(insuranceID));
-		contract.setCreatedDate(createdDate);
+		contract.setResurrectionDate(resurrectionDate);
 		contract.setConclude(isConclude);
+		contract.setResurrectionReason(resurrectionReason);
 		contract.setPassUW(isPassUW);
 		contract.setMonthlyPremium(Integer.parseInt(monthlyPremium));
 		contract.setPaymentInfo(paymentInfo);
 		
-		System.out.println(employee.revive(contract));
+		System.out.println("==특정 부활 상세 정보 확인란==");
+		System.out.println(contract.toString());
+		
+		System.out.println("부활 심사를 등록하시겠습니까? [Y/N]");
+		String yOrN = dataValidation(clientInputReader.readLine().trim(), "String");
+		if(yOrN.equals("Y")) {
+			try {
+				System.out.println(employee.permitRevive(contract));
+			} catch (DuplicateIDException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		try {
+			System.out.println(employee.revive(contract));
+		} catch (DuplicateIDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	// -------------------------------------------------------------
@@ -1437,15 +1482,33 @@ public class ISMain {
 	private void manageExpirationContract() throws IOException, ParseException {
 		System.out.print("만기 계약ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
+		System.out.println("==만기 계약 상세 정보 확인란==");
+		System.out.println(contract.toString());
 		String expirationDate = contract.getExpirationDate();
-		System.out.println(employee.manageExpirationContract(contractID, expirationDate));
+		try {
+			System.out.println(employee.manageExpirationContract(contractID, expirationDate));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DuplicateIDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	// -------------------------------------------------------------
 	// 재계약을 관리한다.
 	private void manageRenewalContract() throws IOException {
 		System.out.print("재계약ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
-		System.out.println(employee.manageRenewal(contract));
+		System.out.println("==재계약 상세 정보 확인란==");
+		System.out.println(contract.toString());
+		
+		try {
+			System.out.println(employee.manageRenewal(contract));
+		} catch (NotFoundProfileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	// -------------------------------------------------------------
 	// 배서를 관리한다.
@@ -1513,8 +1576,19 @@ public class ISMain {
 		contract.setPassUW(isPassUW);
 		contract.setMonthlyPremium(Integer.parseInt(monthlyPremium));
 		contract.setPaymentInfo(paymentInfo);
+		System.out.println("==베서 정보==");
+		System.out.println(contract.toString());
 		
-		System.out.println(employee.update(contract));
+		System.out.println("배서 심사를 하시겠습니까?[Y/N]");
+		String yOrN = dataValidation(clientInputReader.readLine().trim(), "String");
+		if(yOrN.equals("Y")) {
+			try {
+				System.out.println(employee.permitUpdate(contract));
+			} catch (NotFoundProfileException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	//// 고객 DB 서비스 카테고리 - 입수한 고객정보를 DB에 반영한다.
 	private void showAllPaymentList() {
@@ -2067,7 +2141,15 @@ public class ISMain {
 		}
 		System.out.println("--Delete Insurance Infomation--");
 		System.out.print("Insurance ID: "); String insuranceID = dataValidation(clientInputReader.readLine().trim(), "Integer");
-		System.out.println(employee.deleteInsurance(Integer.parseInt(insuranceID)));
+		try {
+			System.out.println(employee.deleteInsurance(Integer.parseInt(insuranceID)));
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DuplicateIDException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	private void login(String userType) throws IOException, NotFoundProfileException {
 		System.out.println("-- 로그인 정보 입력란 --");
