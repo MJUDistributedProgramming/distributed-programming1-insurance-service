@@ -121,7 +121,7 @@ public class Employee {
 		customer.setPhone(phone);
 		customer.setWeight(Integer.parseInt(weight));
 		customer.setMedicalHistory(medicalHistory);
-		return "[success] 성공적으로 고객 정보가 수정되었습니다!";
+		return "[success] 성공적으로 고객 정보가 수정되었습니다.";
 	}
 	//seohyun
 	public boolean confirmCounsel(Counsel counsel) {

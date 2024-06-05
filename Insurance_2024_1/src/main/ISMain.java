@@ -442,7 +442,7 @@ public class ISMain {
 		}
 	}
 	//// 고객 DB 서비스 카테고리 - 입수한 고객정보를 DB에 반영한다.
-	private void customerDBServiceCategory() throws IOException, DuplicateIDException, AuthenticationException, AuthorizationException {
+	private void customerDBServiceCategory() throws IOException, DuplicateIDException, AuthenticationException, AuthorizationException, NotFoundProfileException {
 		if (employee==null) {
 			throw new AuthenticationException();
 		}
@@ -529,10 +529,10 @@ public class ISMain {
 		System.out.print("해당 고객의 정보를 DB에 추가하여 반영하시겠습니까? [Y/N]"); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		System.out.println(employee.createCustomer(customer, result));
 	}
-	private void retrieveCustomer(BufferedReader clientInputReader) {
+	private void retrieveCustomer(BufferedReader clientInputReader) throws AuthorizationException {
 		showCustomerList();
 	}
-	private void updateCustomer(BufferedReader clientInputReader) throws IOException {
+	private void updateCustomer(BufferedReader clientInputReader) throws IOException, NotFoundProfileException {
 		System.out.println("-- 수정할 고객 정보 입력 --");
 		System.out.print("수정할 고객 ID: "); String customerID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.println("-- 새로운 고객 정보 입력 --");
@@ -548,7 +548,6 @@ public class ISMain {
 		System.out.print("직업: "); String job = dataValidation(clientInputReader.readLine().trim(), "String");
 		System.out.print("폰번호: "); String phone = dataValidation(clientInputReader.readLine().trim(), "String");
 		System.out.print("몸무게: "); String weight = dataValidation(clientInputReader.readLine().trim(), "Integer");
-		
 		// composition to whole settings
 		// MedicalHistorys
 		MedicalHistory medicalHistory = new MedicalHistory();
@@ -566,19 +565,13 @@ public class ISMain {
 		medicalHistory.setCured(isCured);
 		medicalHistory.setCurePeriod(curePeriod);
 		medicalHistory.setDiseases(diseases);
-		
-		try {
-			System.out.println(employee.updateCustomer(customerID, name, account, address, age, birthDate, email, gender, height, job, phone, weight, medicalHistory));
-		} catch (NotFoundProfileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		System.out.println(employee.updateCustomer(customerID, name, account, address, age, birthDate, email, gender, height, job, phone, weight, medicalHistory));
 	}
 	private void deleteCustomer(BufferedReader clientInputReader) throws IOException {
 		System.out.println("-- 삭제할 고객 정보 입력 --");
 		System.out.print("삭제할 고객 ID: "); String customerID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.println(employee.deleteCustomer(Integer.parseInt(customerID)));
-		}
+	}
 	// -------------------------------------------------------------
 	
 	//// 계약체결 카테고리 - 계약을 체결한다.
