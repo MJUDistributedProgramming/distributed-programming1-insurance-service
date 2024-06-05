@@ -11,6 +11,7 @@ import IF.ContractList;
 import IF.RuleList;
 import constant.Constant;
 import exception.DuplicateIDException;
+import exception.NotFoundProfileException;
 import listImpl.CustomerListImpl;
 import IF.CounselList;
 import IF.CustomerList;
@@ -39,25 +40,25 @@ public class Employee {
 	// operate
 	public boolean createContract(Contract contract) {return contractListImpl.add(contract);}
 	public boolean deleteContract(int contractID) {return contractListImpl.deleteById(contractID);}
-	public String createRule(Rule rule) {
+	public String createRule(Rule rule) throws DuplicateIDException {
 		boolean response = this.ruleListImpl.add(rule);
 		if (response == true) return "[success] 성공적으로 제관리지침이 생성되었습니다!";
-		else return "[error] 제관리지침 ID가 겹칩니다. 다시 시도해주세요";
+		else throw new DuplicateIDException();
 		}
-	public String deleteRule(int ruleID) {
+	public String deleteRule(int ruleID) throws DuplicateIDException {
 		boolean response = this.ruleListImpl.deleteById(ruleID);
 		if (response == true) return "[success] 성공적으로 제관리지침이 삭제되었습니다!";
-		else return "[error] 제관리지침 ID가 겹칩니다. 다시 시도해주세요";
+		else throw new DuplicateIDException();
 		}
-	public String createInsurance(Insurance insurance) {
+	public String createInsurance(Insurance insurance) throws DuplicateIDException {
 		boolean response = this.insuranceListImpl.add(insurance);
 		if (response == true) return "[success] 성공적으로 보험 상품이 생성되었습니다!";
-		else return "[error] 보험상품 ID가 겹칩니다. 다시 시도해주세요";
+		else throw new DuplicateIDException();
 	}
-	public String deleteInsurance(int insuranceID) {
+	public String deleteInsurance(int insuranceID) throws DuplicateIDException {
 		boolean response = this.insuranceListImpl.delete(insuranceID);
 		if (response == true) return "[success] 성공적으로 보험 상품이 삭제되었습니다!";
-		else return "[error] 보험상품 ID가 겹칩니다. 다시 시도해주세요";
+		else throw new DuplicateIDException();
 		}
 	public boolean createPayment(Payment payment) {return this.paymentListImpl.add(payment);}
 	public boolean deletePayment(int paymentID) {return this.paymentListImpl.delete(paymentID);}
@@ -105,9 +106,9 @@ public class Employee {
 	}
 	public String updateCustomer(String customerID, String name, String account, String address, String age,
 		String birthDate, String email, String gender, String height, String job, String phone, String weight,
-		MedicalHistory medicalHistory) {
+		MedicalHistory medicalHistory) throws NotFoundProfileException {
 		Customer customer = customerList.retrieveById(Integer.parseInt(customerID));
-		if (customer == null) return "[error] 고객 정보 수정에 실패했습니다. 다시 시도해주세요.";
+		if (customer == null) throw new NotFoundProfileException();
 		customer.setName(name);
 		customer.setAccount(account);
 		customer.setAddress(address);
@@ -140,21 +141,21 @@ public class Employee {
 		contract.setPaymentInfo(paymentInfo);
 		return "[success] 성공적으로 결제 정보가 등록되었습니다!";
 	}
-	public String manageLatePayment(String contractID) {
+	public String manageLatePayment(String contractID) throws DuplicateIDException {
 		boolean response = false;
 		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
 		if(contract.getNonPaymentPeriod()>= Constant.maximumLatePaymentPeriod) {
 			response= contractListImpl.deleteById(Integer.parseInt(contractID));
 		}
 		if(response) return "[success] 성공적으로 미납 관리가 되었습니다!";
-		else return "[error] 계약ID가 존재하지 않아 미납 관리에 실패했습니다. 다시시도해주세요!";
+		else throw new DuplicateIDException();
 	}
-	public String revive(Contract contract) {
+	public String revive(Contract contract) throws DuplicateIDException {
 		boolean response= contractListImpl.add(contract);
 		if(response) return "[success] 성공적으로 부활관리가 되었습니다!";
-		else return "[error] 계약 부활에 실패했습니다. 다시시도해주세요!";
+		else throw new DuplicateIDException();
 	}
-	public String manageExpirationContract(String contractID, String expirationDate) throws ParseException {
+	public String manageExpirationContract(String contractID, String expirationDate) throws ParseException, DuplicateIDException {
 		boolean response=false;
 		SimpleDateFormat dateFormat =new SimpleDateFormat(Constant.dateFormat);
 		Date date = dateFormat.parse(expirationDate);
@@ -167,9 +168,9 @@ public class Employee {
 				response=contractListImpl.deleteById(Integer.parseInt(contractID));
 		}
 		if(response) return "[success] 성공적으로 만기계약 관리가 되었습니다!";
-		else return "[error] 만기계약 관리에 실패했습니다. 다시시도해주세요!";
+		else throw new DuplicateIDException();
 	}
-	public String manageRenewal(Contract contract) {
+	public String manageRenewal(Contract contract) throws NotFoundProfileException {
 		if(contract.isRenewalStatus()) {
 			contract.setExpirationDate(new Date().getYear()+2 + "-"+ new Date().getMonth() + "-" + new Date().getDay());
 			this.permitUpdate(contract);
@@ -185,17 +186,17 @@ public class Employee {
 			contractListImpl.update(contractID, contract);
 		}
 	}
-	public String permitUpdate(Contract contract) {
+	public String permitUpdate(Contract contract) throws NotFoundProfileException {
 		if(contractListImpl.retrieveById(contract.getContractID()).equals(null)) {
-			return "[error] 존재하지 않는 계약 ID입니다.";
+			throw new NotFoundProfileException();
 		}else {
 			update(contract);
 			return "[success] 성공적으로 배서가 반영 되었습니다!";
 		}	
 	}
-	public String permitRevive(Contract contract) {
+	public String permitRevive(Contract contract) throws DuplicateIDException {
 		if(contractListImpl.retrieveById(contract.getContractID()).equals(null)) {
-			return "[error] 존재하지 않는 계약 ID입니다.";
+			throw new DuplicateIDException();
 		}else {
 			revive(contract);
 			return "[success] 성공적으로 계약이 부활 되었습니다!";
