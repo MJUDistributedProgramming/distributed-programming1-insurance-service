@@ -124,16 +124,21 @@ public class Employee {
 		return "[success] 성공적으로 고객 정보가 수정되었습니다.";
 	}
 	//seohyun
-	public boolean confirmCounsel(Counsel counsel) {
-		if(counsel.isConfirmedCounsel()) return false;
+	
+	public String confirmCounsel(Counsel counsel, int employeeId) {
+		if(counsel.getStatusOfCounsel()) 
+			return "[error] 이미 처리완료된 상담입니다.";
 		else {
 			counsel.setStatusOfCounsel(true);
-			return true;
+			counsel.setEmployeeID(employeeId);
+			return "[success] 상담 일정이 확정되었습니다.";
 		}
 	}
-	public boolean updateCounsel(Counsel counsel, String counselDetail, String note) {
-		if(counsel == null) return false;
-		else return counsel.updateCounsel(counselDetail, note);
+	public String updateCounsel(Counsel counsel, String counselDetail, String note) {
+		if(counsel.updateCounsel(counselDetail, note))
+			return "[success] 상담 내용이 추가되었습니다.";
+		else 
+			return "[error] 상담 내용 추가에 실패하였습니다.";
 	}
 
 	public String setPaymentInfo(String contractID, PaymentInfo paymentInfo) {

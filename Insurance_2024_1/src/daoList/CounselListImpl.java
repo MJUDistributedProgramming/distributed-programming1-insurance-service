@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import IF.CounselList;
 import domain.Counsel;
+import exception.DuplicateIDException;
 
 public class CounselListImpl implements CounselList {
 
@@ -19,7 +20,7 @@ public class CounselListImpl implements CounselList {
 
 	}
 
-	public boolean add(Counsel counsel){
+	public boolean add(Counsel counsel) {
 		for (Counsel c: counselList) {
 			if (c.getCounselID() == counsel.getCounselID()) 
 				return false;

@@ -7,6 +7,7 @@ import IF.ContractList;
 import IF.CounselList;
 import IF.InsuranceList;
 import IF.PaymentList;
+import exception.DuplicateIDException;
 
 public class Customer {
 	private String account;
@@ -174,8 +175,10 @@ public class Customer {
 	public void setCounselList(CounselList counselListImpl) {
 		this.counselListImpl = counselListImpl;
 	}
-	public boolean requestCounsel(Counsel counsel) {
-		return counselListImpl.add(counsel);
+	public String requestCounsel(Counsel counsel) throws DuplicateIDException {		
+		if(counselListImpl.add(counsel)) 
+			return "[success] 상담 신청이 완료되었습니다.";
+		else throw new DuplicateIDException();
 	}
 	public boolean deleteCounsel(int counselID) {
 		return counselListImpl.delete(counselID);
@@ -187,12 +190,17 @@ public class Customer {
 		this.insuranceListImpl = insuranceListImpl;
 	}
 
-	public boolean deleteContract(Contract contract) {
-		this.contractListImpl.deleteById(contract.getContractID());
-		return true;
+	public String cancelContract(Contract contract) {
+		if(contractListImpl.deleteById(contract.getContractID())) 
+			return "[success] 보험 계약이 해지되었습니다.";
+		else 
+			return "[error] 계약 ID가 존재하지 않습니다.";
 	}
-	public boolean payPremium(Payment payment, int cardNumber, int cvcNumber, int password) {
-		return payment.processPayment(cardNumber, cvcNumber, password);
+	public String payPremium(Payment payment, int cardNumber, int cvcNumber, int password) {
+		if(payment.processPayment(cardNumber, cvcNumber, password))
+			return "[success] 보험료가 납부되었습니다.";
+		else 
+			return "[error] 결제에 실패하였습니다.";
 	}
 
 }
