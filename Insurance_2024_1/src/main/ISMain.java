@@ -213,10 +213,8 @@ public class ISMain {
 			
 			// Association setting
 			customer.setAccidentList(accidentListImpl);
-			boolean response = customer.createAccident(accident);
-			if(!response) throw new DuplicateIDException();
-			else System.out.println("[success] 사고접수가 완료되었습니다.");
-		}else {
+			System.out.println(customer.createAccident(accident));
+		} else {
 			System.out.println("[info] 사고접수를 취소했습니다. 본 페이지를 다시 출력합니다.");
 		}
 	}
@@ -268,12 +266,7 @@ public class ISMain {
 	        accident.setCarNumber(Integer.parseInt(carNumber));
 
 			customer.setAccidentList(accidentListImpl);
-			boolean response = customer.updateAccident(Integer.parseInt(accidentID), accident);
-	        if (!response) {
-	        	throw new NotFoundProfileException("[Exception] 사고 정보를 업데이트하는 동안 오류가 발생했습니다. 다시 시도해주세요.");
-	        } else {
-	            System.out.println("[success] 사고 정보가 성공적으로 업데이트되었습니다.");
-	        }
+			System.out.println(customer.updateAccident(Integer.parseInt(accidentID), accident));
 	    } else {
 	        System.out.println("[info] 사고 수정을 취소했습니다. 본 페이지를 다시 출력합니다.");
 	    }
@@ -288,9 +281,7 @@ public class ISMain {
 		
 		// Association setting
 		customer.setAccidentList(accidentListImpl);
-		boolean response = customer.deleteAccident(Integer.parseInt(accidentID));
-		if(!response) throw new NotFoundProfileException("[Exception] 해당 사고ID의 사고가 존재하지 않습니다.");
-		else System.out.println("[success] 성공적으로 사고가 삭제되었습니다!");	
+		System.out.println(customer.deleteAccident(Integer.parseInt(accidentID)));
 	}
 	// -------------------------------------------------------------
 	
@@ -1866,9 +1857,7 @@ public class ISMain {
 			
 			// Association setting
 			customer.setCompensationList(compensationListImpl);
-			boolean response = customer.createCompensation(compensation);
-			if(!response) throw new DuplicateIDException();
-			else System.out.println("[success] 보상 신청이 완료되었습니다.");
+			System.out.println(customer.createCompensation(compensation));
 		}else {
 			System.out.println("[info] 보상 신청을 취소했습니다. 본 페이지를 다시 출력합니다.");
 		}
@@ -1962,12 +1951,7 @@ public class ISMain {
 			
 			// Association setting
 			customer.setCompensationList(compensationListImpl);
-			boolean response = customer.updateCompensation(compensation, Integer.parseInt(compensationID));
-	        if (!response) {
-	        	throw new NotFoundProfileException("[Exception] 보상 정보를 업데이트하는 동안 오류가 발생했습니다. 다시 시도해주세요.");
-	        } else {
-	            System.out.println("[success] 보상 정보가 성공적으로 업데이트되었습니다.");
-	        }
+			System.out.println(customer.updateCompensation(compensation, Integer.parseInt(compensationID)));
 	    } else {
 	        System.out.println("[info] 보상 수정을 취소했습니다. 본 페이지를 다시 출력합니다.");
 	    }
@@ -1982,10 +1966,7 @@ public class ISMain {
 		
 		// Association setting
 		employee.setCompensationList(compensationListImpl);
-		boolean response = employee.deleteCompensation(Integer.parseInt(compensationID));
-		if(!response) 
-        	throw new NotFoundProfileException("[Exception] 해당 보상ID가 존재하지 않습니다. 다시 시도해주세요.");
-		else System.out.println("[success] 성공적으로 보상이 삭제되었습니다!");					
+		System.out.println(employee.deleteCompensation(Integer.parseInt(compensationID)));
 	}
 	// 보험금 청구
 	private void requestInsuranceAmount() throws IOException, DuplicateIDException, NotFoundProfileException {
