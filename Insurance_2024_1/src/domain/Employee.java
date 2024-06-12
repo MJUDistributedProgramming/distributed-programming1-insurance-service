@@ -62,8 +62,18 @@ public class Employee {
 		}
 	public boolean createPayment(Payment payment) {return this.paymentListImpl.add(payment);}
 	public boolean deletePayment(int paymentID) {return this.paymentListImpl.delete(paymentID);}
-	public boolean createCompensation(Compensation compensation) {return this.compensationListImpl.add(compensation);}
-	public boolean deleteCompensation(int compensationID) {return this.compensationListImpl.deleteById(compensationID);}
+	public String createCompensation(Compensation compensation) throws DuplicateIDException {
+		if(compensationListImpl.add(compensation)) {
+			return "[success] 보상 신청이 완료되었습니다.";
+		}
+		else throw new DuplicateIDException();
+	}
+	public String deleteCompensation(int compensationID) throws NotFoundProfileException {
+		if(compensationListImpl.deleteById(compensationID)) {
+			return "[success] 보상 신청이 삭제되었습니다.";
+		}
+		else throw new NotFoundProfileException("[Exception] 해당 보상ID가 존재하지 않습니다.");	
+	}
 	public String processUnderwriting(Contract contract, String evaluation, String result) {
 		contract.setEvaluation(evaluation);
 		if (result.equals("Y")) {

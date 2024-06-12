@@ -8,6 +8,7 @@ import IF.CounselList;
 import IF.InsuranceList;
 import IF.PaymentList;
 import exception.DuplicateIDException;
+import exception.NotFoundProfileException;
 
 public class Customer {
 	private String account;
@@ -147,14 +148,24 @@ public class Customer {
 	public AccidentList getAccidentList() {
 		return accidentListImpl;
 	}
-	public boolean createAccident(Accident accident) {
-		return this.accidentListImpl.add(accident);
+	public String createAccident(Accident accident) throws DuplicateIDException {
+		if(accidentListImpl.add(accident)) {
+			return "[success] 사고접수가 완료되었습니다.";
+		}
+		else throw new DuplicateIDException();
 	}
-	public boolean updateAccident(int accidentID, Accident accident) {
-		return this.accidentListImpl.update(accidentID, accident);
+	public String updateAccident(int accidentID, Accident accident) throws NotFoundProfileException {
+		if(accidentListImpl.update(accidentID, accident)) {
+			return "[success] 사고접수가 수정되었습니다.";
+		}
+		else throw new NotFoundProfileException("[Exception] 사고 정보를 업데이트하는 동안 오류가 발생했습니다. 다시 시도해주세요.");
+
 	}
-	public boolean deleteAccident(int accidentId) {
-		return this.accidentListImpl.deleteById(accidentId);
+	public String deleteAccident(int accidentId) throws NotFoundProfileException {
+		if(accidentListImpl.deleteById(accidentId)) {
+			return "[success] 사고접수가 삭제되었습니다.";
+		}
+		else throw new NotFoundProfileException("[Exception] 해당 사고ID가 존재하지 않습니다.");
 	}
 	public CompensationList getCompensationList() {
 		return compensationListImpl;
@@ -162,12 +173,18 @@ public class Customer {
 	public void setCompensationList(CompensationList compensationListImpl) {
 		this.compensationListImpl = compensationListImpl;
 	}
-	public boolean createCompensation(Compensation compensation) {
-		return this.compensationListImpl.add(compensation);
+	public String createCompensation(Compensation compensation) throws DuplicateIDException {
+		if(compensationListImpl.add(compensation)) {
+			return "[success] 보상 신청이 완료되었습니다.";
+		}
+		else throw new DuplicateIDException();
 	}
 
-	public boolean updateCompensation(Compensation compensation, int compensationID) {
-		return this.compensationListImpl.update(compensation, compensationID);
+	public String updateCompensation(Compensation compensation, int compensationID) throws NotFoundProfileException {
+		if(compensationListImpl.update(compensation, compensationID)) {
+			return "[success] 보상 신청이 수정되었습니다.";
+		}
+		else throw new NotFoundProfileException("[Exception] 보상 신청을 업데이트하는 동안 오류가 발생했습니다. 다시 시도해주세요.");
 	}
 	public boolean createBill(Compensation compensation, int compensationID) {
 		return this.compensationListImpl.update(compensation, compensationID);
