@@ -978,8 +978,11 @@ public class ISMain {
 	// -------------------------------------------------------------
 
 	//// 상품 개발 카테고리 - 상품을 개발한다. 상품리스트를 확인한다.
-	private void createInsuranceCategory() throws IOException {
+	private void createInsuranceCategory() throws IOException, AuthenticationException {
 		while(true) {
+			if (employee==null) {
+				throw new AuthenticationException();
+			}
 			System.out.println("***************** 상품 개발 카테고리 메뉴 *****************");
 			System.out.println("1. 상품 추가");
 			System.out.println("2. 상품 리스트 확인");
@@ -1112,7 +1115,7 @@ public class ISMain {
 		System.out.println();
 		ArrayList<Insurance> insuranceList = insuranceListImpl.retrieveAll();
 		if(insuranceList.size() == 0) {
-			System.out.println("No Insurance");
+			System.out.println("[error] 보험이 없습니다.");
 			return;
 		}
 		System.out.println("-- 보험 리스트 --");
@@ -1123,8 +1126,11 @@ public class ISMain {
 	}
 	// -------------------------------------------------------------
 	//// 제관리 지침 관리 카테고리 - 제관리 지침을 관리한다.
-	private void ruleCategory() throws IOException {
+	private void ruleCategory() throws IOException, AuthenticationException {
 		while(true) {
+			if (employee==null) {
+				throw new AuthenticationException();
+			}
 			System.out.println("***************** 제관리 지침 카테고리 메뉴 *****************");
 			System.out.println("1. 제관리 지침 리스트 조회");
 			System.out.println("2. 제관리 지침 생성");
@@ -1182,15 +1188,17 @@ public class ISMain {
 		int index=1;
 		System.out.println("-- 제관리 지침 리스트 --");
 		for(Rule rule : ruleListImpl.retrieveAll()) {
-			System.out.println(index + ". RuleID: " + rule.getRuleID() + " RuleName: " + rule.getRuleName()+ " RuleDetail: " + rule.getRuleDetail());
+			System.out.println(index + ". 제관리지침 ID: " + rule.getRuleID() + " 제관리지침 이름: " + rule.getRuleName()+ " 제관리지침 내용: " + rule.getRuleDetail());
 			index++;
 		}
 		
 	}
 	// -------------------------------------------------------------
 	// 수금을 관리한다.
-	private void setPaymentInfo() throws IOException {
-		
+	private void setPaymentInfo() throws IOException, AuthenticationException {
+		if (employee==null) {
+			throw new AuthenticationException();
+		}
 		PaymentInfo paymentInfo = new PaymentInfo();
 		System.out.println("--수금 정보 입력란--");
 		System.out.print("계약 ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer");
@@ -1239,7 +1247,10 @@ public class ISMain {
 	}
 	// -------------------------------------------------------------
 	// 미납을 관리한다.
-	private void manageLatePayment() throws IOException {
+	private void manageLatePayment() throws IOException, AuthenticationException {
+		if (employee==null) {
+			throw new AuthenticationException();
+		}
 		System.out.print("계약 ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.println("==특정 미납 정보==");
 		System.out.println(contractListImpl.retrieveById(Integer.parseInt(contractID)).toString());
@@ -1377,7 +1388,10 @@ public class ISMain {
 			else System.out.println("[error] 상담 ID가 존재하지 않습니다.");
 		}
 	}
-	private void manageRevive() throws IOException {
+	private void manageRevive() throws IOException, AuthenticationException {
+		if (employee==null) {
+			throw new AuthenticationException();
+		}
 		System.out.println("--부활 계약 정보--");
 		// basic attribute settings
 		System.out.print("계약ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer");
@@ -1472,7 +1486,10 @@ public class ISMain {
 	
 	// -------------------------------------------------------------
 	// 만기계약을 관리한다.
-	private void manageExpirationContract() throws IOException, ParseException {
+	private void manageExpirationContract() throws IOException, ParseException, AuthenticationException {
+		if (employee==null) {
+			throw new AuthenticationException();
+		}
 		System.out.print("만기 계약ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
 		System.out.println("==만기 계약 상세 정보 확인란==");
@@ -1490,7 +1507,10 @@ public class ISMain {
 	}
 	// -------------------------------------------------------------
 	// 재계약을 관리한다.
-	private void manageRenewalContract() throws IOException {
+	private void manageRenewalContract() throws IOException, AuthenticationException {
+		if (employee==null) {
+			throw new AuthenticationException();
+		}
 		System.out.print("재계약ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
 		System.out.println("==재계약 상세 정보 확인란==");
@@ -1505,7 +1525,10 @@ public class ISMain {
 	}
 	// -------------------------------------------------------------
 	// 배서를 관리한다.
-	private void manageUpdate() throws IOException {
+	private void manageUpdate() throws IOException, AuthenticationException {
+		if (employee==null) {
+			throw new AuthenticationException();
+		}
 		System.out.print("계약ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		String contractStatus = Constant.contractStatus1;
 		System.out.print("고객ID: "); String customerID = dataValidation(clientInputReader.readLine().trim(), "Integer");
