@@ -41,7 +41,7 @@ public class Customer {
 	public void finalize() throws Throwable {
 
 	}
-	public boolean requestJoinInsurance(Customer customer, Insurance insurance) {
+	public boolean requestContract(Customer customer, Insurance insurance) {
 		
 		return false;
 	}
@@ -201,6 +201,15 @@ public class Customer {
 			return "[success] 보험료가 납부되었습니다.";
 		else 
 			return "[error] 결제에 실패하였습니다.";
+	}
+	public String requestContract(Contract contract) throws DuplicateIDException {
+		Contract retrieveContract = contractListImpl.retrieveById(contract.getContractID());
+		if(retrieveContract != null)
+			throw new DuplicateIDException();
+		if(contractListImpl.add(contract))
+			return "[success] 보험 가입 신청이 완료되었습니다.";
+		else
+			return "[error] 가입 신청에 실패하였습니다.";
 	}
 
 }

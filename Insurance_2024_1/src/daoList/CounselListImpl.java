@@ -75,4 +75,14 @@ public class CounselListImpl implements CounselList {
 		}
 		return consultedCounselList;
 	}
+
+	@Override
+	public ArrayList<Counsel> retrieveConfirmedCounsel(int employeeID) {
+		ArrayList<Counsel> confirmedCounselList = new ArrayList<>();
+		for(Counsel counsel: retrieveByEmployeeId(employeeID)) {
+			if(counsel.getStatusOfCounsel())
+				confirmedCounselList.add(counsel);
+		}
+		return confirmedCounselList;
+	}
 }

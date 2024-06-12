@@ -14,4 +14,5 @@ public interface CounselList {
 	public ArrayList<Counsel> retrieveByCustomerID(int customerId);
 	public ArrayList<Counsel> retrieveAll();
 	public ArrayList<Counsel> retrieveByEmployeeId(int employeeId);
+	public ArrayList<Counsel> retrieveConfirmedCounsel(int employeeID);
 }
