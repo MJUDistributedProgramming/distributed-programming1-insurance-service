@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import IF.CounselList;
 import domain.Counsel;
+import exception.DuplicateIDException;
 
 public class CounselListImpl implements CounselList {
 
@@ -19,7 +20,7 @@ public class CounselListImpl implements CounselList {
 
 	}
 
-	public boolean add(Counsel counsel){
+	public boolean add(Counsel counsel) {
 		for (Counsel c: counselList) {
 			if (c.getCounselID() == counsel.getCounselID()) 
 				return false;
@@ -73,5 +74,15 @@ public class CounselListImpl implements CounselList {
 			}
 		}
 		return consultedCounselList;
+	}
+
+	@Override
+	public ArrayList<Counsel> retrieveConfirmedCounsel(int employeeID) {
+		ArrayList<Counsel> confirmedCounselList = new ArrayList<>();
+		for(Counsel counsel: retrieveByEmployeeId(employeeID)) {
+			if(counsel.getStatusOfCounsel())
+				confirmedCounselList.add(counsel);
+		}
+		return confirmedCounselList;
 	}
 }

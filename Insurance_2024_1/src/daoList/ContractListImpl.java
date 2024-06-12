@@ -1,6 +1,7 @@
 
 package daoList;
 import java.util.ArrayList;
+
 import IF.ContractList;
 import constant.Constant;
 import domain.Contract;
@@ -68,5 +69,14 @@ public class ContractListImpl implements ContractList {
 	@Override
 	public boolean contains(Contract contract) {
 		return ContractList.contains(contract);
+	}
+
+	public ArrayList<Contract> retrieveRequestedContractList(int customerId) {
+		ArrayList<Contract> requestedContractList = new ArrayList<>();
+		for(Contract contract: retrieveByCustomerId(customerId)){
+			if(contract.getContractStatus() == Constant.contractStatus1)
+				requestedContractList.add(contract);
+		}
+		return requestedContractList;
 	}
 }
