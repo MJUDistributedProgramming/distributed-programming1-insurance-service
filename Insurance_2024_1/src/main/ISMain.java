@@ -1742,10 +1742,6 @@ public class ISMain {
 			index++;
 		}
 	}
-	
-	private void updateCounsel(String userType) {
-		
-	}
 	private void showCustomerList() {
 		int index = 1;
 		System.out.println("-- Customer List --");
@@ -1771,8 +1767,6 @@ public class ISMain {
 			index++;
 		}
 	}
-	
-	
 	private void deleteContract() throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
@@ -1785,7 +1779,7 @@ public class ISMain {
 		if (response == true) System.out.println("[success] Successfully deleted this Contract!");
 		else System.out.println("[error] The contract id does not exist.");
 	}
-  private void deleteCounsel() throws IOException {
+	private void deleteCounsel() throws IOException {
 		if (!TokenManager.isValidToken(token)) {
 			System.out.println("[error] please login first.");
 			return;
