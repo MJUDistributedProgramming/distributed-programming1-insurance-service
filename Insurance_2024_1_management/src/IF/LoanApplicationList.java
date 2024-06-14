@@ -1,5 +1,4 @@
 package IF;
-
 import java.util.ArrayList;
 
 import domain.LoanApplication;

@@ -153,10 +153,7 @@ public class ISMain {
 			} 
 			catch (AuthenticationException e) {
 				System.out.println(e.getMessage());
-			} 
-//			catch (AuthorizationException e) {
-//				System.out.println(e.getMessage());
-//			} 
+			}
 		}
 	}
 	//// 사고접수 카테고리 - 사고접수 신청, 사고접수 조회, 사고접수 수정, 사고접수 삭제

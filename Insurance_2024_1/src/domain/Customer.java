@@ -1,6 +1,5 @@
 package domain;
 import java.util.ArrayList;
-
 import IF.AccidentList;
 import IF.CompensationList;
 import IF.ContractList;
@@ -9,7 +8,6 @@ import IF.InsuranceList;
 import IF.PaymentList;
 import exception.DuplicateIDException;
 import exception.NotFoundProfileException;
-
 public class Customer {
 	private String account;
 	private String address;
@@ -26,7 +24,6 @@ public class Customer {
 	private String name;
 	private String phone;
 	private int weight;
-	
 	// associations
 	public CounselList counselListImpl;
 	public ContractList contractListImpl;
@@ -35,118 +32,12 @@ public class Customer {
 	public InsuranceList insuranceListImpl;
 	public AccidentList accidentListImpl;
 	public CompensationList compensationListImpl;
-	
 	public Customer(){
 		contractedList = new ArrayList<>();
 	}
-	public void finalize() throws Throwable {
-
-	}
+	public void finalize() throws Throwable {}
 	public boolean requestContract(Customer customer, Insurance insurance) {
-		
 		return false;
-	}
-	public String getAccount() {
-		return account;
-	}
-	public void setAccount(String account) {
-		this.account = account;
-	}
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	public int getAge() {
-		return age;
-	}
-	public void setAge(int age) {
-		this.age = age;
-	}
-	public String getBirthDate() {
-		return birthDate;
-	}
-	public void setBirthDate(String birthDate) {
-		this.birthDate = birthDate;
-	}
-	public ArrayList<Contract> getContractedList() {
-		return contractedList;
-	}
-	public void setContractedList(ArrayList<Contract> contractedList) {
-		this.contractedList = contractedList;
-	}
-	public String getCustomerPW() {
-		return customerPW;
-	}
-	public void setCustomerPW(String customerPW) {
-		this.customerPW = customerPW;
-	}
-	public int getCustomerID() {
-		return customerID;
-	}
-	public void setCustomerID(int customerID) {
-		this.customerID = customerID;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getGender() {
-		return gender;
-	}
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
-	public int getHeight() {
-		return height;
-	}
-	public void setHeight(int height) {
-		this.height = height;
-	}
-	public String getJob() {
-		return job;
-	}
-	public void setJob(String job) {
-		this.job = job;
-	}
-	public MedicalHistory getMedicalHistory() {
-		return medicalHistory;
-	}
-	public void setMedicalHistory(MedicalHistory medicalHistory) {
-		this.medicalHistory = medicalHistory;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-	public int getWeight() {
-		return weight;
-	}
-	public void setWeight(int weight) {
-		this.weight = weight;
-	}
-	public ContractList getContractList() {
-		return contractListImpl;
-	}
-	public void setM_Contract(ContractList contractListImpl) {
-		this.contractListImpl = contractListImpl;
-	}
-	public void setAccidentList(AccidentList accidentListImpl) {
-		this.accidentListImpl = accidentListImpl;
-	}
-	public AccidentList getAccidentList() {
-		return accidentListImpl;
 	}
 	public String createAccident(Accident accident) throws DuplicateIDException {
 		if(accidentListImpl.add(accident)) {
@@ -179,7 +70,6 @@ public class Customer {
 		}
 		else throw new DuplicateIDException();
 	}
-
 	public String updateCompensation(Compensation compensation, int compensationID) throws NotFoundProfileException {
 		if(compensationListImpl.update(compensation, compensationID)) {
 			return "[success] 보상 신청이 수정되었습니다.";
@@ -189,29 +79,10 @@ public class Customer {
 	public boolean createBill(Compensation compensation, int compensationID) {
 		return this.compensationListImpl.update(compensation, compensationID);
 	}
-	public void setCounselList(CounselList counselListImpl) {
-		this.counselListImpl = counselListImpl;
-	}
 	public String requestCounsel(Counsel counsel) throws DuplicateIDException {		
 		if(counselListImpl.add(counsel)) 
 			return "[success] 상담 신청이 완료되었습니다.";
 		else throw new DuplicateIDException();
-	}
-	public boolean deleteCounsel(int counselID) {
-		return counselListImpl.delete(counselID);
-	}
-	public void setPaymentList(PaymentList paymentListImpl) {
-		this.paymentListImpl = paymentListImpl;
-	}
-	public void setInsuranceList(InsuranceList insuranceListImpl) {
-		this.insuranceListImpl = insuranceListImpl;
-	}
-
-	public String cancelContract(Contract contract) {
-		if(contractListImpl.deleteById(contract.getContractID())) 
-			return "[success] 보험 계약이 해지되었습니다.";
-		else 
-			return "[error] 계약 ID가 존재하지 않습니다.";
 	}
 	public String payPremium(Payment payment, int cardNumber, int cvcNumber, int password) {
 		if(payment.processPayment(cardNumber, cvcNumber, password))
@@ -228,5 +99,48 @@ public class Customer {
 		else
 			return "[error] 가입 신청에 실패하였습니다.";
 	}
-
+	public String cancelContract(Contract contract) {
+		if(contractListImpl.deleteById(contract.getContractID())) 
+			return "[success] 보험 계약이 해지되었습니다.";
+		else 
+			return "[error] 계약 ID가 존재하지 않습니다.";
+	}
+	public String getAccount() {return account;}
+	public void setAccount(String account) {this.account = account;}
+	public String getAddress() {return address;}
+	public void setAddress(String address) {this.address = address;}
+	public int getAge() {return age;}
+	public void setAge(int age) {this.age = age;}
+	public String getBirthDate() {return birthDate;}
+	public void setBirthDate(String birthDate) {this.birthDate = birthDate;}
+	public ArrayList<Contract> getContractedList() {return contractedList;}
+	public void setContractedList(ArrayList<Contract> contractedList) {this.contractedList = contractedList;}
+	public String getCustomerPW() {return customerPW;}
+	public void setCustomerPW(String customerPW) {this.customerPW = customerPW;}
+	public int getCustomerID() {return customerID;}
+	public void setCustomerID(int customerID) {this.customerID = customerID;}
+	public String getEmail() {return email;}
+	public void setEmail(String email) {this.email = email;}
+	public String getGender() {return gender;}
+	public void setGender(String gender) {this.gender = gender;}
+	public int getHeight() {return height;}
+	public void setHeight(int height) {this.height = height;}
+	public String getJob() {return job;}
+	public void setJob(String job) {this.job = job;}
+	public MedicalHistory getMedicalHistory() {return medicalHistory;}
+	public void setMedicalHistory(MedicalHistory medicalHistory) {this.medicalHistory = medicalHistory;}
+	public String getName() {return name;}
+	public void setName(String name) {this.name = name;}
+	public String getPhone() {return phone;}
+	public void setPhone(String phone) {this.phone = phone;}
+	public int getWeight() {return weight;}
+	public void setWeight(int weight) {this.weight = weight;}
+	public ContractList getContractList() {return contractListImpl;}
+	public void setM_Contract(ContractList contractListImpl) {this.contractListImpl = contractListImpl;}
+	public void setAccidentList(AccidentList accidentListImpl) {this.accidentListImpl = accidentListImpl;}
+	public AccidentList getAccidentList() {return accidentListImpl;}
+	public void setCounselList(CounselList counselListImpl) {this.counselListImpl = counselListImpl;}
+	public boolean deleteCounsel(int counselID) {return counselListImpl.delete(counselID);}
+	public void setPaymentList(PaymentList paymentListImpl) {this.paymentListImpl = paymentListImpl;}
+	public void setInsuranceList(InsuranceList insuranceListImpl) {this.insuranceListImpl = insuranceListImpl;}
 }

@@ -1,11 +1,11 @@
 package IF;
 import java.util.ArrayList;
-import domain.BusinessStraegy;
+import domain.BusinessStrategy;
 import exception.DuplicateIDException;
 public interface BusinessStraegyList {
-	public String add(BusinessStraegy BusinessStraegy) throws DuplicateIDException;
+	public String add(BusinessStrategy BusinessStraegy) throws DuplicateIDException;
 	public String deleteById(int id);
-	public ArrayList<BusinessStraegy> retrieveAll();
-	public BusinessStraegy retrieveById(int id);
-	public String update(int id, BusinessStraegy BusinessStraegy);
+	public ArrayList<BusinessStrategy> retrieveAll();
+	public BusinessStrategy retrieveById(int id);
+	public String update(int id, BusinessStrategy BusinessStraegy);
 }
