@@ -153,10 +153,7 @@ public class ISMain {
 			} 
 			catch (AuthenticationException e) {
 				System.out.println(e.getMessage());
-			} 
-//			catch (AuthorizationException e) {
-//				System.out.println(e.getMessage());
-//			} 
+			}
 		}
 	}
 	//// 사고접수 카테고리 - 사고접수 신청, 사고접수 조회, 사고접수 수정, 사고접수 삭제
@@ -2240,16 +2237,15 @@ public class ISMain {
 		System.out.println("[success] 로그아웃 되었습니다. 본 페이지로 돌아갑니다.");
 	}
 	private void deleteMembership(String userType) throws IOException {
-		if (!TokenManager.isValidToken(token)) {
+		if (employee == null && customer == null) {
 			System.out.println("[error] 로그인을 먼저 진행해주세요.");
 			return;
 		}
 		System.out.println("-- 회원탈퇴 정보 --");
 		System.out.print("회원탈퇴를 진행하시겠습니까? [Y/N] : "); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if (result.equals("Y")) {
-			if (userType.equals(Constant.Customer)) System.out.println(customerListImpl.deleteById(Integer.parseInt(TokenManager.getID(token))));
-			else if (userType.equals(Constant.Employee)) System.out.println(employeeListImpl.deleteById(Integer.parseInt(TokenManager.getID(token))));;
-			TokenManager.invalidateToken(token);
+			if (userType.equals(Constant.Customer)) System.out.println(customerListImpl.deleteById(customer.getCustomerID()));
+			else if (userType.equals(Constant.Employee)) System.out.println(employeeListImpl.deleteById(employee.getEmployeeID()));
 		} else System.out.println("[error] 회원탈퇴를 진행하지 않았습니다. 본 페이지로 돌아갑니다.");
 	}
 	private String dataValidation(String inputData, String type) throws IOException {
