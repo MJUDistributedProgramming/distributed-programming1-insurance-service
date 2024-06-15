@@ -12,7 +12,6 @@ public class AssetManagement {
 	private String prospect;
 	private String rickPlan;
 	private String risk;
-	public BusinessPlan m_BusinessPlan;
 	public AssetManagement(){}
 	public void finalize() throws Throwable {}
 	// set & get
@@ -40,6 +39,4 @@ public class AssetManagement {
 	public void setRickPlan(String rickPlan) {this.rickPlan = rickPlan;}
 	public String getRisk() {return risk;}
 	public void setRisk(String risk) {this.risk = risk;}
-	public BusinessPlan getM_BusinessPlan() {return m_BusinessPlan;}
-	public void setM_BusinessPlan(BusinessPlan m_BusinessPlan) {this.m_BusinessPlan = m_BusinessPlan;}
 }

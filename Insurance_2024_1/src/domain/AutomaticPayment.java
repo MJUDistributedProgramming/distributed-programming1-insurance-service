@@ -1,12 +1,10 @@
 package domain;
-
 public class AutomaticPayment {
 	private String accountNum;
 	private String applicantName;
 	private String applicantRRN;
 	private String paymentCompanyName;
 	private String relationshipToApplicant;
-
 	public AutomaticPayment(){}
 	public String toString() {
 		return "AutomaticPayment{" +
@@ -29,5 +27,4 @@ public class AutomaticPayment {
 	public void setPaymentCompanyName(String paymentCompanyName) {this.paymentCompanyName = paymentCompanyName;}
 	public void setAccountNum(String accountNum) {this.accountNum = accountNum;}
 	public void updateAutomaticPaymentInfo(AutomaticPayment automaticPayment){}
-
 }

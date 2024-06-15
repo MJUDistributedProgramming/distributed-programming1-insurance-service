@@ -1,10 +1,8 @@
 package domain;
-
 public class CardPayment {
 	private String cardNum;
 	private String cvcNum;
 	private String password;
-
 	public CardPayment(){}
 	public String toString() {
 		return "CardPayment{" +

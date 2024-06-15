@@ -1,4 +1,3 @@
-
 package daoList;
 import java.util.ArrayList;
 
@@ -7,7 +6,6 @@ import constant.Constant;
 import domain.Contract;
 public class ContractListImpl implements ContractList {
 	private ArrayList<Contract> ContractList;
-	public Contract m_Contract;
 	public ContractListImpl(){
 		ContractList = new ArrayList<>();
 	}
@@ -65,12 +63,11 @@ public class ContractListImpl implements ContractList {
 			}
 		}
 		return customerContractList;
-  }
+	}
 	@Override
 	public boolean contains(Contract contract) {
 		return ContractList.contains(contract);
 	}
-
 	public ArrayList<Contract> retrieveRequestedContractList(int customerId) {
 		ArrayList<Contract> requestedContractList = new ArrayList<>();
 		for(Contract contract: retrieveByCustomerId(customerId)){
@@ -79,7 +76,6 @@ public class ContractListImpl implements ContractList {
 		}
 		return requestedContractList;
 	}
-	
 	public ArrayList<Contract> retrieveConcludedContractList(int customerId) {
 		ArrayList<Contract> requestedContractList = new ArrayList<>();
 		for(Contract contract: retrieveByCustomerId(customerId)){

@@ -1,11 +1,9 @@
 package domain;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-
 import IF.CompensationList;
 import IF.ContractList;
 import IF.CounselList;
@@ -16,7 +14,6 @@ import IF.RuleList;
 import constant.Constant;
 import exception.DuplicateIDException;
 import exception.NotFoundProfileException;
-
 public class Employee {
 	private String email;
 	private int employeeID;
@@ -254,7 +251,4 @@ public class Employee {
 	public void setContractList(ContractList contractListImpl) {this.contractListImpl = contractListImpl;}
 	public void setRuleList(RuleList ruleListImpl) {this.ruleListImpl = ruleListImpl;}
 	public RuleList getRuleList() {return ruleListImpl;}
-
-	
-	
 }

@@ -1,6 +1,5 @@
 package domain;
 import java.util.ArrayList;
-
 public class MedicalHistory {
 	private String curePeriod;
 	private ArrayList<String> diseases;
@@ -27,5 +26,4 @@ public class MedicalHistory {
 	public void setCured(boolean isCured) {
 		this.isCured = isCured;
 	}
-	
 }

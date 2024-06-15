@@ -15,7 +15,7 @@ public class Customer {
 	private String phone;
 	private String ssn;
 	private ArrayList<LoanApplication> loans;
-	private static LoanApplicationList loanApplicationListImpl;
+	private LoanApplicationList loanApplicationListImpl;
 	public Customer() {loans = new ArrayList<>();}
 	public void finalize() throws Throwable {}
 	public String loanApplication(LoanApplication loanApplication) throws DuplicateIDException {return loanApplicationListImpl.add(loanApplication);}

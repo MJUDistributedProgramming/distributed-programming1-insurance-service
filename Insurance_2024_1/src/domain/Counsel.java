@@ -1,7 +1,5 @@
 package domain;
-
 public class Counsel {
-
 	private int counselID;
 	private int customerID;
 	private int employeeID;
@@ -12,20 +10,16 @@ public class Counsel {
 	private String timeOfCounsel;
 	private boolean statusOfCounsel;
 	private String note;
-	
 	public void finalize() throws Throwable {}
-
 	public boolean updateCounsel(String counselDetail, String note) {
 		this.counselDetail = counselDetail;
 		this.note = note;
 		return true;
 	}
-	
 	public String isConfirmedCounsel(){
 		if(statusOfCounsel) return "확정됨";
 		else return "대기중";
 		}
-	
 	// get & set
 	public String getContent() {return content;}
 	public void setContent(String content) {this.content = content;}
@@ -47,5 +41,4 @@ public class Counsel {
 	public void setStatusOfCounsel(boolean statusOfCounsel) {this.statusOfCounsel = statusOfCounsel;}
 	public String getTimeOfCounsel() {return timeOfCounsel;}
 	public void setTimeOfCounsel(String timeOfCounsel) {this.timeOfCounsel = timeOfCounsel;}
-
 }

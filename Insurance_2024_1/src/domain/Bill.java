@@ -1,13 +1,10 @@
 package domain;
-
 public class Bill {
 	private int billID;
 	private String billReason;
 	private int customerID;
-
 	public Bill(){}
 	public void finalize() throws Throwable {}
-
 	// get&set
 	public int getBillID() { return billID; }
 	public void setBillID(int billID) { this.billID = billID; }

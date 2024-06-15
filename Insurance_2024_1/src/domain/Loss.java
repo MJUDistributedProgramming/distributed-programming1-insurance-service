@@ -1,15 +1,12 @@
 package domain;
-
 public class Loss {
 	private int lossID;
 	private int accidentID;
 	private int employeeID;
 	private String employeeOpinion;
 	private int lossAmount;
-
 	public Loss(){}
 	public void finalize() throws Throwable {}
-
 	// get&set
 	public int getAccidentID() { return accidentID;}
 	public void setAccidentID(int accidentID) { this.accidentID = accidentID; }

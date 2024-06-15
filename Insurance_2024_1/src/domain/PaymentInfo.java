@@ -1,5 +1,4 @@
 package domain;
-
 public class PaymentInfo {
 	private AutomaticPayment automaticPayment;
 	private BankPayment bankPayment;
@@ -8,11 +7,6 @@ public class PaymentInfo {
 	private String fixedMonthlyPaymentDate;
 	private int paymentInfoID;
 	private String paymentType;
-	// associations
-	public AutomaticPayment m_AutomaticPayment;
-	public BankPayment m_BankPayment;
-	public CardPayment m_CardPayment;
-	
 	public PaymentInfo(){}
 	public void finalize() throws Throwable {}
 	public String toString() {
