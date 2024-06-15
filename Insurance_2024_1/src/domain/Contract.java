@@ -1,7 +1,7 @@
 package domain;
 public class Contract {
 	private int concludeEID;
-	private int createContractEID;
+	// private int createContractEID;
 	private String createdDate;
 	private String concludedDate;
 	private int contractID;
@@ -42,7 +42,6 @@ public class Contract {
 	public String toString() {
 		  return "Contract{" +
 	                "concludeEID=" + concludeEID +
-	                ", createContractEID=" + createContractEID +
 	                ", createdDate='" + createdDate + '\'' +
 	                ", concludedDate='" + concludedDate + '\'' +
 	                ", contractID=" + contractID +
@@ -71,8 +70,6 @@ public class Contract {
 	public void setConcludedDate(String concludedDate) {this.concludedDate = concludedDate;}
 	public int getContractID() {return contractID;}
 	public void setContractID(int contractID) {this.contractID = contractID;}
-	public int getCreateContractEID() {return createContractEID;}
-	public void setCreateContractEID(int createContractEID) {this.createContractEID = createContractEID;}
 	public String getContractStatus() {return contractStatus;}
 	public void setContractStatus(String contractStatus) {this.contractStatus = contractStatus;}
 	public int getCustomerID() {return customerID;}

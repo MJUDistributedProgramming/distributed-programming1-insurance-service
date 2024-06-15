@@ -8,15 +8,14 @@ import java.util.Date;
 
 import IF.CompensationList;
 import IF.ContractList;
-import IF.RuleList;
-import constant.Constant;
-import daoList.CustomerListImpl;
-import exception.DuplicateIDException;
-import exception.NotFoundProfileException;
 import IF.CounselList;
 import IF.CustomerList;
 import IF.InsuranceList;
 import IF.PaymentList;
+import IF.RuleList;
+import constant.Constant;
+import exception.DuplicateIDException;
+import exception.NotFoundProfileException;
 
 public class Employee {
 	private String email;
@@ -60,7 +59,11 @@ public class Employee {
 		if (response == true) return "[success] 성공적으로 보험 상품이 삭제되었습니다!";
 		else throw new DuplicateIDException();
 		}
-	public boolean createPayment(Payment payment) {return this.paymentListImpl.add(payment);}
+	public String createPayment(Payment payment) throws DuplicateIDException {
+		boolean response = this.paymentListImpl.add(payment);
+		if (response == true) return "[success] 보험료 납부 요청이 추가되었습니다.";
+		else throw new DuplicateIDException();
+	}
 	public boolean deletePayment(int paymentID) {return this.paymentListImpl.delete(paymentID);}
 	public String createCompensation(Compensation compensation) throws DuplicateIDException {
 		if(compensationListImpl.add(compensation)) {
