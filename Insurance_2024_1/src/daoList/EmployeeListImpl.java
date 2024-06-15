@@ -1,8 +1,8 @@
 
 package daoList;
 import java.util.ArrayList;
+
 import IF.EmployeeList;
-import domain.Customer;
 import domain.Employee;
 import exception.DuplicateIDException;
 public class EmployeeListImpl implements EmployeeList {

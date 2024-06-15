@@ -12,5 +12,6 @@ public interface PaymentList {
 	public boolean update(Payment payment, int paymentID);
 	public ArrayList<Payment> retrieveByCustomerID(int customerID);
 	public ArrayList<Payment> retrieveAll();
-
+	public ArrayList<Payment> retrieveUnprocessed(int customerID);
+	public ArrayList<Payment> retrieveProcessed(int customerID);
 }

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import IF.CounselList;
 import domain.Counsel;
-import exception.DuplicateIDException;
 
 public class CounselListImpl implements CounselList {
 

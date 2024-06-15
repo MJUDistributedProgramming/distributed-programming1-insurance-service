@@ -2,10 +2,9 @@
 package daoList;
 
 import java.util.ArrayList;
+
 import IF.CompensationList;
-import domain.Accident;
 import domain.Compensation;
-import domain.Contract;
 
 public class CompensationListImpl implements CompensationList {
 

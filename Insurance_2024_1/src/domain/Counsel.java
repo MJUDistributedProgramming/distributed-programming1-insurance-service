@@ -15,15 +15,12 @@ public class Counsel {
 	
 	public void finalize() throws Throwable {}
 
-	public boolean confirmCounsel(){
-		return false;
-	}
-
 	public boolean updateCounsel(String counselDetail, String note) {
 		this.counselDetail = counselDetail;
 		this.note = note;
 		return true;
 	}
+	
 	public String isConfirmedCounsel(){
 		if(statusOfCounsel) return "확정됨";
 		else return "대기중";

@@ -16,10 +16,17 @@ public class PaymentInfo {
 	public PaymentInfo(){}
 	public void finalize() throws Throwable {}
 	public String toString() {
+		String automaticPayment = "";
+		if(this.automaticPayment != null) automaticPayment = this.automaticPayment.toString();
+		String bankPayment = "";
+		if(this.bankPayment != null) bankPayment = this.bankPayment.toString();
+		String cardPayment = "";
+		if(this.cardPayment != null) cardPayment = this.cardPayment.toString();
+		
 		return "PaymentInfo{" +
-	            "automaticPayment=" + automaticPayment.toString() +
-	            ", bankPayment=" + bankPayment.toString() +
-	            ", cardPayment=" + cardPayment.toString() +
+	            automaticPayment +
+	            bankPayment +
+	            cardPayment +
 	            ", fixedMonthlyPayment=" + fixedMonthlyPayment +
 	            ", fixedMonthlyPaymentDate='" + fixedMonthlyPaymentDate + '\'' +
 	            ", paymentInfoID=" + paymentInfoID +

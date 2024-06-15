@@ -1,11 +1,6 @@
 package domain;
 import java.util.ArrayList;
 
-/**
- * @author Owner
- * @version 1.0
- * @created 16-5-2024 오후 6:54:56
- */
 public class MedicalHistory {
 	private String curePeriod;
 	private ArrayList<String> diseases;

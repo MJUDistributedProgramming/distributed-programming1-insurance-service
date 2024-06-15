@@ -5,9 +5,6 @@ import java.util.ArrayList;
 
 import IF.AccidentList;
 import domain.Accident;
-import domain.Contract;
-import domain.Counsel;
-import domain.Payment;
 
 public class AccidentListImpl implements AccidentList {
 

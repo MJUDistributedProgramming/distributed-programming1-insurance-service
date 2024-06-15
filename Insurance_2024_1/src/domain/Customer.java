@@ -36,9 +36,7 @@ public class Customer {
 		contractedList = new ArrayList<>();
 	}
 	public void finalize() throws Throwable {}
-	public boolean requestContract(Customer customer, Insurance insurance) {
-		return false;
-	}
+
 	public String createAccident(Accident accident) throws DuplicateIDException {
 		if(accidentListImpl.add(accident)) {
 			return "[success] 사고접수가 완료되었습니다.";
@@ -136,7 +134,7 @@ public class Customer {
 	public int getWeight() {return weight;}
 	public void setWeight(int weight) {this.weight = weight;}
 	public ContractList getContractList() {return contractListImpl;}
-	public void setM_Contract(ContractList contractListImpl) {this.contractListImpl = contractListImpl;}
+	public void setContractList(ContractList contractListImpl) {this.contractListImpl = contractListImpl;}
 	public void setAccidentList(AccidentList accidentListImpl) {this.accidentListImpl = accidentListImpl;}
 	public AccidentList getAccidentList() {return accidentListImpl;}
 	public void setCounselList(CounselList counselListImpl) {this.counselListImpl = counselListImpl;}
