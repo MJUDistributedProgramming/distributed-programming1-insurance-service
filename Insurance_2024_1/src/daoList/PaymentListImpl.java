@@ -65,4 +65,24 @@ public class PaymentListImpl implements PaymentList {
 	public boolean update(Payment payment, int paymentID){
 		return false;
 	}
+	
+	public ArrayList<Payment> retrieveUnprocessed(int customerID) {
+		ArrayList<Payment> unprocessedPayment = new ArrayList<>();
+		for (Payment payment: retrieveByCustomerID(customerID)) {
+			if (!payment.isPaymentProcessed()) {
+				unprocessedPayment.add(payment);
+			}
+		}
+		return unprocessedPayment;
+	}
+
+	public ArrayList<Payment> retrieveProcessed(int customerID) {
+		ArrayList<Payment> processedPayment = new ArrayList<>();
+		for (Payment payment: retrieveByCustomerID(customerID)) {
+			if (payment.isPaymentProcessed()) {
+				processedPayment.add(payment);
+			}
+		}
+		return processedPayment;
+	}
 }

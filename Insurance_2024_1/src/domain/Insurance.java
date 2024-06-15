@@ -29,7 +29,13 @@ public class Insurance {
 	
 	// get & set
 	public String getCategory() { return category;}
-	public void setCategory(String category) {this.category = category;}
+	public void setCategory(String category) {
+		if(category.equals("1")) category = "자동차";
+		else if(category.equals("2")) category = "주택화재";
+		else if(category.equals("3"))  category = "암건강";
+		else if(category.equals("4")) category = "해외여행";
+		this.category = category;
+	}
 	public Guarantee getGuarantee() {return guarantee;}
 	public void setGuarantee(Guarantee guarantee) {this.guarantee = guarantee;}
 	public int getInsuranceID() {return insuranceID;}
