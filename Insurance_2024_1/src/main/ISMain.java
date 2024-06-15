@@ -660,7 +660,8 @@ public class ISMain {
 		System.out.print("평가결과: "); String evaluation = clientInputReader.readLine().trim();
 		System.out.println("[info] 평가결과가 저장되었습니다.");
 		System.out.print("인수여부 [Y/N]: "); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
-		System.out.println("월 보험료: "); String monthlyPremium = dataValidation(clientInputReader.readLine().trim(), "Integer"); 
+		System.out.print("월 보험료: "); String monthlyPremium = dataValidation(clientInputReader.readLine().trim(), "Integer");
+		contract.getPaymentInfo().setFixedMonthlyPayment(Integer.parseInt(monthlyPremium));
 		contract.setMonthlyPremium(Integer.parseInt(monthlyPremium));
 		System.out.println(employee.processUnderwriting(contract, evaluation, result));
 	}
@@ -864,11 +865,11 @@ public class ISMain {
 		PaymentInfo paymentInfo = new PaymentInfo();
 		System.out.println("--결제 정보--");
 		System.out.print("결제정보 ID: "); String paymentInfoID = dataValidation(clientInputReader.readLine().trim(), "Integer");
-		System.out.print("월 납입금 : "); String fixedMonthlyPayment = dataValidation(clientInputReader.readLine().trim(), "Integer");
+//		System.out.print("월 납입금 : "); String fixedMonthlyPayment = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("월 납부일: "); String fixedMonthlyPaymentDate = dataValidation(clientInputReader.readLine().trim(), "String");
 		System.out.print("납부 방법: "); String paymentType = dataValidation(clientInputReader.readLine().trim(), "String");
 		paymentInfo.setPaymentInfoID(Integer.parseInt(paymentInfoID));
-		paymentInfo.setFixedMonthlyPayment(Integer.parseInt(fixedMonthlyPayment));
+//		paymentInfo.setFixedMonthlyPayment(Integer.parseInt(fixedMonthlyPayment));
 		paymentInfo.setFixedMonthlyPaymentDate(fixedMonthlyPaymentDate);
 		paymentInfo.setPaymentType(paymentType);
 		if(paymentType.equals(Constant.paymentInfoCard)) {
@@ -932,7 +933,7 @@ public class ISMain {
 			System.out.println("R. 돌아가기");
 			
 			String clientChoice = clientInputReader.readLine().trim();
-			if(clientChoice.equals("1")) showContractList(clientInputReader);
+			if(clientChoice.equals("1")) showConcludedContractList(clientInputReader);
 			else if (clientChoice.equals("2")) showRequestedContractList(clientInputReader);
 			else if (clientChoice.equals("R")) {
 				System.out.println("|*** 본 홈페이지로 돌아갑니다. ***|");
@@ -942,8 +943,8 @@ public class ISMain {
 	}
 	
 	// 보유한 계약을 확인하다
-	private void showContractList(BufferedReader clientInputReader) throws IOException {
-		ArrayList<Contract> contractList = contractListImpl.retrieveByCustomerId(customer.getCustomerID());
+	private void showConcludedContractList(BufferedReader clientInputReader) throws IOException {
+		ArrayList<Contract> contractList = contractListImpl.retrieveConcludedContractList(customer.getCustomerID());
 		if(contractList.size() == 0) {
 			System.out.println("[info] 보유한 계약이 없습니다.");
 			return;
@@ -1268,7 +1269,8 @@ public class ISMain {
 		}
 		int customerID = contract.getCustomerID();
 		int amount = contract.getMonthlyPremium();
-		System.out.println("납부 기한: "); String date = LocalDateTime.now().plusMonths(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+		String date = LocalDateTime.now().plusMonths(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+		System.out.println("납부 기한: "+date); 		
 		boolean statusOfPayment = false;
 
 		// ListImpl Add
@@ -1396,9 +1398,9 @@ public class ISMain {
 			return;
 		}
 		System.out.println("-- 결제 정보 입력 --");
-		System.out.println("카드 번호: "); String cardNumber = dataValidation(clientInputReader.readLine().trim(), "Integer");
-		System.out.println("CVC: "); String cvcNumber = dataValidation(clientInputReader.readLine().trim(), "Integer");
-		System.out.println("카드 비밀번호 2자리: "); String password = dataValidation(clientInputReader.readLine().trim(), "Integer");
+		System.out.print("카드 번호: "); String cardNumber = dataValidation(clientInputReader.readLine().trim(), "Integer");
+		System.out.print("CVC: "); String cvcNumber = dataValidation(clientInputReader.readLine().trim(), "Integer");
+		System.out.print("카드 비밀번호 2자리: "); String password = dataValidation(clientInputReader.readLine().trim(), "Integer");
 
 		System.out.print("해당 보험료를 납부하시겠습니까? [Y/N]: "); String result = clientInputReader.readLine().trim();
 		if(result.equals("Y")) System.out.println(customer.payPremium(payment, Integer.parseInt(cardNumber), Integer.parseInt(cvcNumber), Integer.parseInt(password)));

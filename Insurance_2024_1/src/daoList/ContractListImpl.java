@@ -79,4 +79,13 @@ public class ContractListImpl implements ContractList {
 		}
 		return requestedContractList;
 	}
+	
+	public ArrayList<Contract> retrieveConcludedContractList(int customerId) {
+		ArrayList<Contract> requestedContractList = new ArrayList<>();
+		for(Contract contract: retrieveByCustomerId(customerId)){
+			if(contract.getContractStatus() == Constant.contractStatus5)
+				requestedContractList.add(contract);
+		}
+		return requestedContractList;
+	}
 }

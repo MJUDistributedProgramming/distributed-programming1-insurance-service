@@ -36,9 +36,7 @@ public class Customer {
 		contractedList = new ArrayList<>();
 	}
 	public void finalize() throws Throwable {}
-	public boolean requestContract(Customer customer, Insurance insurance) {
-		return false;
-	}
+
 	public String createAccident(Accident accident) throws DuplicateIDException {
 		if(accidentListImpl.add(accident)) {
 			return "[success] 사고접수가 완료되었습니다.";

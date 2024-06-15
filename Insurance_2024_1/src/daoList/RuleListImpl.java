@@ -4,7 +4,6 @@ package daoList;
 import java.util.ArrayList;
 
 import IF.RuleList;
-import domain.Contract;
 import domain.Rule;
 
 public class RuleListImpl implements RuleList {
