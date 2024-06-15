@@ -1,9 +1,7 @@
 package domain;
-
 public class BankPayment {
 	private String payerName;
 	private String payerPhoneNum;
-
 	public BankPayment(){}
 	public String toString() {
 		return "BankPayment{" +

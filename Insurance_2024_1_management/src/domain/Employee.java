@@ -15,11 +15,10 @@ public class Employee {
 	private String gender;
 	private String department;
 	private Performance performance;
+	private Assignment assignment;
 	private String position;
 	private String salary;
 	private String type;
-	public Performance m_Performance;
-	public Assignment m_Assignment;
 	private AssetManagementList assetManagementListImpl;
 	private BusinessStraegyList businessStraegyListImpl;
 	private DepositClosureDetailList depositClosureDetailListImpl;
@@ -31,7 +30,7 @@ public class Employee {
 	// 직원의 발령을 관리한다.
 	public String assignmentManagement(Employee employee, Assignment assignment, String result) {
 		if (result.equals("N")) return "[info] 발령정보를 저장하지 않았습니다.";
-		employee.setM_Assignment(assignment);
+		employee.setAssignment(assignment);
 		return "[success] 발령정보가 저장되었습니다.";
 	}
 	// 대출 신청 심사를 요청한다.
@@ -123,10 +122,6 @@ public class Employee {
 	public void setLoanApplicationListImpl(LoanApplicationList loanApplicationListImpl) {this.loanApplicationListImpl = loanApplicationListImpl;}
 	public void setLoanListImpl(LoanList loanListImpl) {this.loanListImpl = loanListImpl;}
 	public void setRegulationListImpl(RegulationList regulationListImpl) {this.regulationListImpl = regulationListImpl;}
-	public Performance getM_Performance() {return m_Performance;}
-	public void setM_Performance(Performance m_Performance) {this.m_Performance = m_Performance;}
-	public Assignment getM_Assignment() {return m_Assignment;}
-	public void setM_Assignment(Assignment m_Assignment) {this.m_Assignment = m_Assignment;}
 	public String getName() {return name;}
 	public void setName(String name) {this.name = name;}
 	public String getPhone() {return phone;}
@@ -147,4 +142,6 @@ public class Employee {
 	public void setSalary(String salary) {this.salary = salary;}
 	public String getType() {return type;}
 	public void setType(String type) {this.type = type;}
+	public Assignment getAssignment() {return assignment;}
+	public void setAssignment(Assignment assignment) {this.assignment = assignment;}
 }

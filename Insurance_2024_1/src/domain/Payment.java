@@ -1,7 +1,5 @@
 package domain;
-
 public class Payment {
-
 	private int contractID;
 	private int customerID;
 	private int paymentID;
@@ -10,14 +8,11 @@ public class Payment {
 	private String dateOfPayment;
 	private String paymentMethod;
 	private boolean statusOfPayment;
-	
 	public Payment(){}
 	public void finalize() throws Throwable {}
-	
 	public boolean processPayment(int cardNumber, int cvcNumber, int password){
 		return true;
 	}
-	
 	// get & set
 	public int getAmount() {return amount;}
 	public void setAmount(int amount) {this.amount = amount;}
@@ -35,5 +30,4 @@ public class Payment {
 	public void setPaymentMethod(String paymentMethod) {this.paymentMethod = paymentMethod;}
 	public boolean isPaymentProcessed() {return statusOfPayment;}
 	public void setStatusOfPayment(boolean statusOfPayment) {this.statusOfPayment = statusOfPayment;}
-
 }

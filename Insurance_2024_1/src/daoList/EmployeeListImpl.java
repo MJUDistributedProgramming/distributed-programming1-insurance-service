@@ -1,4 +1,3 @@
-
 package daoList;
 import java.util.ArrayList;
 
@@ -7,7 +6,6 @@ import domain.Employee;
 import exception.DuplicateIDException;
 public class EmployeeListImpl implements EmployeeList {
 	private ArrayList<Employee> EmployeeList;
-	public Employee m_Employee;
 	public EmployeeListImpl(){
 		EmployeeList = new ArrayList<>();
 	}

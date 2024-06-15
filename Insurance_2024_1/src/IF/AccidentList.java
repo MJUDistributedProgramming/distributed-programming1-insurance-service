@@ -1,10 +1,6 @@
 package IF;
-
 import java.util.ArrayList;
-
 import domain.Accident;
-import domain.Contract;
-
 public interface AccidentList {
 	public boolean add(Accident accident);
 	public boolean deleteById(int accidentID);

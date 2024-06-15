@@ -1,12 +1,8 @@
 package IF;
-
 import java.util.ArrayList;
-
 import domain.Counsel;
 import exception.DuplicateIDException;
-
 public interface CounselList {
-
 	public boolean add(Counsel counsel) throws DuplicateIDException;
 	public boolean delete(int counselID);
 	public Counsel retrieve(int counselID);

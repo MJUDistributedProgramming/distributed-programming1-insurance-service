@@ -8,7 +8,6 @@ public class Loan {
 	private String loanTerm;
 	private String qualification;
 	private String repaymentMethod;
-	public LoanApplication m_LoanApplication;
 	public Loan() {}
 	public void finalize() throws Throwable {}
 	// set & get
@@ -28,6 +27,4 @@ public class Loan {
 	public void setQualification(String qualification) {this.qualification = qualification;}
 	public String getRepaymentMethod() {return repaymentMethod;}
 	public void setRepaymentMethod(String repaymentMethod) {this.repaymentMethod = repaymentMethod;}
-	public LoanApplication getM_LoanApplication() {return m_LoanApplication;}
-	public void setM_LoanApplication(LoanApplication m_LoanApplication) {this.m_LoanApplication = m_LoanApplication;}
 }
