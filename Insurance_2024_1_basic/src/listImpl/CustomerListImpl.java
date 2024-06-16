@@ -1,4 +1,4 @@
-package daoList;
+package listImpl;
 import java.util.ArrayList;
 import IF.CustomerList;
 import domain.Customer;
