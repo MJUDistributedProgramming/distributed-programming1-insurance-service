@@ -40,7 +40,7 @@ public class Insurance {
 	public String getNotice() {return notice;}
 	public void setNotice(String notice) {this.notice = notice;}
 	public String getProcessOfCompoensation() {return processOfCompoensation;}
-	public void setProcessOfCompoensation(String processOfCompoensation) {this.processOfCompoensation = processOfCompoensation;}
+	public void setProcessOfCompensation(String processOfCompoensation) {this.processOfCompoensation = processOfCompoensation;}
 	public String getProcessOfSubscription() {return processOfSubscription;}
 	public void setProcessOfSubscription(String processOfSubscription) {this.processOfSubscription = processOfSubscription;}
 	public SpecialProvision getSpecialProvision() {return specialProvision;}

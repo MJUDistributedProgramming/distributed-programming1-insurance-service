@@ -85,11 +85,11 @@ public class ISMain {
 		customerListImpl.add(customer);
 
 		Employee employee = new Employee();
-		employee.setEmployeeID(1234);
+		employee.setEmployeeID(3642);
 		employee.setEmployeePW("1234");
 		employee.setName("이준규");
-		employee.setPhone("010-1111-2222");
-		employee.setGender("남성");
+		employee.setPhone("010-6540-3642");
+		employee.setGender("M");
 		employee.setDepartment("지급관리");
 		employee.setPosition("대리");
 		employee.setSalary("3000000");

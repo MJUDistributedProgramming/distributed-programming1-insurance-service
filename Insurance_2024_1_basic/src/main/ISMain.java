@@ -84,53 +84,6 @@ public class ISMain {
 		main.setDemoData();
 		main.startInsuranceService();
 	}
-	private void setDemoData() throws DuplicateIDException {
-		Customer customer = new Customer();
-		customer.setCustomerID(123);
-		customer.setCustomerPW("123");
-		customer.setAddress("서울");
-		customer.setJob("학생");
-		customer.setName("김예일");
-		customer.setPhone("010-1234-1234");
-		customer.setAccount("110-123-456789");
-		customer.setBirthDate("991015");
-		customer.setEmail("gmail");
-		customer.setGender("M");
-		customer.setHeight(170);
-		customer.setWeight(60);
-		customer.setAge(26);
-		
-		MedicalHistory medicalHistory = new MedicalHistory();
-		medicalHistory.setCured(true);
-		medicalHistory.setCurePeriod(null);
-		ArrayList<String> diseases = new ArrayList<>();
-		medicalHistory.setDiseases(diseases);
-		customer.setMedicalHistory(medicalHistory);
-		customer.setCounselList(counselListImpl);;
-		customer.setContractList(contractListImpl);
-		customer.setPaymentList(paymentListImpl);;
-		customer.setInsuranceList(insuranceListImpl);
-		customer.setAccidentList(accidentListImpl);;
-		customer.setCompensationList(compensationListImpl);
-		customerListImpl.add(customer);
-
-		Employee employee = new Employee();
-		employee.setName("예일");
-		employee.setEmployeeID(12);
-		employee.setEmployeePW("12");
-		employee.setPhone("010-9876-5432");
-		employee.setEmail("naver");
-		employee.setGender("M");
-		employee.setType(Constant.Sales);
-		employee.setRuleList(ruleListImpl);
-		employee.setContractList(contractListImpl);
-		employee.setInsuranceList(insuranceListImpl);
-		employee.setPaymentList(paymentListImpl);
-		employee.setCounselList(counselListImpl);
-		employee.setCustomerList(customerListImpl);
-		employee.setCompensationList(compensationListImpl);
-		employeeListImpl.add(employee);
-	}
 	
 	private static void printMainMenu() {
 		System.out.println("***************** 보험사 시스템 웹페이지 *****************");
@@ -848,41 +801,6 @@ public class ISMain {
 		boolean isPassUW = false;
 //		System.out.print("월 보험료: "); String monthlyPremium = dataValidation(clientInputReader.readLine().trim(), "Integer");
 
-		// 상품 카테고리에 맞는 추가 정보 입력
-		if(insurance.getCategory().equals("자동차")) {
-			System.out.println("--자동차 보험 정보--");
-			System.out.print("차 종: "); String model = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("가격: "); String carPrice = dataValidation(clientInputReader.readLine().trim(), "Integer");
-			System.out.print("VIN: "); String VIN = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("블랙박스 유무 [Y/N]: "); String blackbox = dataValidation(clientInputReader.readLine().trim(), "boolean");
-			((Car) insurance).setModel(model);
-			((Car) insurance).setPriceOfCar(Integer.parseInt(carPrice));
-			((Car) insurance).setVIN(VIN);
-			if(blackbox.equals("Y")) ((Car) insurance).setHasBlackbox(true);
-			else if(blackbox.equals("N")) ((Car) insurance).setHasBlackbox(false);
-			
-		}else if(insurance.getCategory().equals("주택화재")) {
-			insurance = new HouseFire();
-			System.out.println("--주택화재 보험 정보--");
-			System.out.print("주택 종류: "); String categoryOfHouse = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("주택 가격: "); String housePrice = dataValidation(clientInputReader.readLine().trim(), "Integer");
-			((HouseFire) insurance).setCategoryOfHouse(categoryOfHouse);
-			((HouseFire) insurance).setPriceOfHouse(Integer.parseInt(housePrice));
-			
-		}else if(insurance.getCategory().equals("암건강")) {
-			insurance = new CancerHealth();
-			System.out.println("--암 보험 정보--");
-			System.out.print("암 종류: "); String categoryOfCancer = dataValidation(clientInputReader.readLine().trim(), "String");
-			((CancerHealth) insurance).setCategoryOfCancer(categoryOfCancer);
-			
-		}else if(insurance.getCategory().equals("해외여행")) {
-			insurance = new InternationalTravel();
-			System.out.println("--해외 여행 보험 정보--");
-			System.out.print("여행 국가: "); String travelCountry = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("여행 기간: "); String travelPeriod = dataValidation(clientInputReader.readLine().trim(), "Integer");
-			((InternationalTravel) insurance).setTravelCountry(travelCountry);
-			((InternationalTravel) insurance).setTravelPeriod(Integer.parseInt(travelPeriod));
-		}
 		// composition to whole settings
 		PaymentInfo paymentInfo = new PaymentInfo();
 		System.out.println("--결제 정보--");
@@ -1085,7 +1003,7 @@ public class ISMain {
 		System.out.print("보험 이름: "); String insuranceName = dataValidation(clientInputReader.readLine().trim(), "String");
 		System.out.print("상품 종류: 1. 자동차  2. 주택화재  3. 암건강  4. 해외여행 "); String category = dataValidation(clientInputReader.readLine().trim(), "insuranceType");
 		System.out.print("최소 계약 기간: "); String minimumPeriod = dataValidation(clientInputReader.readLine().trim(), "Integer");
-		System.out.print("최대 계약 기간: "); String minimumPremium = dataValidation(clientInputReader.readLine().trim(), "Integer");
+		System.out.print("최소 보험료: "); String minimumPremium = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("보상 규정: "); String processOfCompensation = dataValidation(clientInputReader.readLine().trim(), "String");
 		System.out.print("신청 규정: "); String processOfSubscription = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("메모: "); String notice = dataValidation(clientInputReader.readLine().trim(), "String");
@@ -1110,12 +1028,43 @@ public class ISMain {
 		
 		Insurance insurance = null;
 		// 상품 카테고리에 맞는 추가 정보 입력
-		if(category.equals("1")) insurance = new Car();
-		else if(category.equals("2")) insurance = new HouseFire();
-		else if(category.equals("3")) insurance = new CancerHealth();
-		else if (category.equals("4")) insurance = new InternationalTravel();
+		if(category.equals("1")) {
+			insurance = new Car();
+			System.out.println("--자동차 보험 정보--");
+			System.out.print("자동차 종류: "); String model = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("최대 자동차 가격: "); String carPrice = dataValidation(clientInputReader.readLine().trim(), "Integer");
+//			System.out.print("VIN: "); String VIN = dataValidation(clientInputReader.readLine().trim(), "String");
+//			System.out.print("블랙박스 유무 [Y/N]: "); String blackbox = dataValidation(clientInputReader.readLine().trim(), "boolean");
+			((Car) insurance).setModel(model);
+			((Car) insurance).setPriceOfCar(Integer.parseInt(carPrice));
+//			((Car) insurance).setVIN(VIN);
+//			if(blackbox.equals("Y")) ((Car) insurance).setHasBlackbox(true);
+//			else if(blackbox.equals("N")) ((Car) insurance).setHasBlackbox(false);
+		}
+		else if(category.equals("2")) {
+			insurance = new HouseFire();
+			System.out.println("--화재 보험 정보--");
+			System.out.print("주택 종류: "); String categoryOfHouse = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("최대 주택 가격: "); String housePrice = dataValidation(clientInputReader.readLine().trim(), "Integer");
+			((HouseFire) insurance).setCategoryOfHouse(categoryOfHouse);
+			((HouseFire) insurance).setPriceOfHouse(Integer.parseInt(housePrice));
+		}
+		else if(category.equals("3")) {
+			insurance = new CancerHealth();
+			System.out.println("--암 보험 정보--");
+			System.out.print("암 종류: "); String categoryOfCancer = dataValidation(clientInputReader.readLine().trim(), "String");
+			((CancerHealth) insurance).setCategoryOfCancer(categoryOfCancer);
+		}
+		else if (category.equals("4")) {
+			insurance = new InternationalTravel();
+			System.out.println("--해외 여행 보험 정보--");
+			System.out.print("여행 국가: "); String travelCountry = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("여행 기간: "); String travelPeriod = dataValidation(clientInputReader.readLine().trim(), "Integer");
+			((InternationalTravel) insurance).setTravelCountry(travelCountry);
+			((InternationalTravel) insurance).setTravelPeriod(Integer.parseInt(travelPeriod));
+		}
 		
-//			System.out.println("--차 보험 정보--");
+//			System.out.println("--자동차 보험 정보--");
 //			System.out.print("차 종: "); String model = dataValidation(clientInputReader.readLine().trim(), "String");
 //			System.out.print("가격: "); String carPrice = dataValidation(clientInputReader.readLine().trim(), "Integer");
 //			System.out.print("VIN: "); String VIN = dataValidation(clientInputReader.readLine().trim(), "String");
@@ -1158,7 +1107,7 @@ public class ISMain {
 			insurance.setCategory(category);
 			insurance.setMinimumPeriod(Integer.parseInt(minimumPeriod));
 			insurance.setMinimumPremium(Integer.parseInt(minimumPremium));
-			insurance.setProcessOfCompoensation(processOfCompensation);
+			insurance.setProcessOfCompensation(processOfCompensation);
 			insurance.setProcessOfSubscription(processOfSubscription);
 			insurance.setNotice(notice);
 			insurance.setGuarantee(guarantee);
@@ -2365,5 +2314,96 @@ public class ISMain {
 		}
 		if (inputData.trim().isEmpty() || inputData.contains(" ")) return false;
 	    return true;
+	}
+	private void setDemoData() throws DuplicateIDException {
+		Customer customer = new Customer();
+		customer.setCustomerID(6022);
+		customer.setCustomerPW("1234");
+		customer.setAddress("서울특별시 서대문구");
+		customer.setJob("학생");
+		customer.setName("박승호");
+		customer.setPhone("010-2187-4775");
+		customer.setAccount("110-472-882180");
+		customer.setBirthDate("990817");
+		customer.setEmail("parksh0817@gmail.com");
+		customer.setGender("M");
+		customer.setHeight(175);
+		customer.setWeight(68);
+		customer.setAge(26);
+		
+		MedicalHistory medicalHistory = new MedicalHistory();
+		medicalHistory.setCured(true);
+		medicalHistory.setCurePeriod("");
+		ArrayList<String> diseases = new ArrayList<>();
+		medicalHistory.setDiseases(diseases);
+		customer.setMedicalHistory(medicalHistory);
+		
+		customer.setCounselList(counselListImpl);;
+		customer.setContractList(contractListImpl);
+		customer.setPaymentList(paymentListImpl);;
+		customer.setInsuranceList(insuranceListImpl);
+		customer.setAccidentList(accidentListImpl);;
+		customer.setCompensationList(compensationListImpl);
+		customerListImpl.add(customer);
+
+		Employee employee = new Employee();
+		employee.setName("김예일");
+		employee.setEmployeeID(1015);
+		employee.setEmployeePW("1111");
+		employee.setPhone("010-2125-4255");
+		employee.setEmail("yeilk1015@naver.com");
+		employee.setGender("M");
+		employee.setType(Constant.Sales);
+		
+		employee.setRuleList(ruleListImpl);
+		employee.setContractList(contractListImpl);
+		employee.setInsuranceList(insuranceListImpl);
+		employee.setPaymentList(paymentListImpl);
+		employee.setCounselList(counselListImpl);
+		employee.setCustomerList(customerListImpl);
+		employee.setCompensationList(compensationListImpl);
+		employeeListImpl.add(employee);
+		
+		Insurance insurance = new Car();
+		insurance.setInsuranceID(100);
+		insurance.setInsuranceName("다이렉트 자동차보험 (SUV)");
+		insurance.setCategory("1");
+		insurance.setMinimumPeriod(1);
+		insurance.setMinimumPremium(55000);
+		insurance.setProcessOfSubscription("가입정보 기입 -> 가입신청 -> 인수심사 -> 계약체결");
+		insurance.setProcessOfCompensation("사고접수 -> 보상신청 -> 손해조사 -> 보험금 청구 -> 보험금 지급");
+		insurance.setNotice("개인용");
+		((Car)insurance).setPriceOfCar(50000000);
+		((Car)insurance).setModel("SUV");
+		
+		Guarantee guarantee = new Guarantee();
+		guarantee.setGuaranteeName("대인배상");
+		guarantee.setDescription("타인을 다치거나 사망하게 한 경우");
+		guarantee.setMaxCoverage(100000000);
+		
+		SpecialProvision specialProvision = new SpecialProvision();
+		specialProvision.setSpecialProvisionName("3년 연속 무사고 특약");
+		specialProvision.setDescription("3년 연속 무사고 운전자인 경우");
+		specialProvision.setRateOfDiscount(12.4);
+		
+		insurance.setGuarantee(guarantee);
+		insurance.setSpecialProvision(specialProvision);
+		insuranceListImpl.add(insurance);
+		
+		Insurance insurance2 = new Car();
+		insurance2.setInsuranceID(101);
+		insurance2.setInsuranceName("다이렉트 자동차보험 (Sedan)");
+		insurance2.setCategory("1");
+		insurance2.setMinimumPeriod(0);
+		insurance2.setMinimumPremium(50000);
+		insurance2.setProcessOfSubscription("가입정보 기입 -> 가입신청 -> 인수심사 -> 계약체결");
+		insurance2.setProcessOfCompensation("사고접수 -> 보상신청 -> 손해조사 -> 보험금 청구 -> 보험금 지급");
+		insurance.setNotice("개인용");
+		((Car)insurance).setPriceOfCar(50000000);
+		((Car)insurance).setModel("Sedan");
+		
+		insurance2.setGuarantee(guarantee);
+		insurance2.setSpecialProvision(specialProvision);
+		insuranceListImpl.add(insurance2);
 	}
 }
