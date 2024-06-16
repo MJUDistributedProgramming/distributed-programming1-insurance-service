@@ -1,4 +1,3 @@
-
 package daoList;
 import java.util.ArrayList;
 import IF.CustomerList;
@@ -6,7 +5,6 @@ import domain.Customer;
 import exception.DuplicateIDException;
 public class CustomerListImpl implements CustomerList {
 	private ArrayList<Customer> customerList;
-	public Customer m_Customer;
 	public ArrayList<Customer> retrieveAll(){
 		return customerList;
 	}

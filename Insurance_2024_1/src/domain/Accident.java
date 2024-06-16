@@ -1,5 +1,4 @@
 package domain;
-
 public class Accident {
 	private int customerID;
 	private int accidentID;
@@ -8,10 +7,8 @@ public class Accident {
 	private String accidentType;
 	private String carInformation;
 	private int carNumber;
-	
 	public Accident(){}
 	public void finalize() throws Throwable {}
-	
 	// get&set
 	public String getAccidentDate() { return accidentDate; }
 	public void setAccidentDate(String accidentDate) { this.accidentDate = accidentDate; }

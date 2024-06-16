@@ -19,12 +19,8 @@ public class Contract {
 	private String resurrectionDate;
 	private String resurrectionReason;
 	private int underwritingEID;
-	// association
-	public Payment m_Payment;
-	public PaymentInfo m_PaymentInfo;
 	public Contract(){}
 	public void finalize() throws Throwable {}
-
 	public String toString() {
 		  return "Contract{" +
 	                "concludeEID=" + concludeEID +
@@ -84,8 +80,4 @@ public class Contract {
 	public void setResurrectionReason(String resurrectionReason) {this.resurrectionReason = resurrectionReason;}
 	public int getUnderwritingEID() {return underwritingEID;}
 	public void setUnderwritingEID(int underwritingEID) {this.underwritingEID = underwritingEID;}
-	public Payment getM_Payment() {return m_Payment;}
-	public void setM_Payment(Payment m_Payment) {this.m_Payment = m_Payment;}
-	public PaymentInfo getM_PaymentInfo() {return m_PaymentInfo;}
-	public void setM_PaymentInfo(PaymentInfo m_PaymentInfo) {this.m_PaymentInfo = m_PaymentInfo;}
 }

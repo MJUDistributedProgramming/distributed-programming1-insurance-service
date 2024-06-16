@@ -1,7 +1,5 @@
 package domain;
-
 public class Insurance {
-
 	private int insuranceID;
 	private String insuranceName;
 	private String category;
@@ -13,20 +11,11 @@ public class Insurance {
 	private String notice;
 	private Guarantee guarantee;
 	private SpecialProvision specialProvision;
-	public SpecialProvision m_SpecialProvision;
-	public Guarantee m_Guarantee;
-	public Contract m_Contract;	
-
 	public Insurance() {}
-
-	public void finalize() throws Throwable {
-
-	}
-
+	public void finalize() throws Throwable {}
 	public int CalculateInsuranceRate(){
 		return 0;
 	}
-	
 	// get & set
 	public String getCategory() { return category;}
 	public void setCategory(String category) {
@@ -56,5 +45,4 @@ public class Insurance {
 	public void setProcessOfSubscription(String processOfSubscription) {this.processOfSubscription = processOfSubscription;}
 	public SpecialProvision getSpecialProvision() {return specialProvision;}
 	public void setSpecialProvision(SpecialProvision specialProvision) {this.specialProvision = specialProvision;}
-
 }

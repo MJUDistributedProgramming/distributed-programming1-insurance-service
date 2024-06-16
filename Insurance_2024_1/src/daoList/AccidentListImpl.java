@@ -1,25 +1,15 @@
-
 package daoList;
-
 import java.util.ArrayList;
-
 import IF.AccidentList;
 import domain.Accident;
-
 public class AccidentListImpl implements AccidentList {
-
 	private ArrayList<Accident> accidentList;
-	public Accident m_Accident;
-
 	public AccidentListImpl() {
 		this.accidentList = new ArrayList<Accident>();
-
 	}
-
 	public void finalize() throws Throwable {
 
 	}
-
 	public boolean add(Accident accident) {
 		for (Accident ac : accidentList) {
 			if (ac.getAccidentID() == accident.getAccidentID()) {

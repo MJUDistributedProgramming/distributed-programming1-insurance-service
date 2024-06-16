@@ -1,9 +1,6 @@
 package IF;
-
 import java.util.ArrayList;
-
 import domain.Compensation;
-
 public interface CompensationList {
 	public boolean add(Compensation compensation);
 	public boolean deleteById(int compensationID);

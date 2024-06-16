@@ -1,9 +1,6 @@
 package IF;
-
 import java.util.ArrayList;
-
 import domain.Rule;
-
 public interface RuleList {
 	public boolean add(Rule rule);
 	public Rule retrieveById(int ruleID);

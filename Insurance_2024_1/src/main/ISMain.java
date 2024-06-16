@@ -1,4 +1,4 @@
-  package main;
+package main;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -6,7 +6,6 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-
 import IF.AccidentList;
 import IF.CompensationList;
 import IF.ContractList;
@@ -52,7 +51,6 @@ import exception.AuthenticationException;
 import exception.AuthorizationException;
 import exception.DuplicateIDException;
 import exception.NotFoundProfileException;
-
 public class ISMain {
 	// main attributes
 	private static AccidentList accidentListImpl;
@@ -86,7 +84,6 @@ public class ISMain {
 		main.setDemoData();
 		main.startInsuranceService();
 	}
-	
 	private void setDemoData() throws DuplicateIDException {
 		Customer customer = new Customer();
 		customer.setCustomerID(123);
@@ -108,16 +105,13 @@ public class ISMain {
 		medicalHistory.setCurePeriod(null);
 		ArrayList<String> diseases = new ArrayList<>();
 		medicalHistory.setDiseases(diseases);
-		
 		customer.setMedicalHistory(medicalHistory);
-		
 		customer.setCounselList(counselListImpl);;
 		customer.setContractList(contractListImpl);
 		customer.setPaymentList(paymentListImpl);;
 		customer.setInsuranceList(insuranceListImpl);
 		customer.setAccidentList(accidentListImpl);;
 		customer.setCompensationList(compensationListImpl);
-		
 		customerListImpl.add(customer);
 
 		Employee employee = new Employee();
@@ -128,7 +122,6 @@ public class ISMain {
 		employee.setEmail("naver");
 		employee.setGender("M");
 		employee.setType(Constant.Sales);
-		
 		employee.setRuleList(ruleListImpl);
 		employee.setContractList(contractListImpl);
 		employee.setInsuranceList(insuranceListImpl);
@@ -136,7 +129,6 @@ public class ISMain {
 		employee.setCounselList(counselListImpl);
 		employee.setCustomerList(customerListImpl);
 		employee.setCompensationList(compensationListImpl);
-		
 		employeeListImpl.add(employee);
 	}
 	
@@ -328,7 +320,6 @@ public class ISMain {
 		}
 		System.out.println("--사고 정보 입력란--");
 		System.out.print("사고ID: "); String accidentID = dataValidation(clientInputReader.readLine().trim(), "Integer");
-		
 		System.out.println(customer.deleteAccident(Integer.parseInt(accidentID)));
 	}
 	// -------------------------------------------------------------
