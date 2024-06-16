@@ -1,5 +1,8 @@
 package domain;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Payment {
 
 	private int contractID;
@@ -15,6 +18,8 @@ public class Payment {
 	public void finalize() throws Throwable {}
 	
 	public boolean processPayment(int cardNumber, int cvcNumber, int password){
+		this.dateOfPayment = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+		this.statusOfPayment = true;
 		return true;
 	}
 	
@@ -33,7 +38,11 @@ public class Payment {
 	public void setPaymentID(int paymentID) {this.paymentID = paymentID;}
 	public String getPaymentMethod() {return paymentMethod;}
 	public void setPaymentMethod(String paymentMethod) {this.paymentMethod = paymentMethod;}
-	public boolean isPaymentProcessed() {return statusOfPayment;}
+	public String isPaymentProcessed() {
+		if(statusOfPayment) return "완료";
+		else return "미납";
+	}
+	public boolean getStatusOfPayment() {return this.statusOfPayment;}
 	public void setStatusOfPayment(boolean statusOfPayment) {this.statusOfPayment = statusOfPayment;}
 
 }

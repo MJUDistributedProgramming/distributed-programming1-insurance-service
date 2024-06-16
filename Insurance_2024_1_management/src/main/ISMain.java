@@ -91,9 +91,9 @@ public class ISMain {
 		employee.setPhone("010-1111-2222");
 		employee.setGender("남성");
 		employee.setDepartment("지급관리");
-		employee.setPosition("과장");
-		employee.setSalary("10000000");
-		employee.setType("지급관리자");
+		employee.setPosition("대리");
+		employee.setSalary("3000000");
+		employee.setType("인사관리자");
 		employee.setAssetManagementListImpl(assetManagementListImpl);
 		employee.setBusinessStraegyListImpl(businessStraegyListImpl);
 		employee.setDepositClosureDetailListImpl(depositClosureDetailListImpl);
@@ -881,8 +881,8 @@ public class ISMain {
 	        else if ("Integer".equals(type)) System.out.println("[error] you must enter only numbers.\n re-enter: ");
 	        else if ("Double".equals(type)) System.out.println("[error] you must enter a decimal number.\n re-enter: ");
 	        else if ("multiValue".equals(type)) System.out.println("[error] you must enter null or have only String values However, there cannot be more than two consecutive blank spaces..\n re-enter: ");
-	        else if("boolean".equals(type)) System.out.println("[error] you must enter only \"S\" / \"UW\" / \"CI\" / \"CP\" \n re-enter: ");
-	        else if("type".equals(type)) System.out.println("[error] you must enter only 'Y' / 'N' \n re-enter: ");
+	        else if("type".equals(type)) System.out.println("[error] you must enter only \"S\" / \"UW\" / \"CI\" / \"CP\" \n re-enter: ");
+	        else if("boolean".equals(type)) System.out.println("[error] you must enter only 'Y' / 'N' \n re-enter: ");
 	        else if("gender".equals(type)) System.out.println("[error] you must enter only 'M' / 'W' \n re-enter: ");
 	        else System.out.println("[error] You can't enter spaces or empty values. \n re-enter: ");
 	        inputData = clientInputReader.readLine().trim();

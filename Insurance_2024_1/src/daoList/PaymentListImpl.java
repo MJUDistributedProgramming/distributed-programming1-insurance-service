@@ -69,7 +69,7 @@ public class PaymentListImpl implements PaymentList {
 	public ArrayList<Payment> retrieveUnprocessed(int customerID) {
 		ArrayList<Payment> unprocessedPayment = new ArrayList<>();
 		for (Payment payment: retrieveByCustomerID(customerID)) {
-			if (!payment.isPaymentProcessed()) {
+			if (!payment.getStatusOfPayment()) {
 				unprocessedPayment.add(payment);
 			}
 		}
@@ -79,7 +79,7 @@ public class PaymentListImpl implements PaymentList {
 	public ArrayList<Payment> retrieveProcessed(int customerID) {
 		ArrayList<Payment> processedPayment = new ArrayList<>();
 		for (Payment payment: retrieveByCustomerID(customerID)) {
-			if (payment.isPaymentProcessed()) {
+			if (payment.getStatusOfPayment()) {
 				processedPayment.add(payment);
 			}
 		}
