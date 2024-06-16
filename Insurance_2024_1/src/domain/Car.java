@@ -9,9 +9,13 @@ public class Car extends Insurance {
 	public void finalize() throws Throwable {
 		super.finalize();
 	}
-	public boolean isHasBlackbox() {
-		return hasBlackbox;
+
+	public String hasBlackbox() {
+		if(getHasBlackbokx()) return "보유";
+		else return "미보유";
 	}
+	public boolean getHasBlackbokx() {return hasBlackbox;}
+
 	public void setHasBlackbox(boolean hasBlackbox) {
 		this.hasBlackbox = hasBlackbox;
 	}

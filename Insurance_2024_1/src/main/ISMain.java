@@ -245,7 +245,7 @@ public class ISMain {
 		// AccidentImpl Add
 		Accident accident = new Accident();
 		System.out.println("-- 사고를 접수하시겠습니까? [Y/N] --");
-		String save = dataValidation(clientInputReader.readLine().trim(), "String");
+		String save = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(save.equals("Y")) {
 			accident.setAccidentID(Integer.parseInt(accidentID));
 			accident.setCustomerID(customer.getCustomerID());
@@ -300,7 +300,7 @@ public class ISMain {
 	    String carNumber = dataValidation(clientInputReader.readLine().trim(), "Integer");
 
 	    System.out.println("-- 사고를 수정하시겠습니까? [Y/N] --");
-	    String save = dataValidation(clientInputReader.readLine().trim(), "String");
+	    String save = dataValidation(clientInputReader.readLine().trim(), "boolean");
 	    if (save.equalsIgnoreCase("Y")) {
 	        accident.setAccidentDate(accidentDate);
 	        accident.setAccidentLocation(accidentLocation);
@@ -603,6 +603,10 @@ public class ISMain {
 		if (!status) return;
 		System.out.print("계약진행 허가할 계약 id: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "String");
 		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
+		if(contract == null) {
+			System.out.println("[error] 계약 id가 존재하지 않습니다.");
+			return;
+		}
 		System.out.println("-- 계약진행을 허가하려는 계약의 정보 --");
 		System.out.println("진행 허가 계약정보. " + "계약 id: "+contract.getContractID() + " 고객id: "+contract.getCustomerID()+" 계약날짜: "+contract.getCreatedDate()+" 보험 상품 id: "+contract.getInsuranceID() +" 인수한 U/W 직원 id: " +contract.getUnderwritingEID());
 		System.out.print("계약 진행 허가 [Y/N]: "); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
@@ -715,7 +719,7 @@ public class ISMain {
 		System.out.println("-- 상담 신청 정보--");
 		// basic attribute settings
 		System.out.print("상담 ID: "); String counselID = dataValidation(clientInputReader.readLine().trim(), "Integer");
-		System.out.print("보험 종류: 1. 자동차 2. 주택화재 3. 암건강 4. 해외여행 "); String insuranceCategoryInput = dataValidation(clientInputReader.readLine().trim(), "Integer");
+		System.out.print("보험 종류: 1. 자동차 2. 주택화재 3. 암건강 4. 해외여행 "); String insuranceCategoryInput = dataValidation(clientInputReader.readLine().trim(), "insuranceType");
 		System.out.print("상담 일자: "); String dateOfCounsel = dataValidation(clientInputReader.readLine().trim(), "String");
 		System.out.print("상담 시간: "); String timeOfCOunsel = dataValidation(clientInputReader.readLine().trim(), "String");
 		boolean statusOfCounsel = false;
@@ -735,10 +739,9 @@ public class ISMain {
 		counsel.setTimeOfCounsel(timeOfCOunsel);
 		counsel.setStatusOfCounsel(statusOfCounsel);
 		
-		System.out.print("해당 일자에 상담을 신청하시겠습니까? [Y/N]: "); String result = clientInputReader.readLine().trim();
+		System.out.print("해당 일자에 상담을 신청하시겠습니까? [Y/N]: "); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(result.equals("Y")) System.out.println(customer.requestCounsel(counsel));
-		else if(result.equals("N")) System.out.println("|*** 본 페이지로 돌아갑니다. ***|");
-		else System.out.println("잘못된 입력입니다.");
+		else System.out.println("|*** 본 페이지로 돌아갑니다. ***|");
 	}
 	
 	// 상담 신청 조회
@@ -794,7 +797,7 @@ public class ISMain {
 			return;
 		}
 		int index = 1;
-		System.out.println("-- 보험 상품명 리스트 --");
+		System.out.println("--" +insuranceCategory+ " 보험 상품명 리스트 --");
 		for(Insurance insurance: insuranceList) {
 			System.out.println(index + ". 보험 ID: " + insurance.getInsuranceID() + " 보험 상품명: " + insurance.getInsuranceName());
 			index++;
@@ -828,14 +831,6 @@ public class ISMain {
 			if(clientChoice.equals("J")) requestContract(insurance);
 			else if (clientChoice.equals("R")) System.out.println("|*** 보험 상품 종류 카테고리로 돌아갑니다. ***|");
 			else System.out.println("잘못된 입력입니다.");
-			
-//			if(clientChoice.equals("J")) {
-//				boolean response = customer.requestContract(customer, insurance);
-//				if(response) System.out.println("[success] 가입 신청이 완료되었습니다.");
-//				else System.out.println("[error] 이미 가입된 보험 ID 입니다.");
-//			} else if (clientChoice.equals("R")) {
-//				System.out.println("|*** 보험 상품 종류 카테고리로 돌아갑니다. ***|");
-//			} else System.out.println("잘못된 입력입니다.");
 	}
 	// 보험 가입 신청하다
 	private void requestContract(Insurance insurance) throws IOException, DuplicateIDException {
@@ -853,13 +848,48 @@ public class ISMain {
 		boolean isPassUW = false;
 //		System.out.print("월 보험료: "); String monthlyPremium = dataValidation(clientInputReader.readLine().trim(), "Integer");
 
+		// 상품 카테고리에 맞는 추가 정보 입력
+		if(insurance.getCategory().equals("자동차")) {
+			System.out.println("--자동차 보험 정보--");
+			System.out.print("차 종: "); String model = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("가격: "); String carPrice = dataValidation(clientInputReader.readLine().trim(), "Integer");
+			System.out.print("VIN: "); String VIN = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("블랙박스 유무 [Y/N]: "); String blackbox = dataValidation(clientInputReader.readLine().trim(), "boolean");
+			((Car) insurance).setModel(model);
+			((Car) insurance).setPriceOfCar(Integer.parseInt(carPrice));
+			((Car) insurance).setVIN(VIN);
+			if(blackbox.equals("Y")) ((Car) insurance).setHasBlackbox(true);
+			else if(blackbox.equals("N")) ((Car) insurance).setHasBlackbox(false);
+			
+		}else if(insurance.getCategory().equals("주택화재")) {
+			insurance = new HouseFire();
+			System.out.println("--주택화재 보험 정보--");
+			System.out.print("주택 종류: "); String categoryOfHouse = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("주택 가격: "); String housePrice = dataValidation(clientInputReader.readLine().trim(), "Integer");
+			((HouseFire) insurance).setCategoryOfHouse(categoryOfHouse);
+			((HouseFire) insurance).setPriceOfHouse(Integer.parseInt(housePrice));
+			
+		}else if(insurance.getCategory().equals("암건강")) {
+			insurance = new CancerHealth();
+			System.out.println("--암 보험 정보--");
+			System.out.print("암 종류: "); String categoryOfCancer = dataValidation(clientInputReader.readLine().trim(), "String");
+			((CancerHealth) insurance).setCategoryOfCancer(categoryOfCancer);
+			
+		}else if(insurance.getCategory().equals("해외여행")) {
+			insurance = new InternationalTravel();
+			System.out.println("--해외 여행 보험 정보--");
+			System.out.print("여행 국가: "); String travelCountry = dataValidation(clientInputReader.readLine().trim(), "String");
+			System.out.print("여행 기간: "); String travelPeriod = dataValidation(clientInputReader.readLine().trim(), "Integer");
+			((InternationalTravel) insurance).setTravelCountry(travelCountry);
+			((InternationalTravel) insurance).setTravelPeriod(Integer.parseInt(travelPeriod));
+		}
 		// composition to whole settings
 		PaymentInfo paymentInfo = new PaymentInfo();
 		System.out.println("--결제 정보--");
 		System.out.print("결제정보 ID: "); String paymentInfoID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 //		System.out.print("월 납입금 : "); String fixedMonthlyPayment = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("월 납부일: "); String fixedMonthlyPaymentDate = dataValidation(clientInputReader.readLine().trim(), "String");
-		System.out.print("납부 방법: "); String paymentType = dataValidation(clientInputReader.readLine().trim(), "String");
+		System.out.print("납부 방법: "); String paymentType = dataValidation(clientInputReader.readLine().trim(), "paymentType");
 		paymentInfo.setPaymentInfoID(Integer.parseInt(paymentInfoID));
 //		paymentInfo.setFixedMonthlyPayment(Integer.parseInt(fixedMonthlyPayment));
 		paymentInfo.setFixedMonthlyPaymentDate(fixedMonthlyPaymentDate);
@@ -906,10 +936,9 @@ public class ISMain {
 		contract.setPassUW(isPassUW);
 		contract.setPaymentInfo(paymentInfo);
 		
-		System.out.print("가입 신청을 완료하시겠습니까? [Y/N]: "); String result = clientInputReader.readLine().trim();
+		System.out.print("가입 신청을 완료하시겠습니까? [Y/N]: "); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(result.equals("Y")) System.out.println(customer.requestContract(contract));
-		else if(result.equals("N")) System.out.println("|*** 본 페이지로 돌아갑니다. ***|");
-		else System.out.println("잘못된 입력입니다.");
+		else System.out.println("|*** 본 페이지로 돌아갑니다. ***|");
 	}
 	// -------------------------------------------------------------
 	
@@ -973,7 +1002,7 @@ public class ISMain {
 		System.out.println("-- 신청한 계약 리스트 --");
 		for(Contract contract : contractList) {
 			Insurance insurance = insuranceListImpl.retrieve(contract.getInsuranceID());
-			System.out.println(index + ". 계약 ID: " + contract.getContractID() + " 보험 상품명: "+insurance.getInsuranceName() + " 고객 ID: "+ customer.getCustomerID() + "계약 상태: "+ contract.getContractStatus());
+			System.out.println(index + ". 계약 ID: " + contract.getContractID() + " 보험 상품명: "+insurance.getInsuranceName() + " 고객 ID: "+ customer.getCustomerID() + " 계약 상태: "+ contract.getContractStatus());
 			index++;
 		}
 	}
@@ -992,6 +1021,26 @@ public class ISMain {
 		System.out.println("계약 시작일: " + contract.getCreatedDate());
 		System.out.println("계약 만기일: "+ contract.getExpirationDate());
 		System.out.println("계약 상태: "+ contract.getContractStatus());
+		if(insurance.getCategory().equals("자동차")) {
+			System.out.println("--자동차 보험 정보--");
+			System.out.println("차 종: "+ ((Car) insurance).getModel());
+			System.out.println("가격: "+ ((Car) insurance).getPriceOfCar());
+			System.out.println("VIN: " + ((Car) insurance).getVIN());
+			System.out.println("블랙박스 유무: " + ((Car) insurance).hasBlackbox());
+		} else if(insurance.getCategory().equals("주택화재")) {
+			System.out.println("--주택화재 보험 정보--");
+			System.out.println("주택 종류: "+ ((HouseFire) insurance).getCategoryOfHouse());
+			System.out.println("주택 가격: "+ ((HouseFire) insurance).getPriceOfHouse());
+		} else if(insurance.getCategory().equals("암건강")) {
+			insurance = new CancerHealth();
+			System.out.println("--암 보험 정보--");
+			System.out.println("암 종류: "+ ((CancerHealth) insurance).getCategoryOfCancer());
+		} else if(insurance.getCategory().equals("해외여행")) {
+			insurance = new InternationalTravel();
+			System.out.println("--해외 여행 보험 정보--");
+			System.out.println("여행 국가: "+ ((InternationalTravel) insurance).getTravelCountry());
+			System.out.println("여행 기간: "+ ((InternationalTravel) insurance).getTravelPeriod());
+		}
 		System.out.println("D. 계약 해지");
 		System.out.println("R. 돌아가기");
 		
@@ -1002,10 +1051,9 @@ public class ISMain {
 	}
 	// 계약을 해지한다
 	private void cancelContract(Customer customer, Contract contract) throws IOException {
-		System.out.print("보험 계약을 해지하시겠습니까? [Y/N]: "); String result = clientInputReader.readLine().trim();
+		System.out.print("보험 계약을 해지하시겠습니까? [Y/N]: "); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(result.equals("Y")) System.out.println(customer.cancelContract(contract));
-		else if(result.equals("N")) System.out.println("|*** 본 페이지로 돌아갑니다. ***|");
-		else System.out.println("잘못된 입력입니다.");
+		else System.out.println("|*** 본 페이지로 돌아갑니다. ***|");
 	}
 	// -------------------------------------------------------------
 
@@ -1035,8 +1083,7 @@ public class ISMain {
 		System.out.println("--상품 정보 입력란--");
 		System.out.print("보험 ID: "); String insuranceID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("보험 이름: "); String insuranceName = dataValidation(clientInputReader.readLine().trim(), "String");
-		System.out.println("상품 종류: 1. 자동차  2. 주택화재  3. 암건강  4. 해외여행"); 
-		System.out.print("상품 종류: "); String category = dataValidation(clientInputReader.readLine().trim(), "String");
+		System.out.print("상품 종류: 1. 자동차  2. 주택화재  3. 암건강  4. 해외여행 "); String category = dataValidation(clientInputReader.readLine().trim(), "insuranceType");
 		System.out.print("최소 계약 기간: "); String minimumPeriod = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("최대 계약 기간: "); String minimumPremium = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("보상 규정: "); String processOfCompensation = dataValidation(clientInputReader.readLine().trim(), "String");
@@ -1063,44 +1110,48 @@ public class ISMain {
 		
 		Insurance insurance = null;
 		// 상품 카테고리에 맞는 추가 정보 입력
-		if(category.equals("1")) {
-			insurance = new Car();
-			System.out.println("--차 보험 정보--");
-			System.out.print("차 종: "); String model = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("가격: "); String carPrice = dataValidation(clientInputReader.readLine().trim(), "Integer");
-			System.out.print("VIN: "); String VIN = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("블랙박스 유무 [Y/N]: "); String blackbox = dataValidation(clientInputReader.readLine().trim(), "boolean");
-			((Car) insurance).setModel(model);
-			((Car) insurance).setPriceOfCar(Integer.parseInt(carPrice));
-			((Car) insurance).setVIN(VIN);
-			if(blackbox.equals("Y")) ((Car) insurance).setHasBlackbox(true);
-			else if(blackbox.equals("N")) ((Car) insurance).setHasBlackbox(false);
-			
-		}else if(category.equals("2")) {
-			insurance = new HouseFire();
-			System.out.println("--화재 보험 정보--");
-			System.out.print("주택 종류: "); String categoryOfHouse = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("주택 가격: "); String housePrice = dataValidation(clientInputReader.readLine().trim(), "Integer");
-			((HouseFire) insurance).setCategoryOfHouse(categoryOfHouse);
-			((HouseFire) insurance).setPriceOfHouse(Integer.parseInt(housePrice));
-			
-		}else if(category.equals("3")) {
-			insurance = new CancerHealth();
-			System.out.println("--암 보험 정보--");
-			System.out.print("암의 종류: "); String categoryOfCancer = dataValidation(clientInputReader.readLine().trim(), "String");
-			((CancerHealth) insurance).setCategoryOfCancer(categoryOfCancer);
-			
-		}else if(category.equals("4")) {
-			insurance = new InternationalTravel();
-			System.out.println("--해외 여행 보험 정보--");
-			System.out.print("여행 국가: "); String travelCountry = dataValidation(clientInputReader.readLine().trim(), "String");
-			System.out.print("여행 기간: "); String travelPeriod = dataValidation(clientInputReader.readLine().trim(), "Integer");
-			((InternationalTravel) insurance).setTravelCountry(travelCountry);
-			((InternationalTravel) insurance).setTravelPeriod(Integer.parseInt(travelPeriod));
-		}
+		if(category.equals("1")) insurance = new Car();
+		else if(category.equals("2")) insurance = new HouseFire();
+		else if(category.equals("3")) insurance = new CancerHealth();
+		else if (category.equals("4")) insurance = new InternationalTravel();
+		
+//			System.out.println("--차 보험 정보--");
+//			System.out.print("차 종: "); String model = dataValidation(clientInputReader.readLine().trim(), "String");
+//			System.out.print("가격: "); String carPrice = dataValidation(clientInputReader.readLine().trim(), "Integer");
+//			System.out.print("VIN: "); String VIN = dataValidation(clientInputReader.readLine().trim(), "String");
+//			System.out.print("블랙박스 유무 [Y/N]: "); String blackbox = dataValidation(clientInputReader.readLine().trim(), "boolean");
+//			((Car) insurance).setModel(model);
+//			((Car) insurance).setPriceOfCar(Integer.parseInt(carPrice));
+//			((Car) insurance).setVIN(VIN);
+//			if(blackbox.equals("Y")) ((Car) insurance).setHasBlackbox(true);
+//			else if(blackbox.equals("N")) ((Car) insurance).setHasBlackbox(false);
+//			
+//		}else if(category.equals("2")) {
+//			insurance = new HouseFire();
+//			System.out.println("--화재 보험 정보--");
+//			System.out.print("주택 종류: "); String categoryOfHouse = dataValidation(clientInputReader.readLine().trim(), "String");
+//			System.out.print("주택 가격: "); String housePrice = dataValidation(clientInputReader.readLine().trim(), "Integer");
+//			((HouseFire) insurance).setCategoryOfHouse(categoryOfHouse);
+//			((HouseFire) insurance).setPriceOfHouse(Integer.parseInt(housePrice));
+//			
+//		}else if(category.equals("3")) {
+//			insurance = new CancerHealth();
+//			System.out.println("--암 보험 정보--");
+//			System.out.print("암의 종류: "); String categoryOfCancer = dataValidation(clientInputReader.readLine().trim(), "String");
+//			((CancerHealth) insurance).setCategoryOfCancer(categoryOfCancer);
+//			
+//		}else if(category.equals("4")) {
+//			insurance = new InternationalTravel();
+//			System.out.println("--해외 여행 보험 정보--");
+//			System.out.print("여행 국가: "); String travelCountry = dataValidation(clientInputReader.readLine().trim(), "String");
+//			System.out.print("여행 기간: "); String travelPeriod = dataValidation(clientInputReader.readLine().trim(), "Integer");
+//			((InternationalTravel) insurance).setTravelCountry(travelCountry);
+//			((InternationalTravel) insurance).setTravelPeriod(Integer.parseInt(travelPeriod));
+//		}
+	
 		// 상품 저장 버튼
 		System.out.println("--상품을 저장하시겠습니까? [Y/N]--");
-		String save = dataValidation(clientInputReader.readLine().trim(), "String");
+		String save = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(save.equals("Y")) {
 			insurance.setInsuranceID(Integer.parseInt(insuranceID));
 			insurance.setInsuranceName(insuranceName);
@@ -1119,7 +1170,7 @@ public class ISMain {
 		}
 		//보험요율 저장 버튼
 		System.out.print("보험요율 입력: "); String insuranceRate = dataValidation(clientInputReader.readLine().trim(), "Integer");
-		System.out.println("--보험요율을 저장하시겠습니까? [Y/N]--"); save = dataValidation(clientInputReader.readLine().trim(), "String");
+		System.out.println("--보험요율을 저장하시겠습니까? [Y/N]--"); save = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(save.equals("Y")) {
 			insurance.setInsuranceRate(Integer.parseInt(insuranceRate));
 			System.out.println("보험요율을 저장했습니다.");
@@ -1128,7 +1179,7 @@ public class ISMain {
 			return;
 		}
 		//보험요율 확인 버튼
-		System.out.println("--보험요율을 확인하시겠습니까? [Y/N]--"); save = dataValidation(clientInputReader.readLine().trim(), "String");
+		System.out.println("--보험요율을 확인하시겠습니까? [Y/N]--"); save = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(save.equals("Y")) {System.out.println("보험요율:" + insuranceRate);}
 
 		try {
@@ -1145,7 +1196,6 @@ public class ISMain {
 			return;
 		}
 		int index = 1;
-		System.out.println();
 		ArrayList<Insurance> insuranceList = insuranceListImpl.retrieveAll();
 		if(insuranceList.size() == 0) {
 			System.out.println("[error] 보험이 없습니다.");
@@ -1153,7 +1203,7 @@ public class ISMain {
 		}
 		System.out.println("-- 보험 리스트 --");
 		for(Insurance insurance: insuranceList) {
-			System.out.println(index + ". 보험ID: " + insurance.getInsuranceID() + "보험 상품명: " + insurance.getInsuranceName() + " 보험 종류: "+insurance.getCategory());
+			System.out.println(index + ". 보험ID: " + insurance.getInsuranceID() + " 보험 상품명: " + insurance.getInsuranceName() + " 보험 종류: "+insurance.getCategory());
 			index++;
 		}
 	}
@@ -1284,7 +1334,7 @@ public class ISMain {
 		System.out.print("결제정보 ID: "); String paymentInfoID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("월 납입금 : "); String fixedMonthlyPayment = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("월 납부일: "); String fixedMonthlyPaymentDate = dataValidation(clientInputReader.readLine().trim(), "String");
-		System.out.print("납부 방법: "); String paymentType = dataValidation(clientInputReader.readLine().trim(), "String");
+		System.out.print("납부 방법: "); String paymentType = dataValidation(clientInputReader.readLine().trim(), "paymentType");
 		paymentInfo.setPaymentInfoID(Integer.parseInt(paymentInfoID));
 		paymentInfo.setFixedMonthlyPayment(Integer.parseInt(fixedMonthlyPayment));
 		paymentInfo.setFixedMonthlyPaymentDate(fixedMonthlyPaymentDate);
@@ -1394,10 +1444,9 @@ public class ISMain {
 		System.out.print("CVC: "); String cvcNumber = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("카드 비밀번호 2자리: "); String password = dataValidation(clientInputReader.readLine().trim(), "Integer");
 
-		System.out.print("해당 보험료를 납부하시겠습니까? [Y/N]: "); String result = clientInputReader.readLine().trim();
+		System.out.print("해당 보험료를 납부하시겠습니까? [Y/N]: "); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(result.equals("Y")) System.out.println(customer.payPremium(payment, Integer.parseInt(cardNumber), Integer.parseInt(cvcNumber), Integer.parseInt(password)));
-		else if(result.equals("N")) System.out.println("|*** 본 페이지로 돌아갑니다. ***|");
-		else System.out.println("잘못된 입력입니다.");
+		else System.out.println("|*** 본 페이지로 돌아갑니다. ***|");
 	}
 	
 	private void showProcessedPaymentList() {
@@ -1471,10 +1520,9 @@ public class ISMain {
 			return;
 		}
 		
-		System.out.print("해당 상담 일정을 확정하시겠습니까? [Y/N]: "); String result = clientInputReader.readLine().trim();
+		System.out.print("해당 상담 일정을 확정하시겠습니까? [Y/N]: "); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(result.equals("Y")) System.out.println(employee.confirmCounsel(counsel, employee.getEmployeeID()));
-		else if(result.equals("N")) System.out.println("|*** 본 홈페이지로 돌아갑니다. ***|");
-		else System.out.println("잘못된 입력입니다.");
+		else System.out.println("|*** 본 홈페이지로 돌아갑니다. ***|");
 	}
 	private void showConfirmedCounselList() throws AuthorizationException {
 		if (!employee.getType().equals(Constant.Sales)) {
@@ -1554,8 +1602,7 @@ public class ISMain {
 		
 		System.out.print("상담 내용을 추가하시겠습니까? [Y/N]: "); String result = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(result.equals("Y")) System.out.println(employee.updateCounsel(counsel, counselDetail, note));
-		else if(result.equals("N")) System.out.println("|*** 본 홈페이지로 돌아갑니다. ***|");
-		else System.out.println("잘못된 입력입니다.");	
+		else System.out.println("|*** 본 홈페이지로 돌아갑니다. ***|");
 	}
 	private void suggestInsurance() throws AuthorizationException, IOException {
 		if (!employee.getType().equals(Constant.Sales)) {
@@ -1588,8 +1635,7 @@ public class ISMain {
 			System.out.println();
 			System.out.println("고객에게 보험 상품을 제안하였습니다.");
 		}
-		else if(result.equals("N")) System.out.println("|*** 본 홈페이지로 돌아갑니다. ***|");
-		else System.out.println("잘못된 입력입니다.");	
+		else System.out.println("|*** 본 홈페이지로 돌아갑니다. ***|");	
 	}
 	// -------------------------------------------------------------
 	
@@ -1617,7 +1663,7 @@ public class ISMain {
 		System.out.print("결제정보 ID: "); String paymentInfoID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("월 납입금 : "); String fixedMonthlyPayment = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("월 납부일: "); String fixedMonthlyPaymentDate = dataValidation(clientInputReader.readLine().trim(), "String");
-		System.out.print("납부 방법: "); String paymentType = dataValidation(clientInputReader.readLine().trim(), "String");
+		System.out.print("납부 방법: "); String paymentType = dataValidation(clientInputReader.readLine().trim(), "paymentType");
 		paymentInfo.setPaymentInfoID(Integer.parseInt(paymentInfoID));
 		paymentInfo.setFixedMonthlyPayment(Integer.parseInt(fixedMonthlyPayment));
 		paymentInfo.setFixedMonthlyPaymentDate(fixedMonthlyPaymentDate);
@@ -1672,7 +1718,7 @@ public class ISMain {
 		System.out.println(contract.toString());
 		
 		System.out.println("--부활 심사를 등록하시겠습니까? [Y/N]--");
-		String yOrN = dataValidation(clientInputReader.readLine().trim(), "String");
+		String yOrN = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(yOrN.equals("Y")) {
 			try {
 				System.out.println(employee.permitRevive(contract));
@@ -1750,7 +1796,7 @@ public class ISMain {
 		System.out.print("결제정보 ID: "); String paymentInfoID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("월 납입금 : "); String fixedMonthlyPayment = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("월 납부일: "); String fixedMonthlyPaymentDate = dataValidation(clientInputReader.readLine().trim(), "String");
-		System.out.print("납부 방법: "); String paymentType = dataValidation(clientInputReader.readLine().trim(), "String");
+		System.out.print("납부 방법: "); String paymentType = dataValidation(clientInputReader.readLine().trim(), "paymentType");
 		paymentInfo.setPaymentInfoID(Integer.parseInt(paymentInfoID));
 		paymentInfo.setFixedMonthlyPayment(Integer.parseInt(fixedMonthlyPayment));
 		paymentInfo.setFixedMonthlyPaymentDate(fixedMonthlyPaymentDate);
@@ -1801,7 +1847,7 @@ public class ISMain {
 		System.out.println(contract.toString());
 		
 		System.out.println("--배서 심사를 하시겠습니까? [Y/N]--");
-		String yOrN = dataValidation(clientInputReader.readLine().trim(), "String");
+		String yOrN = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(yOrN.equals("Y")) {
 			try {
 				System.out.println(employee.permitUpdate(contract));
@@ -1858,11 +1904,17 @@ public class ISMain {
 	}
 	// 보상 신청
 	private void createCompensation(String usertype) throws IOException, AuthorizationException, DuplicateIDException {
-		System.out.println("-- 보상 정보 입력란 --");
+		if(customer==null) throw new AuthorizationException();
 		
+		System.out.println("-- 보상 정보 입력란 --");
 		// basic attribute settings
 		System.out.print("보상ID: "); String compensationID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		System.out.print("계약ID: "); String contractID = dataValidation(clientInputReader.readLine().trim(), "Integer");
+		Contract contract = contractListImpl.retrieveById(Integer.parseInt(contractID));
+		if(contract == null) {
+			System.out.println("[error] 계약 id가 존재하지 않습니다.");
+			return;
+		}
 
 		// composition to whole settings
 		// Bill setting - 보험금 청구하기 전
@@ -1882,10 +1934,10 @@ public class ISMain {
 		// ListImpl Add
 		Compensation compensation = new Compensation();
 		System.out.println("-- 보상을 신청하시겠습니까? [Y/N] --");
-		String save = dataValidation(clientInputReader.readLine().trim(), "String");
+		String save = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(save.equals("Y")) {
 			compensation.setCompensationID(Integer.parseInt(compensationID));
-			compensation.setContractID(Integer.parseInt(contractID));
+			compensation.setContractID(contract.getContractID());
 			compensation.setCustomerID(customer.getCustomerID());
 			compensation.setInsuranceAmount(0);
 
@@ -1899,11 +1951,13 @@ public class ISMain {
 		}
 	}	
 	// 보상 조회
-	private void showCompensationList() {
+	private void showCompensationList() throws AuthorizationException {
+		if(customer==null) throw new AuthorizationException();
+		
 		ArrayList<Compensation> compensationList = compensationListImpl.retrieveByCustomerID(customer.getCustomerID());
 		int index = 1;	
 		if(compensationList.size() == 0) {
-			System.out.println("No Compensation");
+			System.out.println("보상 리스트가 존재하지 않습니다.");
 			return;
 		}
 		
@@ -1915,14 +1969,14 @@ public class ISMain {
 	}
 	// 모든 고객의 보상 조회
 	private void showAllCompensationList() throws AuthorizationException {
-		if (!employee.getType().equals(Constant.CompensationProcessing)) {
+		if(employee == null || !employee.getType().equals(Constant.CompensationProcessing)) {
 			throw new AuthorizationException();
 		}
 		int index = 1;
 		System.out.println();
 		ArrayList<Compensation> compensationList = compensationListImpl.retrieveAll();
 		if(compensationList.size() == 0) {
-			System.out.println("No Compensation");
+			System.out.println("보상 리스트가 존재하지 않습니다.");
 			return;
 		}
 		System.out.println("-- 보상 리스트 --");
@@ -1933,7 +1987,7 @@ public class ISMain {
 	}
 	// 보상 수정
 	private void updateCompensation() throws IOException, AuthorizationException, NotFoundProfileException {
-		if (!employee.getType().equals(Constant.CompensationProcessing)) {
+		if (employee == null || !employee.getType().equals(Constant.CompensationProcessing)) {
 			throw new AuthorizationException();
 		}
 	    System.out.println("-- 보상 정보 수정란 --");
@@ -1975,7 +2029,7 @@ public class ISMain {
 		loss.setLossAmount(Integer.parseInt(lossAmount));
 		
 	    System.out.println("-- 보상을 수정하시겠습니까? [Y/N] --");
-	    String save = dataValidation(clientInputReader.readLine().trim(), "String");
+	    String save = dataValidation(clientInputReader.readLine().trim(), "boolean");
 	    if (save.equalsIgnoreCase("Y")) {
 			compensation.setContractID(Integer.parseInt(contractID));
 			compensation.setCustomerID(Integer.parseInt(customerID));
@@ -1992,16 +2046,18 @@ public class ISMain {
 	}
 	// 보상 삭제
 	private void deleteCompensation() throws IOException, AuthorizationException, NotFoundProfileException {
-		if (!employee.getType().equals(Constant.CompensationProcessing)) {
+		if (employee == null || !employee.getType().equals(Constant.CompensationProcessing)) {
 			throw new AuthorizationException();
 		}
+		
 		System.out.println("-- 보상 정보 입력란 --");
 		System.out.print("보상ID: "); String compensationID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 		
 		System.out.println(employee.deleteCompensation(Integer.parseInt(compensationID)));
 	}
 	// 보험금 청구
-	private void requestInsuranceAmount() throws IOException, DuplicateIDException, NotFoundProfileException {
+	private void requestInsuranceAmount() throws IOException, DuplicateIDException, NotFoundProfileException, AuthorizationException {
+		if(customer == null) throw new AuthorizationException();
 		System.out.print("보험금 청구할 보상ID: ");
 	    String compensationID = dataValidation(clientInputReader.readLine().trim(), "Integer");
 	    Compensation compensation = compensationListImpl.retrieveById(Integer.parseInt(compensationID));
@@ -2014,7 +2070,7 @@ public class ISMain {
 		System.out.print("청구 사유: "); String billReason = dataValidation(clientInputReader.readLine().trim(), "String");
 		
 		System.out.println("-- 보험금 청구를 신청하시겠습니까? [Y/N] --");
-		String save = dataValidation(clientInputReader.readLine().trim(), "String");
+		String save = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(save.equals("Y")) {
 			Bill bill = new Bill();
 			bill.setBillID(Integer.parseInt(billID));
@@ -2034,7 +2090,7 @@ public class ISMain {
 	}
   	// 손해 조사
 	private void investigateLoss() throws IOException, AuthorizationException, DuplicateIDException, NotFoundProfileException {
-		if (!employee.getType().equals(Constant.CompensationProcessing)) {
+		if (employee == null || !employee.getType().equals(Constant.CompensationProcessing)) {
 			throw new AuthorizationException();
 		}
 		
@@ -2052,7 +2108,7 @@ public class ISMain {
 		System.out.print("손해액 평가 : "); String lossAmount = dataValidation(clientInputReader.readLine().trim(), "Integer");
 
 		System.out.println("-- 손해 조사를 진행하시겠습니까? [Y/N] --");
-		String save = dataValidation(clientInputReader.readLine().trim(), "String");
+		String save = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(save.equals("Y")) {
 			Loss loss = new Loss();
 			loss.setLossID(Integer.parseInt(lossID));
@@ -2073,7 +2129,7 @@ public class ISMain {
 	}
 	// 보험금 산출
 	private void calculateInsuranceAmount () throws IOException, AuthorizationException, NotFoundProfileException {
-		if (!employee.getType().equals(Constant.CompensationProcessing)) {
+		if (employee == null || !employee.getType().equals(Constant.CompensationProcessing)) {
 			throw new AuthorizationException();
 		}
 		
@@ -2085,7 +2141,7 @@ public class ISMain {
 	    }
 	    
 	    System.out.println("-- 손해 조사 내용을 불러와 보험금 산출을 진행하시겠습니까? [Y/N] --");
-		String save = dataValidation(clientInputReader.readLine().trim(), "String");
+		String save = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(save.equals("Y")) {
 			int calculatedInsuarnceAmount = compensation.getLoss().getLossAmount();
 			compensation.setInsuranceAmount(calculatedInsuarnceAmount);
@@ -2100,7 +2156,7 @@ public class ISMain {
 	}
 	// 보험금 지급
 	private void giveInsuranceAmount() throws IOException, AuthorizationException, NotFoundProfileException {
-		if (!employee.getType().equals(Constant.CompensationProcessing)) {
+		if (employee == null || !employee.getType().equals(Constant.CompensationProcessing)) {
 			throw new AuthorizationException();
 		}
 		
@@ -2112,7 +2168,7 @@ public class ISMain {
 	    }
 	    
 	    System.out.println("-- 보상 내용을 불러와 보험금 지급을 진행하시겠습니까? [Y/N] --");
-		String save = dataValidation(clientInputReader.readLine().trim(), "String");
+		String save = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(save.equals("Y")) {
 			System.out.println("[success] 보험금 지급이 완료되었습니다.");
 			System.out.println("고객ID:  " + compensation.getCustomerID());
@@ -2274,6 +2330,8 @@ public class ISMain {
 	        else if("type".equals(type)) System.out.println("[error] you must enter only \"S\" / \"UW\" / \"CI\" / \"CP\" \n re-enter: ");
 	        else if("boolean".equals(type)) System.out.println("[error] you must enter only 'Y' / 'N' \n re-enter: ");
 	        else if("gender".equals(type)) System.out.println("[error] you must enter only 'M' / 'W' \n re-enter: ");
+	        else if("insuranceType".equals(type)) System.out.println("[error] you must enter only '1. 자동차' / '2. 주택화재' / '3. 암건강' / '4. 해외여행' \n re-enter: ");
+	        else if("paymentType".equals(type)) System.out.println("[error] you must enter only '"+Constant.paymentInfoCard+"' / '"+Constant.paymentInfoBank + "'/ '"+Constant.paymentInfoAutomatic);
 	        else System.out.println("[error] You can't enter spaces or empty values. \n re-enter: ");
 	        inputData = clientInputReader.readLine().trim();
 	    }
@@ -2297,6 +2355,12 @@ public class ISMain {
             else return false;
 		} else if ("gender".equals(type)) {
 			if (inputData.equals("M") || inputData.equals("W")) return true;
+            else return false;
+		} else if ("insuranceType".equals(type)) {
+			if (inputData.equals("1") || inputData.equals("2") || inputData.equals("3") || inputData.equals("4")) return true;
+            else return false;
+		} else if ("paymentType".equals(type)) {
+			if (inputData.equals(Constant.paymentInfoCard) || inputData.equals(Constant.paymentInfoBank) || inputData.equals(Constant.paymentInfoAutomatic)) return true;
             else return false;
 		}
 		if (inputData.trim().isEmpty() || inputData.contains(" ")) return false;
