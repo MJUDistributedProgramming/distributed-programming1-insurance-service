@@ -68,60 +68,6 @@ public class ISMain {
 		main.setDemoData();
 		main.startInsuranceService();
 	}
-	private void setDemoData() throws DuplicateIDException {
-		Customer customer = new Customer();
-		customer.setCustomerID(60221320);
-		customer.setCustomerPW("1234");
-		customer.setAddress("울산광역시 북구 호계매곡 1로");
-		customer.setAsset("700000");
-		customer.setCredit("상");
-		customer.setIncome("0");
-		customer.setJob("학생");
-		customer.setLiabilities("123");
-		customer.setName("euntaek");
-		customer.setPhone("010-1111-1111");
-		customer.setSsn("1234567-89101112");
-		customer.setLoanApplicationList(loanApplicationListImpl);
-		customerListImpl.add(customer);
-
-		Employee employee = new Employee();
-		employee.setEmployeeID(3642);
-		employee.setEmployeePW("1234");
-		employee.setName("이준규");
-		employee.setPhone("010-6540-3642");
-		employee.setGender("M");
-		employee.setDepartment("지급관리");
-		employee.setPosition("대리");
-		employee.setSalary("3000000");
-		employee.setType("인사관리자");
-		employee.setAssetManagementListImpl(assetManagementListImpl);
-		employee.setBusinessStraegyListImpl(businessStraegyListImpl);
-		employee.setDepositClosureDetailListImpl(depositClosureDetailListImpl);
-		employee.setLoanApplicationListImpl(loanApplicationListImpl);
-		employee.setLoanListImpl(loanListImpl);
-		employee.setRegulationListImpl(regulationListImpl);
-		employeeListImpl.add(employee);
-
-		Loan loan = new Loan();
-		loan.setLoanID(1234);
-		loan.setEmployeeID(1234);
-		loan.setInterestRate("2.0");
-		loan.setLoanName("청년안심대출");
-		loan.setLoanTerm("5년");
-		loan.setQualification("학생");
-		loan.setRepaymentMethod("없음");
-		loanListImpl.add(loan);
-
-		LoanApplication loanApplication = new LoanApplication();
-		loanApplication.setCustomerID(60221320);
-		loanApplication.setLoanAmount("1000000000");
-		loanApplication.setLoanApplicationID(1);
-		loanApplication.setLoanID(1234);
-		loanApplication.setLoanPurpose("학비");
-		loanApplication.setLoanStatus(Constant.loanStatus1);
-		loanApplication.setPaymentCompanyName("농협은행");
-		loanApplicationListImpl.add(loanApplication);
-	}
 	private static void printMainMenu() {
 		System.out.println("***************** 보험사 시스템 웹페이지 *****************");
 		System.out.println("1. 고객서비스");
@@ -911,5 +857,59 @@ public class ISMain {
 		}
 		if (inputData.trim().isEmpty() || inputData.contains(" ")) return false;
 	    return true;
+	}
+	private void setDemoData() throws DuplicateIDException {
+		Customer customer = new Customer();
+		customer.setCustomerID(1234);
+		customer.setCustomerPW("1234");
+		customer.setAddress("울산광역시 북구 호계매곡 1로");
+		customer.setAsset("700000");
+		customer.setCredit("상");
+		customer.setIncome("0");
+		customer.setJob("학생");
+		customer.setLiabilities("123");
+		customer.setName("euntaek");
+		customer.setPhone("010-1111-1111");
+		customer.setSsn("1234567-89101112");
+		customer.setLoanApplicationList(loanApplicationListImpl);
+		customerListImpl.add(customer);
+
+		Employee employee = new Employee();
+		employee.setEmployeeID(1234);
+		employee.setEmployeePW("1234");
+		employee.setName("이준규");
+		employee.setPhone("010-6540-3642");
+		employee.setGender("M");
+		employee.setDepartment("지급관리");
+		employee.setPosition("대리");
+		employee.setSalary("3000000");
+		employee.setType("인사관리자");
+		employee.setAssetManagementListImpl(assetManagementListImpl);
+		employee.setBusinessStraegyListImpl(businessStraegyListImpl);
+		employee.setDepositClosureDetailListImpl(depositClosureDetailListImpl);
+		employee.setLoanApplicationListImpl(loanApplicationListImpl);
+		employee.setLoanListImpl(loanListImpl);
+		employee.setRegulationListImpl(regulationListImpl);
+		employeeListImpl.add(employee);
+
+		Loan loan = new Loan();
+		loan.setLoanID(1234);
+		loan.setEmployeeID(1234);
+		loan.setInterestRate("2.0");
+		loan.setLoanName("청년안심대출");
+		loan.setLoanTerm("5년");
+		loan.setQualification("학생");
+		loan.setRepaymentMethod("없음");
+		loanListImpl.add(loan);
+
+		LoanApplication loanApplication = new LoanApplication();
+		loanApplication.setCustomerID(60221320);
+		loanApplication.setLoanAmount("1000000000");
+		loanApplication.setLoanApplicationID(1);
+		loanApplication.setLoanID(1234);
+		loanApplication.setLoanPurpose("학비");
+		loanApplication.setLoanStatus(Constant.loanStatus1);
+		loanApplication.setPaymentCompanyName("농협은행");
+		loanApplicationListImpl.add(loanApplication);
 	}
 }

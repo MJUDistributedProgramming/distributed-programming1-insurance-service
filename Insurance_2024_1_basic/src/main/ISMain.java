@@ -713,7 +713,7 @@ public class ISMain {
 	}
 	// -------------------------------------------------------------
     //// 보험 상품 종류 카테고리 - 보험 상품을 조회하다, 보험 가입 신청하다
-	private void insuranceTypeCategory() throws IOException, AuthenticationException, DuplicateIDException {
+	private void insuranceTypeCategory() throws IOException, AuthenticationException, DuplicateIDException, NotFoundProfileException {
 		if (customer == null) {
 			throw new AuthenticationException();
 		}
@@ -737,7 +737,7 @@ public class ISMain {
 	}
 
 	// 보험 상품 종류 조회
-	private void showInsuranceTypeList(String clientChoice) throws IOException, DuplicateIDException {
+	private void showInsuranceTypeList(String clientChoice) throws IOException, DuplicateIDException, NotFoundProfileException {
 		String insuranceCategory = "";
 		if(clientChoice.equals("1")) insuranceCategory = "자동차";
 		else if(clientChoice.equals("2")) insuranceCategory = "주택화재";
@@ -765,7 +765,7 @@ public class ISMain {
 		}
 		Insurance insurance = insuranceListImpl.retrieve(Integer.parseInt(clientChoice));
 		if(insurance != null) showInsuranceDetail(insurance, clientInputReader);
-		else System.out.println("[error] 보험 ID가 존재하지 않습니다.");
+		else throw new NotFoundProfileException("[Exception] 보험 ID가 존재하지 않습니다.");
 	}
 	// 보험 상품 상세 내용 조회
 	private void showInsuranceDetail(Insurance insurance, BufferedReader clientInputReader) throws IOException, DuplicateIDException {
@@ -1881,7 +1881,7 @@ public class ISMain {
 	// 모든 고객의 보상 조회
 	private void showAllCompensationList() throws AuthorizationException {
 		if(employee == null || !employee.getType().equals(Constant.CompensationProcessing)) {
-			throw new AuthorizationException();
+			throw new AuthorizationException("[Exception] 보상처리팀만 접근이 가능합니다.");
 		}
 		int index = 1;
 		System.out.println();
@@ -1899,7 +1899,7 @@ public class ISMain {
 	// 보상 수정
 	private void updateCompensation() throws IOException, AuthorizationException, NotFoundProfileException {
 		if (employee == null || !employee.getType().equals(Constant.CompensationProcessing)) {
-			throw new AuthorizationException();
+			throw new AuthorizationException("[Exception] 보상처리팀만 접근이 가능합니다.");
 		}
 	    System.out.println("-- 보상 정보 수정란 --");
 
@@ -1958,7 +1958,7 @@ public class ISMain {
 	// 보상 삭제
 	private void deleteCompensation() throws IOException, AuthorizationException, NotFoundProfileException {
 		if (employee == null || !employee.getType().equals(Constant.CompensationProcessing)) {
-			throw new AuthorizationException();
+			throw new AuthorizationException("[Exception] 보상처리팀만 접근이 가능합니다.");
 		}
 		
 		System.out.println("-- 보상 정보 입력란 --");
@@ -2002,7 +2002,7 @@ public class ISMain {
   	// 손해 조사
 	private void investigateLoss() throws IOException, AuthorizationException, DuplicateIDException, NotFoundProfileException {
 		if (employee == null || !employee.getType().equals(Constant.CompensationProcessing)) {
-			throw new AuthorizationException();
+			throw new AuthorizationException("[Exception] 보상처리팀만 접근이 가능합니다.");
 		}
 		
 		System.out.print("손해 조사할 보상ID: ");
@@ -2041,7 +2041,7 @@ public class ISMain {
 	// 보험금 산출
 	private void calculateInsuranceAmount () throws IOException, AuthorizationException, NotFoundProfileException {
 		if (employee == null || !employee.getType().equals(Constant.CompensationProcessing)) {
-			throw new AuthorizationException();
+			throw new AuthorizationException("[Exception] 보상처리팀만 접근이 가능합니다.");
 		}
 		
 		System.out.print("보험금 산출할 보상ID: ");
@@ -2068,7 +2068,7 @@ public class ISMain {
 	// 보험금 지급
 	private void giveInsuranceAmount() throws IOException, AuthorizationException, NotFoundProfileException {
 		if (employee == null || !employee.getType().equals(Constant.CompensationProcessing)) {
-			throw new AuthorizationException();
+			throw new AuthorizationException("[Exception] 보상처리팀만 접근이 가능합니다.");
 		}
 		
 		System.out.print("보험금을 지급할 보상ID: ");
@@ -2284,7 +2284,7 @@ public class ISMain {
 	}
 	private void setDemoData() throws DuplicateIDException {
 		Customer customer = new Customer();
-		customer.setCustomerID(6022);
+		customer.setCustomerID(1234);
 		customer.setCustomerPW("1234");
 		customer.setAddress("서울특별시 서대문구");
 		customer.setJob("학생");
@@ -2315,8 +2315,8 @@ public class ISMain {
 
 		Employee employee = new Employee();
 		employee.setName("김예일");
-		employee.setEmployeeID(1015);
-		employee.setEmployeePW("1111");
+		employee.setEmployeeID(1234);
+		employee.setEmployeePW("1234");
 		employee.setPhone("010-2125-4255");
 		employee.setEmail("yeilk1015@naver.com");
 		employee.setGender("M");
