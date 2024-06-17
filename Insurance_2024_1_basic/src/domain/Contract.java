@@ -22,26 +22,25 @@ public class Contract {
 	public Contract(){}
 	public void finalize() throws Throwable {}
 	public String toString() {
-		  return "Contract{" +
-	                "concludeEID=" + concludeEID +
-	                ", createdDate='" + createdDate + '\'' +
-	                ", concludedDate='" + concludedDate + '\'' +
-	                ", contractID=" + contractID +
-	                ", contractStatus='" + contractStatus + '\'' +
-	                ", customerID=" + customerID +
-	                ", evaluation='" + evaluation + '\'' +
-	                ", expirationDate='" + expirationDate + '\'' +
-	                ", insuranceID=" + insuranceID +
-	                ", isConclude=" + isConclude +
-	                ", isPassUW=" + isPassUW +
-	                ", monthlyPremium=" + monthlyPremium +
-	                ", nonPaymentPeriod=" + nonPaymentPeriod +
-	                ", paymentInfo=" + (paymentInfo != null ? paymentInfo.toString() : "null") +
-	                ", renewalStatus=" + renewalStatus +
-	                ", resurrectionDate='" + resurrectionDate + '\'' +
-	                ", resurrectionReason='" + resurrectionReason + '\'' +
-	                ", underwritingEID=" + underwritingEID +
-	                '}';
+		  return "-- 계약 정보 --\n" +
+	                "계약체결한 직원 id: " + concludeEID +"\n"+
+	                "계약 시작일: " + createdDate + "\n"+
+	                "계약 체결일: " + concludedDate +"\n"+
+	                "계약 ID: " + contractID +"\n"+
+	                "계약 상태: " + contractStatus + "\n"+
+	                "고객 ID: " + customerID +"\n"+
+	                "평가 결과: " + evaluation + "\n"+
+	                "계약 만료일: '" + expirationDate+ "\n"+
+	                "보험 ID: " + insuranceID +"\n"+
+	                "체결 야부: " + isConclude +"\n"+
+	                "인수심사 여부: " + isPassUW +"\n"+
+	                "월 보험료: " + monthlyPremium +"\n"+
+	                "미납 기간: " + nonPaymentPeriod +"\n"+
+	                (paymentInfo != null ? paymentInfo.toString() : "없음") +"\n"+
+	                "재계약 상태: " + renewalStatus +"\n"+
+	                "계약 부활일: " + resurrectionDate + "\n"+
+	                "부활 사유: " + resurrectionReason + "\n"+
+	                "인수심사한 직원 id: " + underwritingEID +"\n";
 	}
 	//
 	public int getConcludeEID() {return concludeEID;}
