@@ -5,11 +5,10 @@ public class CardPayment {
 	private String password;
 	public CardPayment(){}
 	public String toString() {
-		return "CardPayment{" +
-	            "  cardNum=" + cardNum +
-	            ", cvcNum=" + cvcNum + '\'' +
-	            ", password=" + password +
-	            '}';
+		return "-- 카드 정보 --\n" +
+	            "카드 번호: " + cardNum + "\n"+
+	            "CVC 번호: " + cvcNum + "\n"+
+	            "비밀번호: " + password + "\n";
 	}
 	public void finalize() throws Throwable {}
 	public void updateCardPaymentInfo(CardPayment cardPayment){}

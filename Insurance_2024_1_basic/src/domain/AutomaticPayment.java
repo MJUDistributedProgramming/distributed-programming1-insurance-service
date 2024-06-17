@@ -7,13 +7,12 @@ public class AutomaticPayment {
 	private String relationshipToApplicant;
 	public AutomaticPayment(){}
 	public String toString() {
-		return "AutomaticPayment{" +
-	            "  accountNum=" + accountNum +
-	            ", applicantName=" + applicantName + '\'' +
-	            ", applicantRRN=" + applicantRRN +
-	            ", paymentCompanyName=" + paymentCompanyName + '\'' +
-	            ", relationshipToApplicant=" + relationshipToApplicant +
-	            '}';
+		return "-- 자동 이체 정보 --\n" +
+	            "계좌 번호: " + accountNum + "\n"+
+	            "신청자 명: " + applicantName + "\n"+
+	            "신청자 RRN: " + applicantRRN + "\n"+
+	            "은행 이름: " + paymentCompanyName + "\n"+
+	            "신청인과의 관계: =" + relationshipToApplicant +"\n";
 	}
 	public void finalize() throws Throwable {}
 	public String getAccountNum() {return accountNum;}

@@ -4,10 +4,9 @@ public class BankPayment {
 	private String payerPhoneNum;
 	public BankPayment(){}
 	public String toString() {
-		return "BankPayment{" +
-	            "  payerName=" + payerName +
-	            ", payerPhoneNum=" + payerPhoneNum + '\'' +
-	            '}';
+		return "-- 계좌 정보 -- \n" +
+	            "계좌 주 이름: " + payerName +"\n"+
+	            "계좌 주 전화번호: " + payerPhoneNum + "\n";
 	}
 	public void finalize() throws Throwable {}
 	public void updateBankPaymentInfo(BankPayment bankPayment){}

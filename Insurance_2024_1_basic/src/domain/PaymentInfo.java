@@ -17,15 +17,14 @@ public class PaymentInfo {
 		String cardPayment = "";
 		if(this.cardPayment != null) cardPayment = this.cardPayment.toString();
 		
-		return "PaymentInfo{" +
-	            automaticPayment +
-	            bankPayment +
-	            cardPayment +
-	            ", fixedMonthlyPayment=" + fixedMonthlyPayment +
-	            ", fixedMonthlyPaymentDate='" + fixedMonthlyPaymentDate + '\'' +
-	            ", paymentInfoID=" + paymentInfoID +
-	            ", paymentType='" + paymentType + '\'' +
-	            '}';
+		return "-- 결제 정보 --\n" +
+        		"결제 정보 ID: " + paymentInfoID +"\n"+
+	            "납부 방식: " + paymentType + "\n"+
+	            "월 보험료: " + fixedMonthlyPayment +"\n"+
+	            "월 납부일: '" + fixedMonthlyPaymentDate + "\n"+
+				automaticPayment+
+				bankPayment+
+				cardPayment;
 	}
 	public String getPaymentType() {return paymentType;}
 	public AutomaticPayment getAutomaticPayment() {return automaticPayment;}
