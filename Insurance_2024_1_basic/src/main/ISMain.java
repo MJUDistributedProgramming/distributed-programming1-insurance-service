@@ -217,9 +217,8 @@ public class ISMain {
 	private void showAccidentList() throws AuthenticationException{
 		int index = 1;
 		ArrayList<Accident> accidentList = accidentListImpl.retrieveByCustomerId(customer.getCustomerID());
-//		ArrayList<Accident> accidentList = accidentListImpl.retrieveAll();
 		if(accidentList.size() == 0) {
-			System.out.println("No Accident");
+			System.out.println("접수된 사고가 없습니다.");
 			return;
 		}
 		System.out.println("-- 사고 리스트 --");
@@ -1772,7 +1771,7 @@ public class ISMain {
 
 	private void showCustomerList() {
 		int index = 1;
-		System.out.println("-- 고객 리스트t --");
+		System.out.println("-- 고객 리스트 --");
 		for(Customer customer : customerListImpl.retrieveAll()) {
 			System.out.println(index + ". 고객 ID: " + customer.getCustomerID() + " 고객 이름: " + customer.getName());
 			index++;
@@ -1781,7 +1780,7 @@ public class ISMain {
 
 	//// 보상 카테고리 - 보상 신청, 보상 조회, 보상 리스트 조회, 보상 수정, 보상 삭제, 보험금 청구, 손해 조사, 보험금 산출, 보험금 지급
 	private void compensationCategory() throws IOException, AuthenticationException, AuthorizationException, DuplicateIDException, NotFoundProfileException {
-		if (customer==null&&employee==null) {
+		if (customer==null && employee==null) {
 			throw new AuthenticationException();
 		}
 		while(true) {
@@ -1995,7 +1994,7 @@ public class ISMain {
 			boolean response = customer.createBill(compensation, Integer.parseInt(compensationID));
 			if(!response) throw new DuplicateIDException();
 			else System.out.println("[success] 보험금 청구 신청이 완료되었습니다.");
-		}else {
+		} else {
 			System.out.println("[info] 보험금 청구 신청을 취소했습니다. 본 페이지를 다시 출력합니다.");
 		}
 	}
@@ -2063,7 +2062,6 @@ public class ISMain {
 		} else {
 			System.out.println("[info] 보험금 산출을 취소했습니다. 본 페이지를 다시 출력합니다.");
 		}
-		
 	}
 	// 보험금 지급
 	private void giveInsuranceAmount() throws IOException, AuthorizationException, NotFoundProfileException {
@@ -2082,7 +2080,7 @@ public class ISMain {
 		String save = dataValidation(clientInputReader.readLine().trim(), "boolean");
 		if(save.equals("Y")) {
 			System.out.println("[success] 보험금 지급이 완료되었습니다.");
-			System.out.println("고객ID:  " + compensation.getCustomerID());
+			System.out.println("고객ID: " + compensation.getCustomerID());
 			System.out.println("보험금: " + compensation.getInsuranceAmount());			
 		} else {
 			System.out.println("[info] 보험금 지급을 취소했습니다. 본 페이지를 다시 출력합니다.");
