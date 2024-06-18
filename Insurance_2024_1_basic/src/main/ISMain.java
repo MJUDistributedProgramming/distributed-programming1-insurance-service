@@ -366,7 +366,7 @@ public class ISMain {
 	// 입수한 고객정보를 DB에 반영한다.
 	private void createCustomer(BufferedReader clientInputReader) throws IOException, DuplicateIDException, AuthorizationException {
 		if (!employee.getType().equals(Constant.CutomerInfomationManage)) {
-			throw new AuthorizationException();
+			throw new AuthorizationException("[Exception] 고객정보관리자만 접근이 가능합니다.");
 		}
 		System.out.println("-- 입수한 고객 정보 입력 --");
 		
